@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/screen/main/layouts/user_list_header.dart';
 import 'package:matching_app/utile/index.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:matching_app/screen/home_screen/home_screen_view.dart';
 
 // ignore: use_key_in_widget_constructors
 class SettingScreen extends StatefulWidget {
@@ -25,6 +27,13 @@ class _SettingScreenState extends State<SettingScreen>
     {"title": "退会", "screen": "/account_close_screen"},
     {"title": "ログアウト", "screen": "logout"}
   ];
+
+  Future<void> logout() async {
+    SharedPreferences preferences =
+        await SharedPreferences.getInstance();
+    preferences.setString('UserId', '0');
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +69,9 @@ class _SettingScreenState extends State<SettingScreen>
                                       actions: <Widget>[
                                         TextButton(
                                             onPressed: () {
-                                              Navigator.pushNamed(context, "/");
+                                              logout();
+                                              Navigator.pushReplacement(
+                                                context, MaterialPageRoute(builder: (context) => HomeScreenView()));
                                             },
                                             child: const Text('ログアウト',
                                                 style:

@@ -30,7 +30,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   String? userId;
   String? get uid => userId;
-  String? isShow = "false";
+  String? isShow = "true";
   set setUid(String str) {
     this.userId = str;
   }
@@ -116,6 +116,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
           child: CircularProgressIndicator(),
         );
       }
+      isShow = appCubit.user.introduce == ""?"false":"true";
       return Scaffold(
           body: RefreshIndicator(
             onRefresh: () async {
@@ -131,10 +132,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: vww(context, 2)),
-                          child: HeaderWidget(title: "マイページ"),
-                        ),
+                        padding: EdgeInsets.only(
+                            top: vhh(context, 8),
+                            left: vww(context, 5),
+                            right: vww(context, 5)),
+                        child: const Text("マイページ",
+                            style: TextStyle(fontSize: 21))),
                         Padding(
                             padding: EdgeInsets.symmetric(
                                 vertical: vhh(context, 2),

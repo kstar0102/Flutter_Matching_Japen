@@ -1,9 +1,38 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:matching_app/components/background_widget.dart';
 import 'package:matching_app/components/radius_button.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+class HomeScreenView extends ConsumerStatefulWidget {
+  @override
+  // ignore: library_private_types_in_public_api
+  ConsumerState<HomeScreenView> createState() => _HomeScreenViewState();
+}
+
+class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
 // ignore: use_key_in_widget_constructors
-class HomeScreenView extends StatelessWidget {
+// class HomeScreenView extends StatelessWidget {
+  String? user_id = "";
+  
+  @override
+  void initState() {
+    super.initState();
+    GetData();
+  }
+
+  Future<void> GetData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id = prefs.getString('UserId');
+    print("OUTPUT:"+ user_id.toString());
+    if (user_id != "0") {
+      Timer(const Duration(microseconds: 1),
+          () => Navigator.pushNamed(context, "/profile_screen"));
+    } 
+  }
+
   @override
   Widget build(BuildContext context) {
     void goNavigation(int id) {

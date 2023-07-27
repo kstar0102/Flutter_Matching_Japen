@@ -425,6 +425,8 @@ class AppCubit extends Cubit<AppState> {
       var decodedData = json.decode(responseData);
       if (decodedData["type"] == "success") {
         userId = decodedData["data"]["id"];
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString("UserId",userId.toString());
         return 1;
       } else {
         return 0;
@@ -648,10 +650,9 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> fetchProfileInfo() async {
-    print(userId.toString());
-    UserId = userId.toString();
+    print(userId.toString());   
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("UserId",UserId);
+    String? UserId = await prefs.getString("UserId");
     try {
       final response =
           await http.get(Uri.parse('${API_URL}get_user?id=$UserId'));

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/communcation/category_people/people_item.dart';
 import 'package:matching_app/components/user_info_items.dart';
+import 'package:matching_app/screen/main/community_screen.dart';
 import 'package:matching_app/screen/main/layouts/user_filter_by_address.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/communcation/category_people/people_controller.dart';
@@ -75,7 +76,8 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context);
+                                     Navigator.pushReplacement(
+                                                context, MaterialPageRoute(builder: (context) => CommunityScreen()));
                                   },
                                   style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero,
