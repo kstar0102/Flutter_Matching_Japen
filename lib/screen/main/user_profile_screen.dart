@@ -35,12 +35,12 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
     AppCubit appCubit = AppCubit.get(context);
     setState(() {
       items = [
-        if (appCubit.user.photo1 != "http://greeme.net/uploads/null") appCubit.user.photo1,
-        if (appCubit.user.photo2!= "http://greeme.net/uploads/null") appCubit.user.photo2,
-        if (appCubit.user.photo3!= "http://greeme.net/uploads/null") appCubit.user.photo3,
-        if (appCubit.user.photo4!= "http://greeme.net/uploads/null") appCubit.user.photo4,
-        if (appCubit.user.photo5!= "http://greeme.net/uploads/null") appCubit.user.photo5,
-        if (appCubit.user.photo6!= "http://greeme.net/uploads/null") appCubit.user.photo6,
+        if (appCubit.user.photo1 != "http://192.168.144.61:8000/uploads/null") appCubit.user.photo1,
+        if (appCubit.user.photo2!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo2,
+        if (appCubit.user.photo3!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo3,
+        if (appCubit.user.photo4!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo4,
+        if (appCubit.user.photo5!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo5,
+        if (appCubit.user.photo6!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo6,
       ];
     });
         print(items.length);

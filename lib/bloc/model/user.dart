@@ -14,6 +14,8 @@ class User {
   String introduce = "";
   String planType = "";
   int likesRate = 0;
+  String phone_number = "";
+  String phone_token = "";
   double coin = 0;
   String phone = "";
   int res_count = 0;

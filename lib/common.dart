@@ -4,9 +4,9 @@ library common;
 import 'package:flutter/material.dart';
 
 // ignore: constant_identifier_names
-const String API_URL = "http://greeme.net/api/";
+const String API_URL = "http://192.168.144.61:8000/api/";
 // ignore: constant_identifier_names
-const String BASE_URL = "http://greeme.net";
+const String BASE_URL = "http://192.168.144.61:8000";
 
 // ignore: constant_identifier_names
 const double MIN_HEIGHT = 130;

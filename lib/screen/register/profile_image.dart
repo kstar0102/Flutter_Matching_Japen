@@ -11,7 +11,6 @@ import 'package:matching_app/components/Header.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:matching_app/components/dialogs.dart';
-
 class ProfileImage extends StatefulWidget {
   const ProfileImage({super.key});
 
@@ -34,6 +33,7 @@ double calculateMinTextAdapt() {
 
 class _ProfileImageState extends State<ProfileImage> {
   final ImagePicker imgpicker = ImagePicker();
+
 
   @override
   Widget build(BuildContext context) {
@@ -141,13 +141,12 @@ class _ProfileImageState extends State<ProfileImage> {
                               text: "つぎへ",
                               goNavigation: (id) {
                                 appCubit.uploadProfile().then((value) => {
-                                      if (value == 1)
-                                        {
-                                          Navigator.pushNamed(
-                                              context, "/identity_verify")
-                                        }
-                                    });
-                                print(appCubit.avatarImage);
+                                  if (value == 1)
+                                    {
+                                      Navigator.pushNamed(
+                                          context, "/identity_verify")
+                                    }
+                                });
                               },
                               // ignore: unnecessary_null_comparison
                               isDisabled: appCubit.avatarImage == "",

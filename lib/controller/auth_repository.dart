@@ -196,6 +196,32 @@ class AuthRepository {
     return false;
   }
 
+  Future<bool> doChatting(String receiver_id, String sender_id, String msg, String time) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final data = await DioClient.doChatting(sender_id, receiver_id, msg, time);
+    developer.log('doDetailData() returned: $data');
+    var result = data['result'];
+    if (result == 'success') {
+      return true;
+    } else if(result == "error") {
+      return false;
+    } 
+    return false;
+  }
+  
+  Future<bool> doMessage(String receiver_id, String sender_id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final data = await DioClient.doMessage(sender_id, receiver_id);
+    developer.log('doDetailData() returned: $data');
+    var result = data['result'];
+    if (result == 'success') {
+      return true;
+    } else if(result == "error") {
+      return false;
+    } 
+    return false;
+  }
+
   Future<ProfileInfo?> doGetIntro(String uid) async {
     final data = await DioClient.GetIntro(uid);
     // print(data);
@@ -215,12 +241,16 @@ class AuthRepository {
   }
 
   Future<bool> doLogout() async {
-    // clear profile and uid, later we may need to notify server...
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('login_id', 'not');
-    prefs.setBool('isLogin', false);
-
-    return true;
+    String? user_id = prefs.getString('UserId');
+    final data = await DioClient.doLogout(user_id!);
+    var result = data['result'];
+    if (result == 'success') {
+      return true;
+    } else if(result == "error") {
+      return false;
+    } 
+    return false;
   }
 
 }

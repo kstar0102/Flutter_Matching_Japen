@@ -101,6 +101,30 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
     return newState.hasValue;
   }
 
+  Future<bool> doChatting(String sender_id, String receiver_id, String message, String time) async {
+    state = const AsyncValue.loading();
+    final newState =
+        await AsyncValue.guard(() => authRepo.doChatting(receiver_id, sender_id, message, time));
+
+    if (mounted) {
+      state = newState;
+    }
+
+    return newState.hasValue;
+  }
+
+  Future<bool> doMessage(String sender_id, String receiver_id) async {
+    state = const AsyncValue.loading();
+    final newState =
+        await AsyncValue.guard(() => authRepo.doMessage(receiver_id, sender_id));
+
+    if (mounted) {
+      state = newState;
+    }
+
+    return newState.hasValue;
+  }
+
   Future<bool> isLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('isLogin') ?? false;
@@ -113,9 +137,16 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
   //   return str;
   // }
 
-  Future<void> doLogout() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() => authRepo.doLogout());
+ Future<bool> doLogout() async {
+    state = const AsyncValue.loading();
+    final newState =
+        await AsyncValue.guard(() => authRepo.doLogout());
+
+    if (mounted) {
+      state = newState;
+    }
+
+    return newState.hasValue;
   }
 }
 

@@ -12,7 +12,6 @@ class ProfileMainInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Hello"+ photo);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

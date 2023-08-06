@@ -64,6 +64,8 @@ class AppCubit extends Cubit<AppState> {
   String s_sake = "";
   String s_live = "";
   String s_checked = "";
+  String phone = "";
+  String phone_token = "";
   //end
   AppCubit() : super(AppInitial());
 
@@ -74,7 +76,6 @@ class AppCubit extends Cubit<AppState> {
 
   void formatButton() async
   {
-    print("123123123123");
     s_age_start= "";
     s_age_end= "";
     s_height_start = "";
@@ -115,6 +116,14 @@ class AppCubit extends Cubit<AppState> {
     }
     emit(AppRegister());
   }
+
+  void phoneToken(String phone_number, String token) {
+    phone = phone_number;
+    phone_token = token;
+    print(phone + phone_token);
+    emit(AppRegister());
+  }
+
 
   void changeBDay(String value) {
     bDay = value;
@@ -410,6 +419,8 @@ class AppCubit extends Cubit<AppState> {
     request.fields['edtHeight'] = height.toString();
     request.fields['edtBodyType'] = bodyType.toString();
     request.fields['edtUsePurpose'] = purpose.toString();
+    request.fields['phone_number'] = phone.toString();
+    request.fields['phone_token'] = phone_token.toString();
     request.fields['edtIntroBadge'] = selectedBadges;
     var imageFile = File(avatarImage);
     var imageStream = http.ByteStream(imageFile.openRead());
@@ -611,6 +622,8 @@ class AppCubit extends Cubit<AppState> {
         user.annualIncome = jsonData['data']['annual_income'] ?? "";
         user.res_count = jsonData['count']['res_count'] ?? "0";
         r_count = jsonData['count']['res_count'] ?? "0";
+        user.phone_number = jsonData['data']['phone_number'] ?? "";
+        user.phone_token = jsonData['data']['phone_token'] ?? "";
 
         // user.phone = jsonData['data']['phone'] ?? "";
         user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
@@ -683,7 +696,8 @@ class AppCubit extends Cubit<AppState> {
         user.annualIncome = jsonData['data']['annual_income'] ?? "";
         user.res_count = jsonData['count']['res_count'] ?? "0";
         r_count = jsonData['count']['res_count'] ?? "0";
-
+        user.phone_number = jsonData['data']['phone_number'] ?? "";
+        user.phone_token = jsonData['data']['phone_token'] ?? "";
         // user.phone = jsonData['data']['phone'] ?? "";
         user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
         user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";

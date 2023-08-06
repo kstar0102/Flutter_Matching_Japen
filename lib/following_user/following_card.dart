@@ -63,14 +63,14 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
     List<String> numberArray = badge_name.split(",");
     List<String> badgeArray = boardInfo.badge_color.split(",");
     print(avatar);
-    if (avatar == "http://greeme.net/uploads/") {
-      avatar = "http://greeme.net/uploads/good1.png";
+    if (avatar == "http://192.168.144.61:8000/uploads/") {
+      avatar = "http://192.168.144.61:8000/uploads/good1.png";
     }
     Widget image = avatar == null || avatar == "null.png"
     ? SizedBox( width: 170,
         height: 175, child: Text("Image Loading..."),)
     : Image.network(
-        "http://greeme.net/uploads/" + avatar ?? "http://greeme.net/uploads/good1.png",
+        "http://192.168.144.61:8000/uploads/" + avatar ?? "http://192.168.144.61:8000/uploads/good1.png",
         width: 170,
         height: 175,
       );
@@ -131,7 +131,7 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
                                 ),
                               ),
                             boardInfo.identity_state == "1"?
-                            Image.network("http://greeme.net/uploads/status/on.png", width: 15, height: 15,):
+                            Image.network("http://192.168.144.61:8000/uploads/status/on.png", width: 15, height: 15,):
                             Container()
                           ],)
                         ),

@@ -45,8 +45,18 @@ import 'package:matching_app/screen/verify_screen/image_check.dart';
 import 'package:matching_app/screen/main/board_res_detail.dart';
 import 'package:matching_app/screen/verify_screen/image_submit.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_line_sdk/flutter_line_sdk.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:matching_app/firebase_options.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await LineSDK.instance
+      .setup("2000073944")
+      .then((_) => print("Line prepared"));
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const ProviderScope(child: MatchingApp()));
 
   // runApp(const MatchingApp());
@@ -97,7 +107,7 @@ class MatchingApp extends StatelessWidget {
             '/following_users': (context) => FollowingUser(),
             '/board_function': (context) => BoardFunction(),
             '/chat_screen': (context) => ChatScreen(),
-            '/chatting_screen': (context) => ChattingScreen(),
+            // '/chatting_screen': (context) => ChattingScreen(),
             '/users_profile_screen': (context) => UsersProfileScreen(),
             '/report_screen': (context) => ReportScreen(),
             '/report_success': (context) => ReportSuccess(),

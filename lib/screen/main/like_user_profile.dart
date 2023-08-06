@@ -195,7 +195,7 @@ class _LikeUserProfileState extends State<LikeUserProfile> {
                                   const Text("東京都",
                                       style: TextStyle(fontSize: 15)),
                                   Container(width: 20),
-                                  const Text("25歳",
+                                  const Text("35歳",
                                       style: TextStyle(fontSize: 15)),
                                 ])),
                           ]))),

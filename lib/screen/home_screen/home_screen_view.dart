@@ -5,6 +5,7 @@ import 'package:matching_app/components/background_widget.dart';
 import 'package:matching_app/components/radius_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 
 class HomeScreenView extends ConsumerStatefulWidget {
   @override
@@ -27,10 +28,20 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id = prefs.getString('UserId');
     print("OUTPUT:"+ user_id.toString());
-    if (user_id != "0") {
+    if (user_id!= "0" && user_id!=null) {
       Timer(const Duration(microseconds: 1),
           () => Navigator.pushNamed(context, "/profile_screen"));
     } 
+  }
+
+  Future<void> _lineLogin(BuildContext context) async {
+    try {
+      final result = await LineSDK.instance.login(scopes: ['profile']);
+      print(
+          "result" + result.toString() + " :" + result.userProfile.toString());
+    } catch (e) {
+      print("error: $e");
+    }
   }
 
   @override
@@ -40,6 +51,7 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
         case 0:
           break;
         case 1:
+          _lineLogin(context);
           break;
         case 2:
           Navigator.pushNamed(context, "/phone_login");

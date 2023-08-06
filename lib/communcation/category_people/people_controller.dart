@@ -17,6 +17,14 @@ class PeopleController extends StateNotifier<AsyncValue<PeopleItemList>> {
     return;
   }
 
+  Future<void> doGetChattingData() async {
+    final newState = await AsyncValue.guard(() => notifRepo.doGetChattingData());
+    if (mounted) {
+      state = newState;
+    }
+    return;
+  }
+
   Future<void> doGetLikeData() async {
     // state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => notifRepo.doGetLikeData());

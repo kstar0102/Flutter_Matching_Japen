@@ -30,6 +30,23 @@ class PeopleRepository {
     }
   }
 
+  Future<PeopleItemList> doGetChattingData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? user_id = prefs.getString('UserId');
+    dynamic data = await DioClient.doGetChattingData(user_id!);
+
+    final result = data['result'];
+
+    if (result is List) {
+      _peopleitems = result.map((data) => PeopleItem.fromMap(data)).toList();
+      // print('doGetChattingData() src=${_peopleitems.toString()}');
+
+      return _peopleitems;
+    } else {
+      return _peopleitems;
+    }
+  }
+
   Future<PeopleItemList> doGetLikeData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('UserId');

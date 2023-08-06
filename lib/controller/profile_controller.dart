@@ -22,9 +22,9 @@ class HomeAccountController extends StateNotifier<AsyncValue<ProfileInfo?>> {
   Future<void> doGetIntro(String uid) async {
     state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => profileRepo.doGetIntro(uid));
-    if (mounted) {
-      state = newState;
-    }
+    // if (mounted) {
+    //   state = newState;
+    // }
   }
 }
 

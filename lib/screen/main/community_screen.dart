@@ -142,7 +142,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                                             Padding(
                                               padding: EdgeInsets.only(left: vww(context, 0)),
                                               child: Image.network(
-                                                "http://greeme.net/uploads/category/" +
+                                                "http://192.168.144.61:8000/uploads/category/" +
                                                     communicateItem.category_image,
                                                 width: 25,
                                                 height: 25,

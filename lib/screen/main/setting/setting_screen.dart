@@ -5,15 +5,17 @@ import 'package:matching_app/screen/main/layouts/user_list_header.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:matching_app/screen/home_screen/home_screen_view.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:matching_app/controller/auth_controllers.dart';
 
 // ignore: use_key_in_widget_constructors
-class SettingScreen extends StatefulWidget {
+class SettingScreen extends ConsumerStatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
-  _SettingScreenState createState() => _SettingScreenState();
+  ConsumerState<SettingScreen> createState() => _SettingScreenState();
 }
 
-class _SettingScreenState extends State<SettingScreen>
+class _SettingScreenState extends ConsumerState<SettingScreen>
     with SingleTickerProviderStateMixin {
   List settingList = [
     {"title": "運営からのメッセージ", "screen": "/admin_notification_screen"},
@@ -32,6 +34,11 @@ class _SettingScreenState extends State<SettingScreen>
     SharedPreferences preferences =
         await SharedPreferences.getInstance();
     preferences.setString('UserId', '0');
+    final controller = ref.read(AuthProvider.notifier);
+    controller.doLogout().then(
+      (value) {
+      },
+    );
   }
 
 

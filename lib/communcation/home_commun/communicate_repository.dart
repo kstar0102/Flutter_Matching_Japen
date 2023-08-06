@@ -15,7 +15,8 @@ class CommunicationRepository {
   CommunicateItemList _communicationitems = [];
   Future<CommunicateItemList> doGetCommunicateData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    dynamic data = await DioClient.doGetCommunicateData();
+    String? user_id = prefs.getString('UserId');
+    dynamic data = await DioClient.doGetCommunicateData(user_id!);
 
     final result = data['result'];
 

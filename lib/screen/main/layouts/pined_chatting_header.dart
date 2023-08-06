@@ -4,9 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/utile/index.dart';
 
+import '../chat_screen.dart';
+
 // ignore: unused_element
 class PinedChattingHeader extends StatelessWidget {
-  const PinedChattingHeader({super.key});
+  final String user_name;
+  final String user_id;
+  final String avatar;
+  final String tab_v;
+  const PinedChattingHeader({super.key, required this.user_name, required this.avatar, required this.user_id, required this.tab_v});
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +28,34 @@ class PinedChattingHeader extends StatelessWidget {
                   TextButton(
                       style: TextButton.styleFrom(padding: EdgeInsets.zero),
                       onPressed: () {
-                        Navigator.pop(context);
+                        if(tab_v == "0"){
+                          // Navigator.push(
+                          //   context, 
+                          //   MaterialPageRoute(
+                          //     builder: (context) => ChatScreen(),
+                          // ));
+                          Navigator.pop(context);
+                        }
+                        else{
+                          // Navigator.push(
+                          //   context, 
+                          //   MaterialPageRoute(
+                          //     builder: (context) => ChatScreen(),
+                          // ));
+                          Navigator.pop(context);
+                        }                      
                       },
                       child: const Icon(Icons.keyboard_arrow_left,
                           color: PRIMARY_FONT_COLOR, size: 35)),
                   ClipRRect(
                       borderRadius: BorderRadius.circular(50),
-                      child: const Image(
-                        image: AssetImage("assets/images/users/user.png"),
+                      child: Image(
+                        image: NetworkImage("http://192.168.144.61:8000/uploads/" + avatar),
                         height: 60,
                       )),
-                  const Padding(
+                  Padding(
                       padding: EdgeInsets.only(left: 20),
-                      child: Text("TestNameA", style: TextStyle(fontSize: 17)))
+                      child: Text("${user_name}", style: TextStyle(fontSize: 17)))
                 ],
               ),
               TextButton(
