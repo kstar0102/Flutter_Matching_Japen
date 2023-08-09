@@ -33,7 +33,7 @@ class UserListItem extends StatelessWidget {
               height: 60.0,
               child: CircleAvatar(
                 backgroundImage:
-                    NetworkImage('http://192.168.142.55:8000/uploads/' + info.photo1),
+                    NetworkImage('http://greeme.net/uploads/' + info.photo1),
                 radius: 50,
                 backgroundColor: Colors.white,
                 child: Container(

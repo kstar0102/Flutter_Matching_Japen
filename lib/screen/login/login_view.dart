@@ -20,7 +20,45 @@ class LoginView extends ConsumerStatefulWidget {
 
 class _LoginViewState extends ConsumerState<LoginView> {
   String phone_number = "";
+  FirebaseAuth auth = FirebaseAuth.instance;
+  var receivedID = '';
+  bool otpFieldVisibility = false;
+  final otpController = TextEditingController();
+  // firebase OTP
+  void verifyUserPhoneNumber() {
+    auth.verifyPhoneNumber(
+        phoneNumber: "+"+phone_number,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await auth.signInWithCredential(credential).then(
+            (value) => print('Logged In Successfully'),
+          );
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          print(e.message);
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          receivedID = verificationId;
+          otpFieldVisibility = true;
+          setState(() {});
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          print('TimeOut');
+        },
+    );
+  }
 
+  Future<void> verifyOTPCode() async {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: receivedID,
+        smsCode: otpController.text,
+    );
+    await auth
+        .signInWithCredential(credential)
+        .then((value) => print('User Login In Successful'));
+    }
+
+
+  //save phone number in fireabse data 
   void firebaseChecked() async {
     AppCubit appCubit = AppCubit.get(context);
 
@@ -171,27 +209,47 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               color: BUTTON_MAIN,
                               text: "つぎへ",
                               goNavigation: (id) {
-                                // print("object");
-                                // final controller =
-                                //     ref.read(AuthProvider.notifier);
-                                // controller
-                                //     .doPhoneVaild(phone_number)
-                                //     .then(
-                                //   (value) {
-                                //     // go home only if login success.
-                                //     if (value == true) {
-                                //       // reloadData();
-                                      
-                                //     } else {}
-                                //   },
-                                // );
-                                firebaseChecked();
-                                // Navigator.pushNamed(context, "/check_code");
-                                // print(phone_number);
+                                // firebaseChecked();
+                                // verifyUserPhoneNumber();
+                                 if(otpFieldVisibility){
+                                      verifyOTPCode();
+                                  } else{
+                                      verifyUserPhoneNumber();
+                                  }
+                                  FocusManager.instance.primaryFocus?.unfocus();
                               },
                               isDisabled: phone_number.length < 11,
                             ),
                           ))),
+                          SizedBox(
+                            width: 100 * 3.3,
+                            child: TextField(
+                              // textAlign: TextAlign.center,
+                              controller: otpController,
+                              keyboardType: TextInputType.name,
+                              autocorrect: false,
+                              cursorColor: Colors.grey,
+                              decoration: InputDecoration(
+                                // labelStyle: kLabelStyle,
+                                // errorStyle: kErrorStyle,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                hintText: "Enter School Code",
+                                hintStyle: TextStyle(
+                                  fontSize:
+                                      15.0,
+                                  color: Colors.grey[500]
+                                ),
+                                filled: true,
+                                fillColor: Colors.grey[50],
+                                disabledBorder: InputBorder.none,
+                                // Align the text within the TextField vertically and horizontally
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 15.0, horizontal: 20),
+                                counterText: '',
+                              ),
+                            ),
+                          ),
                   Expanded(
                     child: Container(),
                   )

@@ -11,7 +11,7 @@ import 'package:matching_app/model/dio_exception.dart';
 class DioClient {
   static final _baseOptions = BaseOptions(
     // baseUrl: 'http://mobileapp.swaconnect.net/api',
-    baseUrl: 'http://192.168.142.55:8000/api',
+    baseUrl: 'http://greeme.net/api',
     //connectTimeout: 10000, receiveTimeout: 10000,
     headers: {
       'Content-type': 'application/x-www-form-urlencoded',

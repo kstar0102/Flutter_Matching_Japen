@@ -56,7 +56,7 @@ class PinedChattingHeader extends StatelessWidget {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(50),
                       child: Image(
-                        image: NetworkImage("http://192.168.142.55:8000/uploads/" + avatar),
+                        image: NetworkImage("http://greeme.net/uploads/" + avatar),
                         height: 60,
                       )),
                   Padding(

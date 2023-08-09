@@ -15,7 +15,7 @@ import 'package:matching_app/controller/auth_controllers.dart';
 import 'package:matching_app/screen/main/board_res_detail.dart';
 import 'package:matching_app/screen/main/board_res_list.dart';
 import 'package:matching_app/screen/main/layouts/profile_badge.dart';
-import 'package:matching_app/screen/main/profile_people_screen.dart';
+import 'package:matching_app/screen/main/other_profile.dart';
 
 // ignore: use_key_in_widget_constructors
 class FollowingCard extends ConsumerStatefulWidget {
@@ -63,14 +63,14 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
     List<String> numberArray = badge_name.split(",");
     List<String> badgeArray = boardInfo.badge_color.split(",");
     print(avatar);
-    if (avatar == "http://192.168.142.55:8000/uploads/") {
-      avatar = "http://192.168.142.55:8000/uploads/good1.png";
+    if (avatar == "http://greeme.net/uploads/") {
+      avatar = "http://greeme.net/uploads/good1.png";
     }
     Widget image = avatar == null || avatar == "null.png"
     ? SizedBox( width: 170,
         height: 175, child: Text("Image Loading..."),)
     : Image.network(
-        "http://192.168.142.55:8000/uploads/" + avatar ?? "http://192.168.142.55:8000/uploads/good1.png",
+        "http://greeme.net/uploads/" + avatar ?? "http://greeme.net/uploads/good1.png",
         width: 170,
         height: 175,
       );
@@ -102,7 +102,7 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
                           onTap: (){
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ProfilePeopleScreen(info : boardInfo.user_id)),);
+                                MaterialPageRoute(builder: (context) => OtherProfile(info : boardInfo.user_id)),);
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
@@ -131,48 +131,37 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
                                 ),
                               ),
                             boardInfo.identity_state == "1"?
-                            Image.network("http://192.168.142.55:8000/uploads/status/on.png", width: 15, height: 15,):
+                            Image.network("http://greeme.net/uploads/status/on.png", width: 15, height: 15,):
                             Container()
                           ],)
                         ),
                         SizedBox(
-                          height: 50,
-                          width: 150,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
+                          width: 150, // Set the width statically
+                          child: IntrinsicWidth(
                             child: Wrap(
-                              spacing: 5,
-                              runSpacing: 8,
+                              spacing: 2,
+                              runSpacing: 2,
+                              direction: Axis.horizontal, // Set the wrapDirection to horizontal
                               children: badgeList.map((BadgeItemObject e) {
                                 String textColor = e.color;
-                                return FilterChip(
-                                  label: Text(e.title,
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          color:
-                                          Color(int.parse(textColor.substring(2, 7),
-                                                      radix: 16) +
-                                                  0xFF000000))),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    side: BorderSide(
-                                        color: Color(int.parse(textColor.substring(2, 7),
-                                                radix: 16) +
-                                            0xFF000000),
-                                        width: 1.0),
+                                String textName = e.title;
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(width: 1, color: Color(int.parse(textColor.replaceAll('#', '0xFF'))),),
+                                    color: Color(int.parse(textColor.replaceAll('#', '0xFF'))).withOpacity(0.2)
                                   ),
-                                  clipBehavior: Clip.antiAlias,
-                                  backgroundColor: Colors.white,
-                                  selectedColor: Color(
-                                      int.parse(textColor.substring(2, 7), radix: 16) +
-                                          0xFF000000),
-                                  onSelected: (bool value) {},
+                                  child: Text(
+                                    "${textName}",
+                                    style: TextStyle(fontSize: 12, color: Color(int.parse(textColor.replaceAll('#', '0xFF')))),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 );
                               }).toList(),
                             ),
                           ),
                         )
-                        
                       ],
                   ),])
                 )     

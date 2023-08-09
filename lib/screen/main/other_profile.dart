@@ -4,23 +4,31 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_app/common.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matching_app/screen/main/layouts/basic_info.dart';
-import 'package:matching_app/screen/main/layouts/introduction_widget.dart';
+import 'package:matching_app/screen/main/layouts/intro_widget.dart';
 import 'package:matching_app/screen/main/layouts/introductory_badge_widget.dart';
 import 'package:matching_app/screen/main/layouts/my_community_widget.dart';
 import 'package:matching_app/screen/main/layouts/thumb_up_modal.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/bloc/cubit.dart';
 import 'package:matching_app/screen/main/layouts/profile_badge.dart';
+import 'package:matching_app/communcation/category_people/people_item.dart';
+import 'package:matching_app/controller/auth_controllers.dart';
 
 // ignore: use_key_in_widget_constructors
-class UsersProfileScreen extends StatefulWidget {
+class OtherProfile extends ConsumerStatefulWidget {
+  final String? info;
+
+  const OtherProfile({super.key, required this.info});
+
   @override
   // ignore: library_private_types_in_public_api
-  _UsersProfileScreenState createState() => _UsersProfileScreenState();
+  ConsumerState<OtherProfile> createState() => _OtherProfileScreenState();
 }
 
-class _UsersProfileScreenState extends State<UsersProfileScreen> {
+class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
   List<dynamic> items = [];
   List<BadgeObject> badgeList = [];
 
@@ -30,8 +38,9 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
 
   @override
   void initState() {
+    String? info = widget.info;
     super.initState();
-    BlocProvider.of<AppCubit>(context).fetchProfileInfo();
+    BlocProvider.of<AppCubit>(context).fetchProfileInfo1(info.toString());
     AppCubit appCubit = AppCubit.get(context);
     setState(() {
       items = [
@@ -55,11 +64,10 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Object? state = ModalRoute.of(context)!.settings.arguments;
-    BlocProvider.of<AppCubit>(context).fetchProfileInfo();
+    String? info = widget.info;
+
+    BlocProvider.of<AppCubit>(context).fetchProfileInfo1(info.toString());
     AppCubit appCubit = AppCubit.get(context);
-    int age = DateTime.now().year - int.parse(appCubit.user.bday.split("-")[0]);
-    print(appCubit.user.identityState);
     return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
       return Scaffold(
         backgroundColor: Colors.white,
@@ -79,7 +87,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
                           width: vww(context, 100),
                           child: ListView(children: [
                             CarouselSlider(
-                              items: items.map((item) { // Iterate over each item in the 'items' array
+                              items: appCubit.avatarImages.map((item) { // Iterate over each item in the 'items' array
                                 return Container(
                                   height: double.infinity,
                                   width: double.infinity,
@@ -202,11 +210,11 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
                                     Text(appCubit.user.residence,
                                         style: TextStyle(fontSize: 15)),
                                     Container(width: 20),
-                                    Text("${age.toString()}歳",
+                                    Text("${appCubit.user.bday.toString()}歳",
                                         style: TextStyle(fontSize: 15)),
                                   ])),
                             ]))),
-                    IntroductionWidget(),
+                    IntroWidget(),
                     MyCommunityWidget(
                               communityObjects: appCubit.user.community),
                     Padding(padding: EdgeInsets.only(
@@ -216,12 +224,12 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
                     child: ProfileBadgeWidget(badges: appCubit.user.introBadge),
                     ),
                     BasicInfo(
-                      height: appCubit.user.height,
-                      annualIncome: appCubit.user.annualIncome,
-                      blood: appCubit.user.bloodType,
-                      bodyType: appCubit.user.bodytype,
-                      cigarette: appCubit.user.cigarette,
-                      purpose: appCubit.user.usePurpose),
+                      height: appCubit.user.height ?? 0,
+                      annualIncome: appCubit.user.annualIncome == null? "": appCubit.user.annualIncome,
+                      blood: appCubit.user.bloodType ?? "",
+                      bodyType: appCubit.user.bodytype ?? "",
+                      cigarette: appCubit.user.cigarette ?? "",
+                      purpose: appCubit.user.usePurpose?? ""),
                   ]);
             }, childCount: 1)),
           ],
@@ -277,9 +285,14 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => const ThumbUpModal());
+                        final controller = ref.read(AuthProvider.notifier);
+                          controller.doPeopleRecom(widget.info.toString()).then(
+                            (value) {
+                              if(value == true)
+                              {
+                              }
+                          },
+                        );
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(EdgeInsets.zero),

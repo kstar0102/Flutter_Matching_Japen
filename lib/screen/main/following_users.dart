@@ -197,7 +197,7 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
                             horizontal: vww(context, 3.5),
                           ),
                           child: Container(
-                            height: 480,
+                            height: 500,
                             child: follows != null && follows.isNotEmpty
                               ? SingleChildScrollView(
                                   scrollDirection: Axis.vertical,

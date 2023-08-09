@@ -84,7 +84,7 @@ class _UserInfoItemsState extends State<UserInfoItems> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image.network(
-              "http://192.168.142.55:8000/uploads/" + avatar,
+              "http://greeme.net/uploads/" + avatar,
               width: 165,
               height: 165,
             ),
@@ -141,43 +141,34 @@ class _UserInfoItemsState extends State<UserInfoItems> {
             ),
         )
         : Container(),
-        SizedBox(
-          height: 50,
-          width: 150,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Wrap(
-              spacing: 5,
-              runSpacing: 8,
-              children: badgeList.map((BadgeItemObject e) {
-                String textColor = e.color;
-                return FilterChip(
-                  label: Text(e.title,
-                      style: TextStyle(
-                          fontSize: 10,
-                          color:
-                          Color(int.parse(textColor.substring(2, 7),
-                                      radix: 16) +
-                                  0xFF000000))),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    side: BorderSide(
-                        color: Color(int.parse(textColor.substring(2, 7),
-                                radix: 16) +
-                            0xFF000000),
-                        width: 1.0),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  backgroundColor: Colors.white,
-                  selectedColor: Color(
-                      int.parse(textColor.substring(2, 7), radix: 16) +
-                          0xFF000000),
-                  onSelected: (bool value) {},
-                );
-              }).toList(),
+        SizedBox(height: 1,),
+          SizedBox(
+            width: 150, // Set the width statically
+            child: IntrinsicWidth(
+              child: Wrap(
+                spacing: 2,
+                runSpacing: 2,
+                direction: Axis.horizontal, // Set the wrapDirection to horizontal
+                children: badgeList.map((BadgeItemObject e) {
+                  String textColor = e.color;
+                  String textName = e.title;
+                  return Container(
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(width: 1, color: Color(int.parse(textColor.replaceAll('#', '0xFF'))),),
+                      color: Color(int.parse(textColor.replaceAll('#', '0xFF'))).withOpacity(0.2)
+                    ),
+                    child: Text(
+                      "${textName}",
+                      style: TextStyle(fontSize: 12, color: Color(int.parse(textColor.replaceAll('#', '0xFF')))),
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        )
+          )
       ],
     );
   }

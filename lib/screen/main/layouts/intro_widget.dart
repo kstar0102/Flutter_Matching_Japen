@@ -4,10 +4,10 @@ import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/bloc/cubit.dart';
 
 // ignore: must_be_immutable
-class IntroductionWidget extends StatelessWidget {
+class IntroWidget extends StatelessWidget {
   bool? isEditScreen = false;
   String? introduce = "";
-  IntroductionWidget({super.key, this.isEditScreen, this.introduce});
+  IntroWidget({super.key, this.isEditScreen, this.introduce});
   
   @override
   Widget build(BuildContext context) {
@@ -36,17 +36,7 @@ class IntroductionWidget extends StatelessWidget {
                     const TextStyle(fontSize: 13, color: PRIMARY_FONT_COLOR)),
             // isEditScreen == true
             //     ? Container()
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    child: InkWell(
-                      onTap: () =>
-                          {Navigator.pushNamed(context, "/self_introduction")},
-                      child: Text(
-                        "もっとみる",
-                        style: TextStyle(fontSize: 11, color: BUTTON_MAIN),
-                      ),
-                    ),
-                  )
+                 
           ],
         ));
   }

@@ -90,7 +90,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                 height: 120.0,
                 child: CircleAvatar(
                   backgroundImage:
-                      NetworkImage('http://192.168.142.55:8000/uploads/' +widget.receiverUserAvatar),
+                      NetworkImage('http://greeme.net/uploads/' +widget.receiverUserAvatar),
                   radius: 100,
                   backgroundColor: Colors.white,
                   child: Container(

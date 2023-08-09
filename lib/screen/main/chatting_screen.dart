@@ -237,36 +237,31 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    child: Wrap(
-                      spacing: 5,
-                      runSpacing: 8,
-                      children: badgeList.map((BadgeItemObject e) {
-                        String textColor = e.color;
-                        return FilterChip(
-                          label: Text(e.title,
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color:
-                                  Color(int.parse(textColor.substring(2, 7),
-                                              radix: 16) +
-                                          0xFF000000))),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            side: BorderSide(
-                                color: Color(int.parse(textColor.substring(2, 7),
-                                        radix: 16) +
-                                    0xFF000000),
-                                width: 1.0),
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          backgroundColor: Colors.white,
-                          selectedColor: Color(
-                              int.parse(textColor.substring(2, 7), radix: 16) +
-                                  0xFF000000),
-                          onSelected: (bool value) {},
-                        );
-                      }).toList(),
+                  SizedBox(
+                    width: 330,
+                    child: IntrinsicWidth(
+                      child: Wrap(
+                        spacing: 4,
+                        runSpacing: 2,
+                        direction: Axis.horizontal, // Set the wrapDirection to horizontal
+                        children: badgeList.map((BadgeItemObject e) {
+                          String textColor = e.color;
+                          String textName = e.title;
+                          return Container(
+                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(width: 1, color: Color(int.parse(textColor.replaceAll('#', '0xFF'))),),
+                              color: Color(int.parse(textColor.replaceAll('#', '0xFF'))).withOpacity(0.2)
+                            ),
+                            child: Text(
+                              "${textName}",
+                              style: TextStyle(fontSize: 12, color: Color(int.parse(textColor.replaceAll('#', '0xFF')))),
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -388,10 +383,10 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
   }
   // build message list
   Widget _buildMessageList() {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: _chatService.getMessages(
         widget.receiverUserToken, widget.senderUserId),
-      builder: (context, snapshot) {
+      builder: (BuildContext  context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if(snapshot.hasError) {
           return Center(
             child: Text('Error${snapshot.error}'),
@@ -404,12 +399,17 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
           );
         }
 
-        if(snapshot.hasData && snapshot.data!.docs.isEmpty) {
+       if (snapshot.hasData && snapshot.data!.docs.isEmpty) {
+          final messages = snapshot.data!.docs;
+          messages.sort((a, b) => a['timestamp'].compareTo(b['timestamp']));
+          
+          // Reversing the list to get the messages in ascending order        
           return Container(
             alignment: Alignment.topCenter,
             child: const Text("ボード機能でマッチングしました",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: BUTTON_MAIN)));
+                style: TextStyle(color: BUTTON_MAIN)),
+          );
         }
 
         WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -462,7 +462,7 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
             crossAxisAlignment: (data['senderId'] == widget.senderUserId)? CrossAxisAlignment.end : CrossAxisAlignment.start,
             mainAxisAlignment: (data['senderId'] == widget.senderUserId)? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 1,),
+              const SizedBox(height: 15,),
               ChatBubble(message: data['message'], s_compare: sendType.toString(), time: data['timestamp'], read_val: isRead.toString()),
             ],
           ),

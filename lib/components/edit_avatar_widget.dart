@@ -25,7 +25,7 @@ class EditAvatarWidget extends StatelessWidget {
     return FractionallySizedBox(
         widthFactor: 0.3,
         child: InkWell(
-            child: item == "http://192.168.142.55:8000/uploads/null"
+            child: item == "http://greeme.net/uploads/null"
                 ? GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
@@ -39,7 +39,6 @@ class EditAvatarWidget extends StatelessWidget {
                                 children: [
                                   InkWell(
                                       onTap: () async{
-                                        print(item_id);
                                         try {
                                         var pickedFile = await imgpicker.pickImage(
                                             source: ImageSource.camera);
@@ -69,6 +68,7 @@ class EditAvatarWidget extends StatelessWidget {
                                           SizedBox(
                                               width: vw(context, 3),
                                               height: 10),
+                                          
                                           const Image(
                                             image: AssetImage(
                                                 "assets/images/identity/photo-camera-svgrepo-com.png"),
@@ -84,7 +84,6 @@ class EditAvatarWidget extends StatelessWidget {
                                       )),
                                   InkWell(
                                       onTap: () async{
-                                        print(item_id);
                                         try {
                                         var pickedFile = await imgpicker.pickImage(
                                             source: ImageSource.gallery);
