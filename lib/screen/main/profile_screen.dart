@@ -34,7 +34,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   set setUid(String str) {
     this.userId = str;
   }
-  // bool? isShow = false;
   void getData() async {
     BlocProvider.of<AppCubit>(context).fetchProfileInfo();
   }
@@ -44,7 +43,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     super.initState();
     AppCubit appCubit = AppCubit.get(context);
     BlocProvider.of<AppCubit>(context).fetchProfileInfo();
-    print(appCubit.intro_text);
     appCubit.intro_text != "" ?isShow = "true": isShow = "false";
   }
   void dispose() {
@@ -56,8 +54,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   Widget build(BuildContext context) {
     AppCubit appCubit = AppCubit.get(context);
     // BlocProvider.of<AppCubit>(context).fetchProfileInfo();
-    print(appCubit.user.introBadge.toString());
-      if (isShow == "false") {
+    print(appCubit.user.today_recom);
+      if (isShow == "false" && appCubit.UserId=="0") {
         final AlertDialog dialog = AlertDialog(
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           titlePadding: EdgeInsets.zero,
@@ -106,10 +104,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                       height: 160)
                 ],
               )));
+              
       Future.delayed(const Duration(milliseconds: 1000), () {
         showDialog(context: context, builder: (context) => dialog);
       });
     }
+
     return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
       if (appCubit.user.id == -1) {
         return const Center(
@@ -161,7 +161,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                                     child: const Image(
                                         image: AssetImage(
                                             "assets/images/main/set-introduction.png")))),
-                        SettingsWidget(planType: appCubit.user.planType),
+                        SettingsWidget(planType: appCubit.user.planType, todays: appCubit.user.today_recom),
                         MyCommunityWidget(
                             communityObjects: appCubit.user.community),
                         IntroductionWidget(introduce: appCubit.user.introduce),

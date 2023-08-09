@@ -71,7 +71,7 @@ class ProfileMainInfo extends StatelessWidget {
                         width: 20),
                       Padding(
                           padding: const EdgeInsets.only(right: 50),
-                          child: Text(identityState, style: const TextStyle(fontSize: 12))),
+                          child: Text("本人確認完了", style: const TextStyle(fontSize: 12))),
                       ])),
                     ],),
                   ),

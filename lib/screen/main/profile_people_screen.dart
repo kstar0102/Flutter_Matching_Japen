@@ -44,12 +44,12 @@ class _ProfilePeopleScreenState extends ConsumerState<ProfilePeopleScreen> {
     AppCubit appCubit = AppCubit.get(context);
     setState(() {
       items = [
-        if (appCubit.user.photo1 != "http://192.168.144.61:8000/uploads/null") appCubit.user.photo1,
-        if (appCubit.user.photo2!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo2,
-        if (appCubit.user.photo3!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo3,
-        if (appCubit.user.photo4!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo4,
-        if (appCubit.user.photo5!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo5,
-        if (appCubit.user.photo6!= "http://192.168.144.61:8000/uploads/null") appCubit.user.photo6,
+        if (appCubit.user.photo1 != "http://192.168.142.55:8000/uploads/null") appCubit.user.photo1,
+        if (appCubit.user.photo2!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo2,
+        if (appCubit.user.photo3!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo3,
+        if (appCubit.user.photo4!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo4,
+        if (appCubit.user.photo5!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo5,
+        if (appCubit.user.photo6!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo6,
       ];
     });
         print(items.length);
@@ -68,7 +68,6 @@ class _ProfilePeopleScreenState extends ConsumerState<ProfilePeopleScreen> {
 
     BlocProvider.of<AppCubit>(context).fetchProfileInfo1(info.toString());
     AppCubit appCubit = AppCubit.get(context);
-
     return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
       return Scaffold(
         backgroundColor: Colors.white,
@@ -88,7 +87,7 @@ class _ProfilePeopleScreenState extends ConsumerState<ProfilePeopleScreen> {
                           width: vww(context, 100),
                           child: ListView(children: [
                             CarouselSlider(
-                              items: items.map((item) { // Iterate over each item in the 'items' array
+                              items: appCubit.avatarImages.map((item) { // Iterate over each item in the 'items' array
                                 return Container(
                                   height: double.infinity,
                                   width: double.infinity,
@@ -225,12 +224,12 @@ class _ProfilePeopleScreenState extends ConsumerState<ProfilePeopleScreen> {
                     child: ProfileBadgeWidget(badges: appCubit.user.introBadge),
                     ),
                     BasicInfo(
-                      height: appCubit.user.height,
-                      annualIncome: appCubit.user.annualIncome,
-                      blood: appCubit.user.bloodType,
-                      bodyType: appCubit.user.bodytype,
-                      cigarette: appCubit.user.cigarette,
-                      purpose: appCubit.user.usePurpose),
+                      height: appCubit.user.height ?? 0,
+                      annualIncome: appCubit.user.annualIncome == null? "": appCubit.user.annualIncome,
+                      blood: appCubit.user.bloodType ?? "",
+                      bodyType: appCubit.user.bodytype ?? "",
+                      cigarette: appCubit.user.cigarette ?? "",
+                      purpose: appCubit.user.usePurpose?? ""),
                   ]);
             }, childCount: 1)),
           ],

@@ -46,7 +46,8 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
     (_, state) => state.showAlertDialogOnError(context));
 
     final state = ref.watch(communicateProvider);
-    final coms = state.value;
+    final coms = state?.value ?? [];
+    print(coms);
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -93,6 +94,11 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                               Container(
                                 margin: EdgeInsets.only(
                                     right: vww(context, 10), top: 0),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/profile_screen');
+                                  },
+                                ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.0),
                                   image: const DecorationImage(
@@ -142,7 +148,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                                             Padding(
                                               padding: EdgeInsets.only(left: vww(context, 0)),
                                               child: Image.network(
-                                                "http://192.168.144.61:8000/uploads/category/" +
+                                                "http://192.168.142.55:8000/uploads/category/" +
                                                     communicateItem.category_image,
                                                 width: 25,
                                                 height: 25,

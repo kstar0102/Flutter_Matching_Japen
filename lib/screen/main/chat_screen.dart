@@ -11,6 +11,7 @@ import 'package:matching_app/communcation/category_people/people_controller.dart
 import 'package:matching_app/communcation/category_people/people_card.dart';
 import 'dart:async';
 import '../../bloc/cubit.dart';
+import 'package:matching_app/components/radius_button.dart';
 import '../../communcation/category_people/people_item.dart';
 // ignore: use_key_in_widget_constructors
 class ChatScreen extends ConsumerStatefulWidget {
@@ -33,7 +34,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     super.initState();
     getData();
     ref.read(peopleProvider.notifier).doGetChattingData();
-    startTimer();
+    // startTimer();
   }
 
   void getData() async {
@@ -54,12 +55,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     });
   }
 
-  void startTimer() {
-    const duration = Duration(seconds: 2);
-    _timer = Timer.periodic(duration, (timer) {
-      getData();
-    });
-  }
+  // void startTimer() {
+  //   const duration = Duration(seconds: 2);
+  //   _timer = Timer.periodic(duration, (timer) {
+  //     getData();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +69,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
     final state = ref.watch(peopleProvider);
     final peoples = state.value;
+    // print(peoples);
     AppCubit appCubit = AppCubit.get(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -85,7 +87,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         horizontal: 20,
                       ),
                       child: Container(
-                        height: 570,
+                        height: 590,
                         child: peoples != null && peoples.isNotEmpty
                           ? SingleChildScrollView(
                               scrollDirection: Axis.vertical,
@@ -109,7 +111,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                             padding: EdgeInsets.symmetric(
                                 horizontal: vww(context, vww(context, 1))),
                             child: Container(
-                              height: 570,
+                              height: 590,
                               child: peoples != null && peoples.isNotEmpty
                                 ? SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
@@ -122,7 +124,42 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                       )).toList(),
                                     ),
                                   )
-                                : Center(child: Text("No data")),
+                                : Center(
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: 80,),
+                                        Image.asset("assets/images/user.png"),
+                                        SizedBox(height: 20,),
+                                        Text("まだ一致する相手はいません。",
+                                          style: TextStyle(color: Colors.red,
+                                                  fontWeight: FontWeight.bold),),
+                                        SizedBox(height: 20,),
+                                        Text("まずはたくさん"),
+                                        SizedBox(height: 10,),
+                                        Text("好きです。"),
+                                         SizedBox(height: 120,),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 5),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context).size.width,
+                                            child: Align(
+                                              alignment: Alignment.bottomCenter,
+                                              child: RadiusButton(
+                                                id: 0,
+                                                color: BUTTON_MAIN,
+                                                text: "探す",
+                                                goNavigation: (id) {
+                                                  Navigator.pushNamed(context, "/following_users");
+                                                },
+                                                isDisabled: false,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ),
                             ),
                           ),
                         ]);

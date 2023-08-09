@@ -11,9 +11,9 @@ class FollowingController extends StateNotifier<AsyncValue<FollowingItemList>> {
   Future<void> doGetLikeData() async {
     // state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => notifRepo.doGetLikeData());
-    if (mounted) {
+    // if (mounted) {
       state = newState;
-    }
+    // }
     return;
   }
 }

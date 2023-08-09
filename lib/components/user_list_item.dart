@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/utile/index.dart';
+import 'package:matching_app/communcation/category_people/people_item.dart';
+import 'package:matching_app/screen/main/profile_people_screen.dart';
 
 class UserListItem extends StatelessWidget {
-  const UserListItem({super.key, this.isBlockedUser});
+  final PeopleItem info;
+  final VoidCallback onPressed;
+  final bool isBlockedUser;
 
-  final bool? isBlockedUser;
+  const UserListItem({
+    Key? key,
+    required this.info,
+    required this.onPressed,
+    required this.isBlockedUser,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +31,18 @@ class UserListItem extends StatelessWidget {
             Container(
               width: 60.0,
               height: 60.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50.0),
-                image: const DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('assets/images/users/Rectangle -3.png'),
+              child: CircleAvatar(
+                backgroundImage:
+                    NetworkImage('http://192.168.142.55:8000/uploads/' + info.photo1),
+                radius: 50,
+                backgroundColor: Colors.white,
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Color.fromRGBO(
+                              244, 130, 34, 1)),
+                      borderRadius:
+                          BorderRadius.circular(55)),
                 ),
               ),
             ),
@@ -39,11 +55,11 @@ class UserListItem extends StatelessWidget {
                   children: [
                     SizedBox(
                         width: vww(context, 90) - 70,
-                        child: const Row(
+                        child:Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Test2",
+                              Text("${info.user_nickname}",
                                   style: TextStyle(
                                       fontSize: 16, color: PRIMARY_FONT_COLOR))
                             ])),
@@ -53,7 +69,7 @@ class UserListItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              const Text("群馬県　19歳",
+                              Text("${info.residence+ " " + info.age+"歳"}",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                       fontSize: 12,
@@ -69,13 +85,21 @@ class UserListItem extends StatelessWidget {
                                       ),
                                       borderRadius: BorderRadius.circular(50),
                                       color: isBlockedUser == true ? const Color.fromARGB(255, 255, 70, 70) : BUTTON_MAIN),
-                                  child: const Padding(
+                                  child: Padding(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 15),
-                                      child: Text("いいね",
+                                      child: InkWell(
+                                        onTap: (){
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => ProfilePeopleScreen(info : info.user_id)),);
+                                        },
+                                        child: Text("いいね",
                                           style: TextStyle(
                                               fontSize: 10,
-                                              color: Colors.white))))
+                                              color: Colors.white)),
+                                      ) 
+                                    ))
                             ])),
                   ],
                 ))

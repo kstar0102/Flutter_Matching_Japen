@@ -80,7 +80,6 @@ class AuthRepository {
     String? res_id = prefs.getString('UserId');
     final data = await DioClient.postBoardReply(userId,Id,message,res_id!);
     var result = data['result'];
-    print('hhhhhhhhhhhhhhhhhhhhhhhhhh returned: $result');
     if (result == 'success') {
       Fluttertoast.showToast(
           msg: "正確に送信されました。",

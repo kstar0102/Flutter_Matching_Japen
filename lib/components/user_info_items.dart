@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/communcation/category_people/people_item.dart';
+import 'package:matching_app/main.dart';
+import 'package:matching_app/screen/main/matching_screen.dart';
 import 'package:matching_app/screen/main/profile_people_screen.dart';
 import 'package:matching_app/screen/main/chatting_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,9 +36,12 @@ class _UserInfoItemsState extends State<UserInfoItems> {
     // Compare the current date with the created date
     bool isEqual = currentDate.year == createdDate.year &&
         currentDate.month == createdDate.month &&
-        currentDate.day == createdDate.day;
+        currentDate.day == createdDate.day || 
+        currentDate.month >= createdDate.month ||
+        currentDate.day >= createdDate.day;
 
     // Return the result
+    print(isEqual);
     return isEqual;
   }
 
@@ -63,7 +68,7 @@ class _UserInfoItemsState extends State<UserInfoItems> {
             Navigator.push(
               context, 
               MaterialPageRoute(
-                builder: (context) => ChattingScreen(
+                builder: (context) => MatchingScreen(
                   receiverUserPhone: boardInfo.phone_number,
                   receiverUserToken: boardInfo.phone_token,
                   receiverUserId: boardInfo.user_id,
@@ -79,7 +84,7 @@ class _UserInfoItemsState extends State<UserInfoItems> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image.network(
-              "http://192.168.144.61:8000/uploads/" + avatar,
+              "http://192.168.142.55:8000/uploads/" + avatar,
               width: 165,
               height: 165,
             ),

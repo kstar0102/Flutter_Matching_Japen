@@ -63,7 +63,7 @@ class ProfileHolidayType extends StatelessWidget {
 																					Color.fromARGB(255, 155, 155, 155)),
 																)
 															: Text(
-                                  appCubit.user.holiday=="" ? appCubit.user.holiday : "未設定",
+                                  "未設定",
                                   style: TextStyle(
                                       fontSize: 14,
                                       color: BUTTON_MAIN,

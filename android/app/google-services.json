@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "14523935257",
-    "project_id": "greeme-8916e",
-    "storage_bucket": "greeme-8916e.appspot.com"
+    "project_number": "320373877006",
+    "project_id": "greeme-5038c",
+    "storage_bucket": "greeme-5038c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:14523935257:android:053aaf690ad51accd29888",
+        "mobilesdk_app_id": "1:320373877006:android:c8bb3021cff282dd858f5f",
         "android_client_info": {
           "package_name": "com.example.matching_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "14523935257-nh0thr3j8h25fqk69kjr7uiip9tdmhrp.apps.googleusercontent.com",
+          "client_id": "320373877006-s961ah0dldcaqgo0t7hq2fnh096oejuv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.matching_app",
-            "certificate_hash": "cc9d0f13d245b9ae39d148a920518a9e10aecdac"
+            "certificate_hash": "51a7eae1c806e137191f6a1b7b49655b60d30db8"
           }
         },
         {
-          "client_id": "14523935257-7a7lqm8uj7ds0c543anq1d6i4tflsq0u.apps.googleusercontent.com",
+          "client_id": "320373877006-f53tj0o51ml23a61u8b9ok2ss17ca5ig.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCHB7PTzqayyOa5RqjLpt5EdnBXpHclneI"
+          "current_key": "AIzaSyANGV2EoufsuaDqwF2waDISxf4G6K-ajr4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "14523935257-7a7lqm8uj7ds0c543anq1d6i4tflsq0u.apps.googleusercontent.com",
+              "client_id": "320373877006-f53tj0o51ml23a61u8b9ok2ss17ca5ig.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

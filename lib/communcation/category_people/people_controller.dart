@@ -8,30 +8,49 @@ class PeopleController extends StateNotifier<AsyncValue<PeopleItemList>> {
 
   final PeopleRepository notifRepo;
 
-  Future<void> doGetPeopleData(String sub_id) async {
-    // state = const AsyncValue.loading();
+  AsyncValue<PeopleItemList?> _state = const AsyncValue.loading();
+  // set state(AsyncValue<PeopleItemList?> value) => _state = value;
+
+  Future<PeopleItemList?> doGetPeopleData(String sub_id) async {
+    state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => notifRepo.doGetPeopleData(sub_id));
     if (mounted) {
       state = newState;
     }
-    return;
+
+    if (newState.hasError) {
+      return [];
+    } else {
+      return newState.value;
+    }
   }
 
-  Future<void> doGetChattingData() async {
+  Future<PeopleItemList?> doGetChattingData() async {
+    state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => notifRepo.doGetChattingData());
     if (mounted) {
       state = newState;
     }
-    return;
+
+    if (newState.hasError) {
+      return [];
+    } else {
+      return newState.value;
+    }
   }
 
-  Future<void> doGetLikeData() async {
-    // state = const AsyncValue.loading();
+  Future<PeopleItemList?> doGetLikeData() async {
+    state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => notifRepo.doGetLikeData());
     if (mounted) {
       state = newState;
     }
-    return;
+
+    if (newState.hasError) {
+      return [];
+    } else {
+      return newState.value;
+    }
   }
 }
 

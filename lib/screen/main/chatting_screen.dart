@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matching_app/controller/auth_controllers.dart';
 import 'package:intl/intl.dart';
+import 'package:matching_app/screen/verify_screen/identity_verify.dart';
 
 // ignore: use_key_in_widget_constructors
 class ChattingScreen extends ConsumerStatefulWidget {
@@ -22,8 +23,10 @@ class ChattingScreen extends ConsumerStatefulWidget {
   final String receiverUserBadgeColor;
   final String senderUserId;
   final String tab_val;
-  
-  const ChattingScreen({super.key, required this.receiverUserPhone, required this.receiverUserToken, required this.receiverUserId, required this.receiverUserAvatar, required this.receiverUserName, required this.receiverUserBadgeName, required this.receiverUserBadgeColor, required this.senderUserId, required this.tab_val});
+  final String send_identy;
+  final String address;
+  final String age;
+  const ChattingScreen({super.key, required this.receiverUserPhone, required this.receiverUserToken, required this.receiverUserId, required this.receiverUserAvatar, required this.receiverUserName, required this.receiverUserBadgeName, required this.receiverUserBadgeColor, required this.senderUserId, required this.tab_val, required this.send_identy, required this.address, required this.age});
   @override
   // ignore: library_private_types_in_public_api
   ConsumerState<ChattingScreen> createState() => _ChattingScreenState();
@@ -42,6 +45,7 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
   double screenHeight = 0;
   double keyboardHeight = 0;
   bool _isKeyboardVisible = false;
+  bool dialogShown = false;
   final FocusNode _focusNode = FocusNode();
   @override
   void initState() {
@@ -66,21 +70,101 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
 
   void sendMessage() async {
     // only send message if there is something to send
-    String msg = _messageController.text;
-    _messageController.clear();
-    if(msg.isNotEmpty) {
-      final result = await _chatService.sendMessage(   
-        widget.receiverUserToken, msg, widget.senderUserId);
-        // clear the text controller after sending the message
-        
+    if (widget.send_identy != "承認") {
+        final AlertDialog dialog = AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          titlePadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          actionsPadding: EdgeInsets.zero,
+          actions: [
+            Container(
+                padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 13),
+                      backgroundColor: BUTTON_MAIN),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => IdentityVerify()),
+                    );
+                  },
+                  child: const Text('本人確認する'),
+                )),
+            Container(
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 20, left: 50, right: 50),
+                width: double.infinity,
+                child: TextButton(
+                  style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 13),
+                      backgroundColor: Colors.transparent),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('まだしない',
+                      style: TextStyle(color: BUTTON_MAIN)),
+                ))
+          ],
+          shape: roundedRectangleBorder,
+          content: Container(
+              padding: const EdgeInsets.only(
+                  top: 20),
+              height: 300,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Text(
+                    "安心安全のため\n本人確認をしてください",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: PRIMARY_FONT_COLOR,
+                        fontSize: 18,
+                        letterSpacing: -2),
+                  ),
+                  Image(
+                      width: vww(context, 40),
+                      image: const AssetImage(
+                          "assets/images/main/unidentified.png"))
+                ],
+        )));
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        showDialog(context: context, builder: (context) => dialog);
+      });
+       dialogShown = true;
     }
-    DateTime currentTime = DateTime.now();
-    String formattedTime = DateFormat('hh:mm').format(currentTime);
-    final controller = ref.read(AuthProvider.notifier);
-    controller.doChatting(widget.receiverUserId, widget.receiverUserToken, msg, formattedTime).then(
-      (value) {
-      },
-    );
+    else{
+      String msg = _messageController.text;
+      _messageController.clear();
+      if(msg.isNotEmpty) {
+        final result = await _chatService.sendMessage(   
+          widget.receiverUserToken, msg, widget.senderUserId);
+          // clear the text controller after sending the message
+          
+      }
+      DateTime currentTime = DateTime.now();
+      String formattedTime = DateFormat('hh:mm').format(currentTime);
+      final controller = ref.read(AuthProvider.notifier);
+      controller.doChatting(widget.receiverUserId, widget.receiverUserToken, msg, formattedTime).then(
+        (value) {
+        },
+      );
+    }
+    
   }
 
   @override
@@ -124,7 +208,6 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
       screenHeight = 510;
       // keyboardHeight = 0;
     }
-    print(isRead);
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -140,7 +223,10 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
                         avatar: widget.receiverUserAvatar,
                         user_name: widget.receiverUserName,
                         user_id: widget.receiverUserId,
-                        tab_v: widget.tab_val
+                        tab_v: widget.tab_val,
+                        receiver_id: widget.receiverUserToken,
+                        address: widget.address,
+                        age: widget.age
                     )))),
         
         body: Stack(

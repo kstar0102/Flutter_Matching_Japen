@@ -9,6 +9,7 @@ import 'package:matching_app/screen/main/layouts/bottom_nav_bar.dart';
 import 'package:matching_app/screen/main/layouts/date_select_widget.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/controller/board_controller.dart';
+import 'package:matching_app/controller/board_repository.dart';
 import 'package:matching_app/components/dialogs.dart';
 import 'package:matching_app/utile/async_value_ui.dart';
 import 'package:matching_app/screen/main/setting/board_list.dart';
@@ -169,7 +170,6 @@ class _BoardFunctionState extends ConsumerState<BoardFunction> {
     final state = ref.watch(boardProvider);
     final boards = state.value;
 
-    
     return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
      
       return Scaffold(
@@ -310,7 +310,6 @@ class _BoardFunctionState extends ConsumerState<BoardFunction> {
                                   itemBuilder: (context, element) {
                                     return InkWell(
                                       onTap: () {
-                                        
                                         board_id = element.id.toString();
                                         showModalBottomSheet(
                                           isScrollControlled: true,

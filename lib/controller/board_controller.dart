@@ -8,17 +8,24 @@ class BoardController extends StateNotifier<AsyncValue<BoardList>> {
 
   final BoardRepository notifRepo;
 
-  Future<void> doFetchNotifs() async {
-    // state = const AsyncValue.loading();
+  // AsyncValue<BoardList?> _state = const AsyncValue.loading();
+
+  Future<BoardList?> doFetchNotifs() async {
+    state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => notifRepo.doFetchNotifs());
     if (mounted) {
       state = newState;
     }
-    return;
+    // if (newState.hasError) {
+      
+    //   return newState.value;
+    // } else {
+    //   return newState.value;
+    // }
   }
 }
 
 final boardProvider = StateNotifierProvider.autoDispose<BoardController,
-    AsyncValue<BoardList>>((ref) {
+    AsyncValue<BoardList?>>((ref) {
   return BoardController(notifRepo: ref.watch(BoardProvider));
 });

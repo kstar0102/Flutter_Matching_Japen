@@ -94,11 +94,11 @@ class _BoardDetailCardState extends ConsumerState<BoardDetailCard> {
                                               const BorderRadius.all(Radius.circular(50)),
                                           border: Border.all(color: Colors.black45)),
                                       child: CircleAvatar(
-                                        backgroundImage: NetworkImage("http://192.168.144.61:8000/uploads/"+avatar),
+                                        backgroundImage: NetworkImage("http://192.168.142.55:8000/uploads/"+avatar),
                                         onBackgroundImageError: (exception, stackTrace) {
                                           setState(() {
                                             avatar =
-                                                "http://192.168.144.61:8000/uploads/1.png";
+                                                "http://192.168.142.55:8000/uploads/1.png";
                                           });
                                         },
                                         backgroundColor: Colors.transparent,

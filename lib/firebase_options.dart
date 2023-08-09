@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    appId: '1:14523935257:android:053aaf690ad51accd29888',
-    apiKey: 'AIzaSyBZfMqEKv5uzAYzWS74IBeDB6bSnoaP1yU',
-    projectId: 'greeme-8916e',
-    messagingSenderId: '14523935257',
-    measurementId: '388975694',
+    appId: '1:320373877006:android:c8bb3021cff282dd858f5f',
+    apiKey: 'AIzaSyDfNvLsQZhaz0BiaoIENSJzuubHXj5Zo-E',
+    projectId: 'greeme-5038c',
+    messagingSenderId: '320373877006',
+    measurementId: '320373877006',
     storageBucket: 'auth-4c590.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCqNMx96Av7bnq4P8CKyNB3uwUM-PGIUO8',
-    appId: '1:168740472355:ios:def131854fc6c921cc9396',
+    apiKey: 'AIzaSyDfNvLsQZhaz0BiaoIENSJzuubHXj5Zo-E',
+    appId: '1:320373877006:ios:524f364b41f83404858f5f',
     messagingSenderId: '168740472355',
-    projectId: 'auth-4c590',
+    projectId: 'greeme-5038c',
     storageBucket: 'auth-4c590.appspot.com',
     iosClientId: '168740472355-n79gu4u9mto23433goe4nk2faph998bf.apps.googleusercontent.com',
     iosBundleId: 'com.example.line',

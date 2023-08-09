@@ -28,60 +28,60 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen>
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: vww(context, vww(context, 1))),
-                        child: Column(
-                          children: [
-                            TextButton(
-                              style: ButtonStyle(
-                                padding: MaterialStateProperty.all<
-                                    EdgeInsetsGeometry>(EdgeInsets.zero),
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => CupertinoAlertDialog(
-                                          content: const Text(
-                                              'ブロックをしても\nよろしいですか？',
-                                              style: TextStyle(fontSize: 16)),
-                                          actions: <Widget>[
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text('キャンセル',
-                                                    style: TextStyle(
-                                                        fontSize: 15))),
-                                            TextButton(
-                                              onPressed: () {
-                                              },
-                                              child: const Text('OK',
-                                                  style:
-                                                      TextStyle(fontSize: 15)),
-                                            )
-                                          ],
-                                        ));
-                              },
-                              child: const UserListItem(isBlockedUser: true),
-                            ),
-                          ],
-                        )),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: vww(context, vww(context, 1))),
-                        child: Column(
-                          children: [
-                            TextButton(
-                              style: ButtonStyle(
-                                padding: MaterialStateProperty.all<
-                                    EdgeInsetsGeometry>(EdgeInsets.zero),
-                              ),
-                              onPressed: () {},
-                              child: const UserListItem(isBlockedUser: true),
-                            ),
-                          ],
-                        )),
+                    // Padding(
+                    //     padding: EdgeInsets.symmetric(
+                    //         horizontal: vww(context, vww(context, 1))),
+                    //     child: Column(
+                    //       children: [
+                    //         TextButton(
+                    //           style: ButtonStyle(
+                    //             padding: MaterialStateProperty.all<
+                    //                 EdgeInsetsGeometry>(EdgeInsets.zero),
+                    //           ),
+                    //           onPressed: () {
+                    //             showDialog(
+                    //                 context: context,
+                    //                 builder: (context) => CupertinoAlertDialog(
+                    //                       content: const Text(
+                    //                           'ブロックをしても\nよろしいですか？',
+                    //                           style: TextStyle(fontSize: 16)),
+                    //                       actions: <Widget>[
+                    //                         TextButton(
+                    //                             onPressed: () {
+                    //                               Navigator.pop(context);
+                    //                             },
+                    //                             child: const Text('キャンセル',
+                    //                                 style: TextStyle(
+                    //                                     fontSize: 15))),
+                    //                         TextButton(
+                    //                           onPressed: () {
+                    //                           },
+                    //                           child: const Text('OK',
+                    //                               style:
+                    //                                   TextStyle(fontSize: 15)),
+                    //                         )
+                    //                       ],
+                    //                     ));
+                    //           },
+                    //           child: const UserListItem(isBlockedUser: true),
+                    //         ),
+                    //       ],
+                    //     )),
+                    // Padding(
+                    //     padding: EdgeInsets.symmetric(
+                    //         horizontal: vww(context, vww(context, 1))),
+                    //     child: Column(
+                    //       children: [
+                    //         TextButton(
+                    //           style: ButtonStyle(
+                    //             padding: MaterialStateProperty.all<
+                    //                 EdgeInsetsGeometry>(EdgeInsets.zero),
+                    //           ),
+                    //           onPressed: () {},
+                    //           child: const UserListItem(isBlockedUser: true),
+                    //         ),
+                    //       ],
+                    //     )),
                   ]);
             }, childCount: 1)),
           ],

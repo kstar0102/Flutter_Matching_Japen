@@ -58,6 +58,7 @@ class PeopleItem {
   final String unread_message;
 
   factory PeopleItem.fromMap(Map<String, dynamic> data) {
+    print(data);
     return PeopleItem(
       user_id: data['user_id'].toString(),
       user_nickname: data['user_nickname'].toString(),
@@ -75,7 +76,7 @@ class PeopleItem {
       alcohol: data['alcohol'].toString(),
       phone_number: data['phone_number'].toString(),
       phone_token: data['phone_token'].toString(),
-      created_at: data['created_at'].toString(),
+      created_at: data['created_at'],
       status: data['status'].toString(),
       online_status: data['online_status'].toString(),
       last_msg: data['last_msg'].toString() ?? "",
@@ -86,8 +87,8 @@ class PeopleItem {
   }
 
   @override
-  String toString() => 'PeopleItem(user_id: $user_id, user_nickname: $user_nickname, '
-      'photo1: $photo1, badge_name: $badge_name, age: $age, residence: $residence, identity_state: $identity_state, badge_color: $badge_color, height: $height, body_name: $body_name, holiday: $holiday, use_purpose: $use_purpose, cigarette: $cigarette, alcohol: $alcohol, phone_number: $phone_number, phone_token: $phone_token, is_read: $is_read, unread_message: $unread_message)';
+  String toString() => 'doChattingAvailable(user_id: $user_id, user_nickname: $user_nickname, '
+      'photo1: $photo1, badge_name: $badge_name, age: $age, residence: $residence, identity_state: $identity_state, badge_color: $badge_color, height: $height, body_name: $body_name, holiday: $holiday, use_purpose: $use_purpose, cigarette: $cigarette, alcohol: $alcohol, phone_number: $phone_number, phone_token: $phone_token, is_read: $is_read, unread_message: $unread_message, last_msg: $last_msg, last_time: $last_time, online_status: $online_status, created_at: $created_at, status: $status)';
 }
 
 typedef PeopleItemList = List<PeopleItem>;

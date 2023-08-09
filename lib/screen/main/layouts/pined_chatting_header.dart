@@ -1,9 +1,12 @@
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_app/common.dart';
+import 'package:matching_app/screen/main/report_screen.dart';
 import 'package:matching_app/utile/index.dart';
 
+import '../../../bloc/cubit.dart';
 import '../chat_screen.dart';
 
 // ignore: unused_element
@@ -12,7 +15,10 @@ class PinedChattingHeader extends StatelessWidget {
   final String user_id;
   final String avatar;
   final String tab_v;
-  const PinedChattingHeader({super.key, required this.user_name, required this.avatar, required this.user_id, required this.tab_v});
+  final String receiver_id;
+  final String address;
+  final String age;
+  const PinedChattingHeader({super.key, required this.user_name, required this.avatar, required this.user_id, required this.tab_v, required this.receiver_id, required this.address, required this.age});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +56,7 @@ class PinedChattingHeader extends StatelessWidget {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(50),
                       child: Image(
-                        image: NetworkImage("http://192.168.144.61:8000/uploads/" + avatar),
+                        image: NetworkImage("http://192.168.142.55:8000/uploads/" + avatar),
                         height: 60,
                       )),
                   Padding(
@@ -69,7 +75,21 @@ class PinedChattingHeader extends StatelessWidget {
                             title: const Text('違反報告する',
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 54, 137, 232))),
-                            onPressed: (context) {Navigator.pushNamed(context, "/report_screen");}),
+                            onPressed: (context) {
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(
+                                  builder: (context) => ReportScreen(
+                                    user_name: user_name,
+                                    user_id: user_id,
+                                    avatar: avatar,
+                                    receiver_id: receiver_id,
+                                    address: address,
+                                    age: age
+                                ),
+                              ));
+                            }
+                          ),
                         BottomSheetAction(
                             title: const Text('ブロックする',
                                 style: TextStyle(
@@ -90,6 +110,7 @@ class PinedChattingHeader extends StatelessWidget {
                                               child: const Text('キャンセル', style: TextStyle(fontSize: 15))),
                                           TextButton(
                                             onPressed: () {
+                                              BlocProvider.of<AppCubit>(context).removeMatching(receiver_id);
                                               Navigator.pushNamed(context, "/chat_screen");
                                             },
                                             child: const Text('OK', style: TextStyle(fontSize: 15)),

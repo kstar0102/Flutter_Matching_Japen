@@ -118,6 +118,11 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
       BadgeObject("鉄板焼き", false, 3),
     ];
     BlocProvider.of<AppCubit>(context).fetchProfileInfo();
+    BlocProvider.of<AppCubit>(context).fetchAddressList();
+    BlocProvider.of<AppCubit>(context).fetchCommunityList();
+    BlocProvider.of<AppCubit>(context).fetchBodyTypeList();
+    BlocProvider.of<AppCubit>(context).fetchPurposeList();
+    BlocProvider.of<AppCubit>(context).fetchBadgeList();
   }
   void initStateItems() {
     setState(() {
@@ -271,7 +276,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                               },
                                               title: "血液型",
                                               value:
-                                              appCubit.blood_type == ""?"未設定":appCubit.blood_type,
+                                              appCubit.blood_type,
                                               list: bloodType,
                                               isShowWheel: baseInfo[3]),
                                           profileEducationType(
@@ -282,7 +287,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                                 });
                                               },
                                               title: "学歴",
-                                              value: appCubit.edu_type == ""?"未設定":appCubit.edu_type,
+                                              value: appCubit.edu_type,
                                               list: educationType,
                                               isShowWheel: baseInfo[4]),
                                           ProfileInfoProposeType(
@@ -304,7 +309,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                                 });
                                               },
                                               title: "年収",
-                                              value: appCubit.annual_budget == ""?"未設定":appCubit.annual_budget,
+                                              value: appCubit.annual_budget,
                                               list: budgetType,
                                               isShowWheel: baseInfo[6]),
                                           ProfileHolidayType(
@@ -315,7 +320,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                                 });
                                               },
                                               title: "休日",
-                                              value: appCubit.holi_info == ""?"未設定":appCubit.holi_info,
+                                              value: appCubit.holi_info,
                                               list: holidayType, 
                                               isShowWheel: baseInfo[7]),
                                           ProfileCigaType(
@@ -326,7 +331,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                                 });
                                               },
                                               title: "タバコ",
-                                              value: appCubit.ciga_info == ""?"未設定":appCubit.ciga_info,
+                                              value: appCubit.ciga_info,
                                               list: cigaType, 
                                               isShowWheel: baseInfo[8]),
                                           ProfileInfoItem(
@@ -337,7 +342,7 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                                 });
                                               },
                                               title: "お酒",
-                                              value: appCubit.alcohol_info == ""?"未設定":appCubit.alcohol_info,
+                                              value: appCubit.alcohol_info,
                                               list: alcoholType, 
                                               isShowWheel: baseInfo[9]),
                                           Padding(

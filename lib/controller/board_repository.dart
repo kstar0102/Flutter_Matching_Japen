@@ -19,13 +19,26 @@ class BoardRepository {
 
     final result = data['result'];
 
-    if (result is List) {
-      _boards = result.map((data) => Board.fromMap(data)).toList();
-      print('doFetchNotifs() src=${_boards.toString()}');
+    // if (result is List) {
+    //   _boards = result.map((data) => Board.fromMap(data)).toList();
+    //   print('doFetchNotifs() src=${_boards.toString()}');
 
-      return _boards;
+    //   return _boards;
+    // } else {
+    //   return _boards;
+    // }
+     if (result is List) {
+      try {
+        final transs =
+            result.map((data) => Board.fromMap(data)).toList();
+        developer.log('fetched transactions: ${transs.length}');
+        return transs;
+      } catch (e) {
+        developer.log('doFetchTransaction() error=$e');
+        return [];
+      }
     } else {
-      return _boards;
+      throw UnimplementedError;
     }
   }
 }

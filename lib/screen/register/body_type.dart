@@ -96,7 +96,7 @@ class _BodyTypeState extends State<BodyType> {
                             child: RadiusButton(
                               id: 0,
                               color: BUTTON_MAIN,
-                              text: "つぎへ${appCubit.bodyType}",
+                              text: "つぎへ",
                               goNavigation: (id) {
                                 Navigator.pushNamed(context, "/purpose_use");
                               },

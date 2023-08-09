@@ -32,7 +32,7 @@ class _ChatUserItemState extends State<ChatUserItem> {
                   : lastMessage !=""? lastMessage: "チャット記録はありません。";
 
     Widget summary = boardInfo.is_read== 'null'?
-      Text(displayText,
+      Text(displayText == "null"?'':displayText,
       textAlign: TextAlign.start,
           style: TextStyle(
               fontSize: 15,
@@ -59,7 +59,10 @@ class _ChatUserItemState extends State<ChatUserItem> {
               receiverUserBadgeName: boardInfo.badge_name,
               receiverUserBadgeColor: boardInfo.badge_color,
               senderUserId: appCubit.user.phone_token,
-              tab_val: "1"
+              tab_val: "1",
+              send_identy: appCubit.user.identityState,
+              address: boardInfo.residence,
+              age: boardInfo.age
           ),
         ));
       },
@@ -74,7 +77,7 @@ class _ChatUserItemState extends State<ChatUserItem> {
               height: 60.0,
               child: CircleAvatar(
                 backgroundImage:
-                    NetworkImage('http://192.168.144.61:8000/uploads/' + boardInfo.photo1),
+                    NetworkImage('http://192.168.142.55:8000/uploads/' + boardInfo.photo1),
                 radius: 50,
                 backgroundColor: Colors.white,
                 child: Container(
@@ -137,7 +140,7 @@ class _ChatUserItemState extends State<ChatUserItem> {
                       Text("${boardInfo.user_nickname}",
                           style: TextStyle(
                               fontSize: 15, color: PRIMARY_FONT_COLOR)),
-                      Text("${boardInfo.last_time}",
+                      Text("${boardInfo.last_time=='null'?'':boardInfo.last_time}",
                           style: TextStyle(
                               fontSize: 15,
                               color: Color.fromARGB(255, 193, 192, 201)))

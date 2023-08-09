@@ -93,7 +93,6 @@ class ProfileInfoAddress extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () {
                           appCubit.changeAddress(address, address_id.toString());
-                          
                         },
                         child: Text('保管'),
                       ),

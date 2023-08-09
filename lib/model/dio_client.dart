@@ -5,13 +5,13 @@ import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:matching_app/model/dio_exception.dart';
 
 class DioClient {
   static final _baseOptions = BaseOptions(
     // baseUrl: 'http://mobileapp.swaconnect.net/api',
-    baseUrl: 'http://192.168.144.61:8000/api',
+    baseUrl: 'http://192.168.142.55:8000/api',
     //connectTimeout: 10000, receiveTimeout: 10000,
     headers: {
       'Content-type': 'application/x-www-form-urlencoded',
@@ -43,7 +43,8 @@ class DioClient {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
-    print(uId + introText);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('isShow', "true");
     try {
       final response = await dio
           .post('/introduce_update', data: {'id': uId, 'data': introText});
@@ -276,7 +277,6 @@ class DioClient {
     try {
       final response = await dio.get('/get_board_data/$uid',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
-
       return response.data;
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
@@ -407,6 +407,21 @@ class DioClient {
     }
   }
 
+  static Future<dynamic> addLikesData(String send_id, String receiver_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    print(send_id+receiver_id);
+    try {
+       final response = await dio
+          .post('/add_user_like', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
   static Future<dynamic> doGetCommunicateData(String user_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
@@ -429,6 +444,7 @@ class DioClient {
     try {
       final response = await dio.get('/get_people_data/$sub_id/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
+      print(response.data);
       return response.data;
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
@@ -468,6 +484,49 @@ class DioClient {
       } else {
         throw e.message; // let DioExceptions handle other errors
       }
+    }
+  }
+
+  static Future<dynamic> addMatching(String receiver_id, String send_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    try {
+       final response = await dio
+          .post('/add_matching', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      print(response.data);
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
+  static Future<dynamic> removeMatching(String receiver_id, String send_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    try {
+       final response = await dio
+          .post('/remove_matching', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
+  static Future<dynamic> userReport(String receiver_id, String send_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    try {
+       final response = await dio
+          .post('/user_report', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 }

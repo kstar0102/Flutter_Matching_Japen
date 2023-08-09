@@ -54,9 +54,6 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
 
     final newState =
         await AsyncValue.guard(() => authRepo.doBoardReply(userId, Id, message));
-
-    // Check if the controller is mounted before setting the state to prevent:
-    // Bad state: Tried to use Controller after `dispose` was called.
     if (mounted) {
       state = newState;
     }
@@ -70,8 +67,6 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
     final newState =
         await AsyncValue.guard(() => authRepo.addBoardData(selectedItems,board_text));
 
-    // Check if the controller is mounted before setting the state to prevent:
-    // Bad state: Tried to use Controller after `dispose` was called.
     if (mounted) {
       state = newState;
     }

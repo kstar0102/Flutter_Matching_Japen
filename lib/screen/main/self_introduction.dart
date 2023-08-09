@@ -69,7 +69,6 @@ class _SelfIntroducion extends ConsumerState<SelfIntroducion>
     }
     textFieldController = TextEditingController(text: self_introduction);
     AppCubit appCubit = AppCubit.get(context);
-
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -92,27 +91,12 @@ class _SelfIntroducion extends ConsumerState<SelfIntroducion>
                           text: "",
                           onPressed: () {
                             if (intro_text.isNotEmpty) {
-                              // print("object");
-                              // BlocProvider.of<AppCubit>(context)
-                              //     .fetchProfileInfo();
-                              // final controller =
-                              //     ref.read(AuthProvider.notifier);
-                              // controller
-                              //     .doIntroduce(_uID, intro_text)
-                              //     .then(
-                              //   (value) {
-                              //     // go home only if login success.
-                              //     if (value == true) {
-                              //       reloadData();
-                                    
-                              //     } else {}
-                              //   },
-                              // );
                               appCubit.postIntroduce(intro_text);
                               Navigator.pushNamed(context, '/profile_screen');
 
-                            } else {
-                              // showOkAlertDialog(context, "ちょっとでも\n文章を入力してみよう");
+                            } else if(intro_text.isEmpty && intro_text.length < 5){
+
+                              showOkAlertDialog(context, "ちょっとでも\n文章を入力してみよう");
                             }
                           }),
                     ),

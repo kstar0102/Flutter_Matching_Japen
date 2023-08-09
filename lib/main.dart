@@ -48,12 +48,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:matching_app/firebase_options.dart';
+import 'package:matching_app/screen/main/matching_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await LineSDK.instance
-      .setup("2000073944")
-      .then((_) => print("Line prepared"));
+  // await LineSDK.instance
+  //     .setup("2000073944")
+  //     .then((_) => print("Line prepared"));
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -109,8 +110,8 @@ class MatchingApp extends StatelessWidget {
             '/chat_screen': (context) => ChatScreen(),
             // '/chatting_screen': (context) => ChattingScreen(),
             '/users_profile_screen': (context) => UsersProfileScreen(),
-            '/report_screen': (context) => ReportScreen(),
-            '/report_success': (context) => ReportSuccess(),
+            // '/report_screen': (context) => ReportScreen(),
+            // '/report_success': (context) => ReportSuccess(),
             '/user_profile_chat': (context) => UsersProfileChatScreen(),
             '/profile_edit_screen': (context) => ProfileEditScreen(),
             '/profile_badge_screen': (context) => ProfileBadgeSelect(),
@@ -127,7 +128,6 @@ class MatchingApp extends StatelessWidget {
             '/privacy_setting_screen': (context) => PrivacySettingScreen(),
             '/account_close_screen': (context) => const AccountCloseScreen(),
             '/new_post_screen': (context) => const NewPostScreen(),
-            
           },
         ));
   }

@@ -48,7 +48,7 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
 
     final state = ref.watch(followingProvider);
     final follows = state.value;
-
+    print(follows);
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -202,6 +202,8 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
                               ? SingleChildScrollView(
                                   scrollDirection: Axis.vertical,
                                   child: Wrap(
+                                    spacing:5,
+                                    runSpacing: 5,
                                     children: <Widget>[
                                       for (var i = 0; i < follows.length; i++)
                                         if (viewShow == '5' || i < 5)

@@ -1,13 +1,19 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/components/Header.dart';
 import 'package:matching_app/components/radius_button.dart';
 import 'package:matching_app/utile/index.dart';
 
+import '../../bloc/cubit.dart';
+
 // ignore: use_key_in_widget_constructors
 class ReportSuccess extends StatefulWidget {
+  final String receiver_id;
+
+  const ReportSuccess({super.key, required this.receiver_id});
   @override
   // ignore: library_private_types_in_public_api
   _ReportSuccessState createState() => _ReportSuccessState();
@@ -42,6 +48,7 @@ class _ReportSuccessState extends State<ReportSuccess> {
                     text: "通報する",
                     color: BUTTON_MAIN,
                     goNavigation: (id) {
+                      BlocProvider.of<AppCubit>(context).userReport(widget.receiver_id);
                       Navigator.pushNamed(context, "/chat_screen");
                     },
                     id: 0)),

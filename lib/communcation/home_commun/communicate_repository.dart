@@ -19,14 +19,17 @@ class CommunicationRepository {
     dynamic data = await DioClient.doGetCommunicateData(user_id!);
 
     final result = data['result'];
-
     if (result is List) {
-      _communicationitems = result.map((data) => CommunicateItem.fromMap(data)).toList();
-      print('doFetchResData() src=${_communicationitems.toString()}');
-
-      return _communicationitems;
+      try {
+        _communicationitems =
+            result.map((data) => CommunicateItem.fromMap(data)).toList();
+        return _communicationitems;
+      } catch (e) {
+        developer.log('doFetchTransaction() error=$e');
+        return [];
+      }
     } else {
-      return _communicationitems;
+      throw UnimplementedError;
     }
   }
 }

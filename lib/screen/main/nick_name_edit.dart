@@ -84,20 +84,24 @@ class _NickNameEditState extends ConsumerState<NickNameEdit> {
                         height: 35,
                         child: TextButton(
                           onPressed: () {
-                          appCubit.changeNick(nick_name);
-                          final controller =
-                              ref.read(AuthProvider.notifier);
-                          controller
-                              .doNickname(_uID,nick_name)
-                              .then(
-                            (value) {
-                              // go home only if login success.
-                              if (value == true) {
-                                  Navigator.pop(context);
-                              } else {}
-                            },
-                          );
-                        }, child: const Text("保存", style: TextStyle(fontSize: 12, color: Colors.white),)
+                            if(nick_name.isEmpty){
+                              showOkAlertDialog(context, "情報を入力してください。");
+                              return;
+                            }
+                            appCubit.changeNick(nick_name);
+                            final controller =
+                                ref.read(AuthProvider.notifier);
+                            controller
+                                .doNickname(_uID,nick_name)
+                                .then(
+                              (value) {
+                                // go home only if login success.
+                                if (value == true) {
+                                    Navigator.pop(context);
+                                } else {}
+                              },
+                            );
+                          }, child: const Text("保存", style: TextStyle(fontSize: 12, color: Colors.white),)
                         ),
                       )
                     ],
@@ -125,5 +129,47 @@ class _NickNameEditState extends ConsumerState<NickNameEdit> {
                 ),
               ],
             )));
+  }
+
+    Future<void> showOkAlertDialog(BuildContext context, String title) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          actionsPadding: EdgeInsets.zero,
+          titlePadding: EdgeInsets.zero,
+          shape: roundedRectangleBorder,
+          title: Container(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                          color: Color.fromARGB(255, 112, 112, 112),
+                          width: 1))),
+              child: Text(title,
+                  style:
+                      const TextStyle(fontSize: 18, color: PRIMARY_FONT_COLOR),
+                  textAlign: TextAlign.center)),
+          actions: <Widget>[
+            Container(
+              width: double.infinity,
+              child: TextButton(
+                child: const Text(
+                  'OK',
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 }

@@ -2,15 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/bloc/cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsWidget extends StatelessWidget {
-  const SettingsWidget({super.key, required this.planType});
+class SettingsWidget extends ConsumerStatefulWidget {
+  const SettingsWidget({super.key, required this.planType, required this.todays});
   final String planType;
+  final String todays;
+   @override
+  // ignore: library_private_types_in_public_api
+  ConsumerState<SettingsWidget> createState() => _SettingsWidgetState();
+}
+class _SettingsWidgetState extends ConsumerState<SettingsWidget>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  @override
+  void initState(){
+    super.initState();
+  }  
 
   @override
   Widget build(BuildContext context) {
     AppCubit appCubit = AppCubit.get(context);
-
+    String tod = widget.todays;
     return Padding(
         padding: EdgeInsets.symmetric(
             vertical: vhh(context, 1), horizontal: vww(context, 6)),
@@ -28,6 +41,7 @@ class SettingsWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)),
                 child: Column(
                   children: [
+                    tod == "0" ?
                     Container(
                         padding: const EdgeInsets.symmetric(
                             vertical: 17, horizontal: 15),
@@ -65,7 +79,8 @@ class SettingsWidget extends StatelessWidget {
                                     size: 20,
                                     color: Color.fromARGB(255, 194, 196, 202))
                               ]),
-                        )),
+                        )
+                      ): Container(),
                     Container(
                         padding: const EdgeInsets.symmetric(
                             vertical: 17, horizontal: 15),
@@ -134,7 +149,7 @@ class SettingsWidget extends StatelessWidget {
                                             color: PRIMARY_FONT_COLOR))
                                   ],
                                 ),
-                                Text(planType,
+                                Text(widget.planType,
                                     style: const TextStyle(
                                         fontSize: 15,
                                         color:

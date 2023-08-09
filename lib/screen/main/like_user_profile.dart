@@ -2,6 +2,8 @@
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/screen/main/layouts/basic_info.dart';
 import 'package:matching_app/screen/main/layouts/introduction_widget.dart';
@@ -9,267 +11,392 @@ import 'package:matching_app/screen/main/layouts/introductory_badge_widget.dart'
 import 'package:matching_app/screen/main/layouts/my_community_widget.dart';
 import 'package:matching_app/screen/main/layouts/thumb_up_modal.dart';
 import 'package:matching_app/utile/index.dart';
+import 'package:matching_app/screen/main/layouts/profile_badge.dart';
+import 'package:matching_app/communcation/category_people/people_item.dart';
+import 'package:matching_app/controller/auth_controllers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:matching_app/bloc/cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 // ignore: use_key_in_widget_constructors
-class LikeUserProfile extends StatefulWidget {
+class LikeUserProfile extends ConsumerStatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
-  _LikeUserProfileState createState() => _LikeUserProfileState();
+  ConsumerState<LikeUserProfile>  createState() => _LikeUserProfileState();
 }
 
-class _LikeUserProfileState extends State<LikeUserProfile> {
-  List<dynamic> items = [];
+class _LikeUserProfileState extends ConsumerState<LikeUserProfile> {
+   List<dynamic> items = [];
   List<BadgeObject> badgeList = [];
-
+  int _seconds = 1;
+  Timer? _timer;
   // ignore: unused_field
   late int _current = 0;
   bool isModalShow = false;
-
+  int count = 0;
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<AppCubit>(context).fetchLikeRandom();
+    AppCubit appCubit = AppCubit.get(context);
     items = [
-      CommunityObject(1, "サッカー", false, 0, 1, ""),
-      CommunityObject(2, "野球", false, 0, 1, ""),
-      CommunityObject(8, "映画", false, 0, 2, ""),
-      CommunityObject(11, "キャンプ", false, 0, 3, ""),
+      if (appCubit.avatarImage != "http://192.168.142.55:8000/uploads/null") appCubit.avatarImage,
+      if (appCubit.avatarImage1!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo2,
+      if (appCubit.avatarImage2!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo3,
+      if (appCubit.avatarImage3!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo4,
+      if (appCubit.avatarImage4!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo5,
+      if (appCubit.avatarImage5!= "http://192.168.142.55:8000/uploads/null") appCubit.user.photo6,
     ];
+
     badgeList = [
       BadgeObject("とにかく話したい", false, 1),
       BadgeObject("いつでも", false, 2),
       BadgeObject("鉄板焼き", false, 3),
     ];
+
+  }
+
+  
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+   void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        setState(() {
+          if (_seconds < 1) {
+            timer.cancel();
+            // SystemNavigator.pop();
+             Navigator.pushNamed(
+              context, "/profile_screen");
+              return;
+          } else {
+            _seconds = _seconds - 1;
+          }
+        });
+      },
+    );
+  }
+
+  dynamic addLikeData() async{
+    AppCubit appCubit = AppCubit.get(context);
+    if(count >= 5)
+    {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('todayRecom',"true");
+      Fluttertoast.showToast(
+        msg: "今日のおすすめが終わりました。",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.yellow,
+        textColor: Colors.black,
+      );
+      return;
+    }
+    dynamic result = await  appCubit.addLikesData(appCubit.receiver_id.toString(), appCubit.UserId.toString());
+    if(result == true)
+    {
+      Fluttertoast.showToast(
+        msg: "成功",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+      );
+     
+      BlocProvider.of<AppCubit>(context).fetchLikeRandom();
+    }
+    else{
+      Fluttertoast.showToast(
+        msg: "推奨数不足",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    Object? state = ModalRoute.of(context)!.settings.arguments;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-              delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
-            return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    alignment: Alignment.topCenter,
-                    children: [
-                      Container(
-                        height: vhh(context, 55),
-                        width: vww(context, 100),
-                        child: ListView(children: [
-                          CarouselSlider(
-                            items: [
-                              Container(
-                                height: double.infinity,
-                                width: double.infinity,
-                                margin: EdgeInsets.zero,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft:
-                                          Radius.circular(vww(context, 10)),
-                                      bottomRight:
-                                          Radius.circular(vww(context, 10))),
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/main/user1.png"),
-                                    fit: BoxFit.cover,
+    AppCubit appCubit = AppCubit.get(context);
+    List<String> lines = appCubit.user.introduce?.split('\n').take(4).toList() ?? [];
+    String shortText = lines.join('\n');
+    print(appCubit.user.nickname);
+    if(appCubit.user.nickname == "")
+    {
+       Fluttertoast.showToast(
+          msg: "おすすめ相手はありません",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+      );
+      startTimer();
+    }
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverList(
+                delegate:
+                    SliverChildBuilderDelegate((BuildContext context, int index) {
+              return  Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        SizedBox(
+                          height: vhh(context, 49),
+                          width: vww(context, 100),
+                          child: ListView(children: [
+                            CarouselSlider(
+                              items: appCubit.avatarImages.map((item) { // Iterate over each item in the 'items' array
+                                return Container(
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  margin: EdgeInsets.zero,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(vww(context, 10)),
+                                      bottomRight: Radius.circular(vww(context, 10)),
+                                    ),
+                                    image: DecorationImage(
+                                      image: NetworkImage(item), // Use the current item from the array
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Container(
-                                height: double.infinity,
-                                width: double.infinity,
-                                margin: EdgeInsets.zero,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft:
-                                          Radius.circular(vww(context, 10)),
-                                      bottomRight:
-                                          Radius.circular(vww(context, 10))),
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/main/user1.png"),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ],
-                            options: CarouselOptions(
+                                );
+                              }).toList(),
+                              options: CarouselOptions(
                                 enableInfiniteScroll: true,
-                                height: vhh(context, 52),
+                                height: vhh(context, 46),
                                 scrollDirection: Axis.horizontal,
                                 onPageChanged: (index, reason) {
                                   setState(() {
                                     _current = index;
                                   });
                                 },
-                                viewportFraction: 1),
-                          ),
-                        ]),
-                      ),
-                      Positioned(
-                          bottom: 30,
-                          child: CarouselIndicator(
-                            count: 2,
-                            index: _current,
-                            activeColor: BUTTON_MAIN,
-                            color: const Color.fromARGB(255, 131, 131, 131),
-                            height: 10,
-                            width: 10,
-                          )),
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Container(
-                                width: vww(context, 100),
-                                height: vhh(context, 10),
-                                alignment: Alignment.bottomCenter,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(15),
-                                      bottomRight: Radius.circular(15)),
-                                  color: BUTTON_MAIN,
-                                ),
-                                child: const Padding(
-                                    padding: EdgeInsets.only(bottom: 10),
-                                    child: Text(
-                                      "無料でいいね！",
-                                      style: TextStyle(
-                                          fontSize: 24, color: Colors.white),
-                                    ))),
-                            Padding(
-                                padding:
-                                    EdgeInsets.only(right: vww(context, 3), top: vww(context, 3)),
-                                child: Container(
-                                    width: 45,
-                                    height: 45,
-                                    alignment: Alignment.centerRight,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: const Color.fromARGB(100, 0, 0, 0),
-                                    ),
-                                    child: TextButton(
-                                        onPressed: () {},
+                                viewportFraction: 1,
+                              ),
+                            ),
+                          ]),
+                        ),
+                        Positioned(
+                            bottom: 30,
+                            child: CarouselIndicator(
+                              count: items.length,
+                              index: _current,
+                              activeColor: BUTTON_MAIN,
+                              color: const Color.fromARGB(255, 131, 131, 131),
+                              height: 10,
+                              width: 10,
+                            )),
+                        Padding(
+                            padding: EdgeInsets.only(
+                                top: 30,
+                                left: vww(context, 4),
+                                right: vww(context, 4)),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                      width: 45,
+                                      height: 45,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: const Color.fromARGB(
+                                            50, 255, 255, 255),
+                                      ),
+                                      child: TextButton(
+                                        onPressed: () {
+                                           Navigator.pushNamed(
+                                            context, "/profile_screen");
+                                        },
                                         style: ButtonStyle(
                                           padding: MaterialStateProperty.all(
                                               EdgeInsets.zero),
                                         ),
-                                        child: const Icon(Icons.more_horiz,
-                                            color: Colors.white))))
-                          ])
-                    ],
-                  ),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: vhh(context, 2),
-                          horizontal: vww(context, 6)),
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Column(children: [
-                            const Row(children: [
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 5, bottom: 5, right: 20),
-                                  child: Text("TSUBASA",
-                                      style: TextStyle(fontSize: 17))),
-                              Image(
-                                  image:
-                                      AssetImage("assets/images/status/on.png"),
-                                  width: 20),
-                              Padding(
-                                  padding: EdgeInsets.only(right: 50),
-                                  child: Text(" 本人確認済み",
-                                      style: TextStyle(fontSize: 12))),
-                            ]),
-                            Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Row(children: [
-                                  const Text("東京都",
-                                      style: TextStyle(fontSize: 15)),
-                                  Container(width: 20),
-                                  const Text("35歳",
-                                      style: TextStyle(fontSize: 15)),
-                                ])),
-                          ]))),
-                  IntroductionWidget(),
-                  MyCommunityWidget(communityObjects: items),
-                  IntroductoryBadgeWidget(badges: badgeList),
-                  const BasicInfo(),
-                ]);
-          }, childCount: 1)),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: SizedBox(
-        width: vww(context, 60),
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                  width: 60,
-                  height: 60,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(50),
-                    color: Colors.white,
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                        child: const Icon(Icons.close,
+                                            color: Colors.white),
+                                      )),
+                                  Container(
+                                      width: 45,
+                                      height: 45,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        color: const Color.fromARGB(100, 0, 0, 0),
+                                      ),
+                                      child: TextButton(
+                                          onPressed: () {},
+                                          style: ButtonStyle(
+                                            padding: MaterialStateProperty.all(
+                                                EdgeInsets.zero),
+                                          ),
+                                          child: const Icon(Icons.more_horiz,
+                                              color: Colors.white)))
+                                ]))
+                      ],
                     ),
-                    child: const Icon(Icons.close,
-                        color: Color.fromARGB(255, 193, 192, 201), size: 35),
-                  )),
-              Container(
-                  width: 60,
-                  height: 60,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(50),
-                    color: Colors.white,
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => const ThumbUpModal());
-                    },
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.zero),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: vhh(context, 2),
+                            horizontal: vww(context, 6)),
+                        child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Column(children: [
+                              Row(children: [
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 5, bottom: 5, right: 20),
+                                    child: Text(appCubit.user.nickname,
+                                        style: TextStyle(fontSize: 17)
+                                        )
+                                      ),
+                                appCubit.user.identityState == "承認"?
+                                Image(
+                                    image:
+                                        AssetImage("assets/images/status/on.png"),
+                                    width: 20): Container(),
+                                appCubit.user.identityState == "承認"?
+                                Padding(
+                                    padding: EdgeInsets.only(right: 50),
+                                    child: Text(" 本人確認済み",
+                                        style: TextStyle(fontSize: 12))):
+                                Container(),
+                              ]),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Row(children: [
+                                    Text(appCubit.user.residence,
+                                        style: TextStyle(fontSize: 15)),
+                                    Container(width: 20),
+                                    Text("${appCubit.user.bday.toString()}歳",
+                                        style: TextStyle(fontSize: 15)),
+                                  ])),
+                            ]))),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          bottom: vhh(context, 3),
+                          left: vww(context, 6),
+                          right: vww(context, 6)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                              padding: EdgeInsets.only(bottom: 10),
+                              child: Text("自己紹介",
+                                  style: TextStyle(fontSize: 16, color: PRIMARY_FONT_COLOR))
+                                  ),
+                          Text(shortText??appCubit.intro_text,
+                              overflow: TextOverflow.ellipsis, // Show "..." if text overflows container
+                              maxLines: 4,
+                              style:
+                                  const TextStyle(fontSize: 13, color: PRIMARY_FONT_COLOR)),
+                        ],
+                      )),
+                    MyCommunityWidget(
+                              communityObjects: appCubit.user.community),
+                    Padding(padding: EdgeInsets.only(
+                      left: vww(context, 6),
+                      right: vww(context, 6),
+                      bottom: vhh(context, 3)),
+                    child: ProfileBadgeWidget(badges: appCubit.user.introBadge),
                     ),
-                    child: const Icon(Icons.thumb_up,
-                        color: BUTTON_MAIN, size: 35),
-                  )),
-            ]),
-      ),
-    );
+                    BasicInfo(
+                      height: appCubit.user.height ?? 0,
+                      annualIncome: appCubit.user.annualIncome == null? "": appCubit.user.annualIncome,
+                      blood: appCubit.user.bloodType ?? "",
+                      bodyType: appCubit.user.bodytype ?? "",
+                      cigarette: appCubit.user.cigarette ?? "",
+                      purpose: appCubit.user.usePurpose?? ""),
+                  ]);
+            }, childCount: 1)),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Container(
+          width: vww(context, 60),
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                    width: 60,
+                    height: 60,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.white,
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                                            context, "/profile_screen");
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                      ),
+                      child: const Icon(Icons.close,
+                          color: Color.fromARGB(255, 193, 192, 201), size: 35),
+                    )),
+                Container(
+                    width: 60,
+                    height: 60,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.white,
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        addLikeData();
+                        if(count < 5)
+                        {
+                          count ++;
+                        }
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                      ),
+                      child: const Icon(Icons.thumb_up,
+                          color: BUTTON_MAIN, size: 35),
+                    )),
+              ]),
+        ),
+      );
+    });
   }
 }

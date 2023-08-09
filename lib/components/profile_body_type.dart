@@ -64,10 +64,10 @@ class ProfileInfoBodyType extends StatelessWidget {
 																					Color.fromARGB(255, 155, 155, 155)),
 																)
 															: Text(
-																	// "未設定",
-                                  appCubit.user.bodytype,
+																	"未設定",
+                                  // appCubit.user.bodytype,
 																	style: TextStyle(
-																			fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
+																			fontSize: 14, color: Color.fromARGB(255, 0, 202, 157)),
 																)),
 										),
 									],

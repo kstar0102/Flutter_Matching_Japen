@@ -66,6 +66,7 @@ class AppCubit extends Cubit<AppState> {
   String s_checked = "";
   String phone = "";
   String phone_token = "";
+  String receiver_id = "";
   //end
   AppCubit() : super(AppInitial());
 
@@ -289,7 +290,7 @@ class AppCubit extends Cubit<AppState> {
   void changeAddress(String address, String idx) async{
     address_info = address;
     address_id = idx;
-    UserId = userId.toString();
+    print(UserId);
     final data = await DioClient.changeAddressData(UserId,address_id);
     emit(AppMain());
   }
@@ -297,10 +298,64 @@ class AppCubit extends Cubit<AppState> {
    void changeBody(String body, String idx) async{
     body_type = body;
     body_id = idx;
-    UserId = userId.toString();
     final data = await DioClient.changeBodyData(UserId,idx);
     emit(AppMain());
   }
+
+  void addMatching(String receiver_token) async{
+    final data = await DioClient.addMatching(receiver_token, UserId);
+    print(data['result']);
+    if(data['result'] == "success"){
+      Fluttertoast.showToast(
+        msg: "成功",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+      );
+    }
+  }
+
+  void removeMatching(String receiver_token) async{
+    final data = await DioClient.removeMatching(receiver_token, UserId);
+    if(data['result'] == "success"){
+      Fluttertoast.showToast(
+        msg: "成功",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+      );
+    }
+  }
+
+   void userReport(String receiver_token) async{
+    final data = await DioClient.userReport(receiver_token, UserId);
+    if(data['result'] == "success"){
+      Fluttertoast.showToast(
+        msg: "成功",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+      );
+    }
+    else if(data['result'] == 'error')
+    {
+      Fluttertoast.showToast(
+        msg: "あなたはすでにこのユーザーの違反\nを報告しています。",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
+  }
+
 
   void searchFilter(String search_age_start, String search_age_end, String search_height_start, String search_height_end, String search_body, String search_holiday, String search_purpose, String search_ciga, String search_sake, String live_place, String VerifyChecked) async{
     s_age_start = search_age_start;
@@ -328,7 +383,6 @@ class AppCubit extends Cubit<AppState> {
   void changeBlood(String blood_t) async
   {
     blood_type = blood_t;
-    UserId = userId.toString();
     final data = await DioClient.changeBloodData(UserId,blood_t);
     emit(AppMain());
   }
@@ -336,7 +390,6 @@ class AppCubit extends Cubit<AppState> {
   void changeEducation(String edu) async
   {
     edu_type = edu;
-    UserId = userId.toString();
     final data = await DioClient.changeEducation(UserId,edu);
     emit(AppMain());
   }
@@ -352,8 +405,7 @@ class AppCubit extends Cubit<AppState> {
   void postIntroduce(String intro) async
   {
     intro_text = intro;
-    UserId = userId.toString();
-    final data = await DioClient.postIntroduce(UserId,intro);
+    final data = await DioClient.postIntroduce(UserId.toString(),intro);
     emit(AppMain());
   }
 
@@ -365,7 +417,6 @@ class AppCubit extends Cubit<AppState> {
 
   void changeBudget(String annual) async
   {
-    UserId = userId.toString();
     annual_budget = annual;
     final data = await DioClient.changeBudget(UserId,annual);
     emit(AppMain());
@@ -373,7 +424,6 @@ class AppCubit extends Cubit<AppState> {
 
   void changeHoliday(String holi) async
   {
-    UserId = userId.toString();
     holi_info = holi;
     final data = await DioClient.changeHoliday(UserId,holi);
     emit(AppMain());
@@ -381,7 +431,6 @@ class AppCubit extends Cubit<AppState> {
 
   void changeCiga(String ciga) async
   {
-    UserId = userId.toString();
     ciga_info = ciga;
     final data = await DioClient.changeCiga(UserId,ciga);
     emit(AppMain());
@@ -389,10 +438,22 @@ class AppCubit extends Cubit<AppState> {
 
   void changeAlcohol(String al_info) async
   {
-    UserId = userId.toString();
     alcohol_info = al_info;
     final data = await DioClient.changeAlcohol(UserId,al_info);
     emit(AppMain());
+  }
+
+  dynamic addLikesData(String receiver_id, String send_id) async
+  {
+    final data = await DioClient.addLikesData(send_id, receiver_id);
+    var result = data['result'];
+    if(result == "success")
+    {
+      return true;
+    }
+    else if(result == "error"){
+      return false;
+    }
   }
 
   Future<int> uploadProfile() async {
@@ -485,7 +546,6 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<int> uploadBadgeData() async {
-    UserId = userId.toString();
     String selectedBadges = "";
     for (var i = 0; i < selectedBadgeList.length; i++) {
       selectedBadges += "${selectedBadgeList[i].id},";
@@ -556,7 +616,6 @@ class AppCubit extends Cubit<AppState> {
   User user = User();
 
   Future<int> uploadAvatarImage(String item_id, String avatar) async {
-    UserId = userId.toString();
     var request =
         http.MultipartRequest('POST', Uri.parse('${API_URL}upload_avatar'));
     var imageFile = File(avatar);
@@ -591,7 +650,7 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-   Future<void> fetchProfileInfo1(String user_id) async {
+  Future<void> fetchProfileInfo1(String user_id) async {
     try {
       final response =
           await http.get(Uri.parse('${API_URL}get_user?id=$user_id'));
@@ -624,7 +683,14 @@ class AppCubit extends Cubit<AppState> {
         r_count = jsonData['count']['res_count'] ?? "0";
         user.phone_number = jsonData['data']['phone_number'] ?? "";
         user.phone_token = jsonData['data']['phone_token'] ?? "";
-
+        avatarImages = [
+          "$BASE_URL/uploads/${jsonData['data']['photo1']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo2']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo3']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo4']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo5']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo6']}",
+        ];
         // user.phone = jsonData['data']['phone'] ?? "";
         user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
         user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";
@@ -662,13 +728,93 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
+  Future<void> fetchLikeRandom() async {
+    try {
+      final response =
+          await http.get(Uri.parse('${API_URL}get_like_random_data/$UserId'));
+      print(response.body);
+      if (response.statusCode == 200) {
+        user = User();
+        Map<String, dynamic> jsonData = jsonDecode(response.body);
+        receiver_id = jsonData['data']['user_id'].toString();
+        user.name = jsonData['data']['user_name'] ?? "";
+        user.nickname = jsonData['data']['user_nickname'] ?? "";
+        user.residenceId = jsonData['data']['residenceid'] ?? 0;
+        user.residence = jsonData['data']['residence'] ?? "";
+        int age = DateTime.now().year - int.parse(jsonData['data']['birthday'].split("-")[0]);
+        user.bday = age.toString();
+        user.height = double.parse(jsonData['data']['height'] ?? 130);
+        user.bodytypeId = jsonData['data']['bodytypeId'] ?? 0;
+        user.bodytype = jsonData['data']['bodytype'] ?? "";
+        user.usePurpose = jsonData['data']['use_purpose'] ?? "";
+        user.introduce = jsonData['data']['introduce'] ?? "";
+        user.planType = jsonData['data']['plan_type'] ?? "";
+        // user.likesRate = int.parse(jsonData['data']['likes_rate'] ?? 0);
+        user.coin = double.parse(jsonData['data']['coin'] ?? 0);
+        user.identityState = jsonData['data']['identity_state'] ?? "";
+        user.bloodType = jsonData['data']['blood_type'] ?? "";
+        user.alcohol = jsonData['data']['alcohol'] ?? "";
+        user.cigarette = jsonData['data']['cigarette'] ?? "";
+        user.education = jsonData['data']['education'] ?? "";
+        user.holiday = jsonData['data']['holiday'] ?? "";
+        user.annualIncome = jsonData['data']['annual_income'] ?? "";
+        user.res_count = jsonData['count']['res_count'] ?? "0";
+        r_count = jsonData['count']['res_count'] ?? "0";
+        user.phone_number = jsonData['data']['phone_number'] ?? "";
+        user.phone_token = jsonData['data']['phone_token'] ?? "";
+
+        // user.phone = jsonData['data']['phone'] ?? "";
+        user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
+        user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";
+        user.photo3 = "$BASE_URL/uploads/${jsonData['data']['photo3']}";
+        user.photo4 = "$BASE_URL/uploads/${jsonData['data']['photo4']}";
+        user.photo5 = "$BASE_URL/uploads/${jsonData['data']['photo5']}";
+        user.photo6 = "$BASE_URL/uploads/${jsonData['data']['photo6']}";
+        avatarImages = [
+          "$BASE_URL/uploads/${jsonData['data']['photo1']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo2']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo3']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo4']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo5']}",
+          "$BASE_URL/uploads/${jsonData['data']['photo6']}",
+        ];
+        var tempCommunityList = jsonData['data']['community'];
+        var tempBadgeList = jsonData['data']['intro_badge'];
+        for (var i = 0; i < tempCommunityList.length; i++) {
+          CommunityObject temp = CommunityObject(
+              tempCommunityList[i]['id'],
+              tempCommunityList[i]['community_name'],
+              false,
+              1,
+              int.parse(tempCommunityList[i]['community_category']),
+              "$BASE_URL/uploads/${tempCommunityList[i]['community_photo']}");
+          user.community.add(temp);
+        }
+        for (var i = 0; i < tempBadgeList.length; i++) {
+          BadgeItemObject tempBadge = BadgeItemObject(
+              tempBadgeList[i]['id'],
+              tempBadgeList[i]['tag_text'],
+              false,
+              tempBadgeList[i]['tag_color']);
+          user.introBadge.add(tempBadge);
+        }
+        emit(AppMain());
+      } else {
+        print("Url Not Found!");
+      }
+    } catch (e) {
+      print("Error---------->${e}");
+    }
+  }
+
   Future<void> fetchProfileInfo() async {
-    print(userId.toString());   
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? UserId = await prefs.getString("UserId");
+    UserId = await prefs.getString("UserId").toString();
+
     try {
       final response =
           await http.get(Uri.parse('${API_URL}get_user?id=$UserId'));
+      print(response.body);
       if (response.statusCode == 200) {
         user = User();
         Map<String, dynamic> jsonData = jsonDecode(response.body);
@@ -695,9 +841,18 @@ class AppCubit extends Cubit<AppState> {
         user.holiday = jsonData['data']['holiday'] ?? "";
         user.annualIncome = jsonData['data']['annual_income'] ?? "";
         user.res_count = jsonData['count']['res_count'] ?? "0";
+        user.today_recom = jsonData['today_recom']['today_count'].toString() ?? "0";
         r_count = jsonData['count']['res_count'] ?? "0";
         user.phone_number = jsonData['data']['phone_number'] ?? "";
         user.phone_token = jsonData['data']['phone_token'] ?? "";
+        body_type = jsonData['data']['bodytype'] ?? "";
+        blood_type = jsonData['data']['blood_type'] ?? "";
+        edu_type = jsonData['data']['education'] ?? "";
+        purpose_type = jsonData['data']['use_purpose'] ?? "";
+        annual_budget = jsonData['data']['annual_income'] ?? "";
+        holi_info = jsonData['data']['holiday'] ?? "";
+        ciga_info = jsonData['data']['cigarette'] ?? "";
+        alcohol_info = jsonData['data']['alcohol'] ?? "";
         // user.phone = jsonData['data']['phone'] ?? "";
         user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
         user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";

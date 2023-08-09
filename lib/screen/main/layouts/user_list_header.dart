@@ -20,7 +20,7 @@ class UserListHeader extends SliverPersistentHeaderDelegate {
                   width: 2, color: Color.fromARGB(255, 237, 237, 237)))),
       child: const Padding(
         padding: EdgeInsets.symmetric(vertical: 0),
-        child: ProfileEditHeader(title: "設定"),
+        child: ProfileEditHeader(title: "足跡"),
       ),
     );
   }

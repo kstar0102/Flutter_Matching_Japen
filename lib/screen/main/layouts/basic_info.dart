@@ -70,8 +70,8 @@ class BasicInfo extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        appCubit.body_type == ""?
-                          bodyType.toString():appCubit.body_type.toString(),
+                        appCubit.user.bodytype == ""?
+                          "未設定":appCubit.user.bodytype.toString(),
                         style:
                             TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
                       ),
@@ -93,8 +93,8 @@ class BasicInfo extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                       appCubit.blood_type == ""?
-                          "未設定":appCubit.blood_type.toString(),
+                       appCubit.user.bloodType == ""?
+                          "未設定":appCubit.user.bloodType.toString(),
                         style:
                             TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
                       ),
@@ -116,8 +116,8 @@ class BasicInfo extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        appCubit.purpose_type == ""?
-                          purpose.toString():appCubit.purpose_type.toString(),
+                        appCubit.user.usePurpose == ""?
+                          "未設定":appCubit.user.usePurpose.toString(),
                         style:
                             TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
                       ),
@@ -139,8 +139,8 @@ class BasicInfo extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                         appCubit.annual_budget == ""?
-                          "未設定":appCubit.annual_budget.toString(),
+                         appCubit.user.annualIncome == ""?
+                          "未設定":appCubit.user.annualIncome.toString(),
                         style:
                             TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
                       ),
@@ -162,8 +162,8 @@ class BasicInfo extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        appCubit.ciga_info == ""?
-                          "未設定":appCubit.ciga_info.toString(),
+                        appCubit.user.cigarette == ""?
+                          "未設定":appCubit.user.cigarette.toString(),
                         style:
                             TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
                       ),

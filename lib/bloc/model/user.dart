@@ -32,6 +32,7 @@ class User {
   String photo4 = "";
   String photo5 = "";
   String photo6 = "";
+  String today_recom = "";
   List<CommunityObject> community = [];
   List<BadgeItemObject> introBadge = [];
 }
