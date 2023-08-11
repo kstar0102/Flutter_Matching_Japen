@@ -54,7 +54,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   Widget build(BuildContext context) {
     AppCubit appCubit = AppCubit.get(context);
     // BlocProvider.of<AppCubit>(context).fetchProfileInfo();
-    print("Hello"+appCubit.user.introBadge.toString());
       if (isShow == "false" && appCubit.UserId=="0") {
         final AlertDialog dialog = AlertDialog(
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),

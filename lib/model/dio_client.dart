@@ -422,6 +422,21 @@ class DioClient {
     }
   }
 
+  static Future<dynamic> addTodayLikesData(String send_id, String receiver_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    print(send_id+receiver_id);
+    try {
+       final response = await dio
+          .post('/add_user_today_like', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
   static Future<dynamic> doGetCommunicateData(String user_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);

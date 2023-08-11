@@ -100,7 +100,7 @@ class _LikeUserProfileState extends ConsumerState<LikeUserProfile> {
       );
       return;
     }
-    dynamic result = await  appCubit.addLikesData(appCubit.receiver_id.toString(), appCubit.UserId.toString());
+    dynamic result = await  appCubit.addTodayLikesData(appCubit.receiver_id.toString(), appCubit.UserId.toString());
     if(result == true)
     {
       Fluttertoast.showToast(

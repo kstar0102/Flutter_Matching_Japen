@@ -456,6 +456,19 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
+  dynamic addTodayLikesData(String receiver_id, String send_id) async
+  {
+    final data = await DioClient.addTodayLikesData(send_id, receiver_id);
+    var result = data['result'];
+    if(result == "success")
+    {
+      return true;
+    }
+    else if(result == "error"){
+      return false;
+    }
+  }
+
   Future<int> uploadProfile() async {
     String selectedCommunityList = "";
     for (var i = 0; i < communityList.length; i++) {

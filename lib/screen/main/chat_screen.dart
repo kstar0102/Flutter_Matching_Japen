@@ -55,12 +55,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     });
   }
 
-  // void startTimer() {
-  //   const duration = Duration(seconds: 2);
-  //   _timer = Timer.periodic(duration, (timer) {
-  //     getData();
-  //   });
-  // }
+  void startTimer() {
+    const duration = Duration(seconds: 2);
+    _timer = Timer.periodic(duration, (timer) {
+      getData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

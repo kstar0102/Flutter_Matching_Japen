@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/components/radius_button.dart';
 import 'package:matching_app/screen/login/layouts/header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:matching_app/utile/index.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 // ignore: use_key_in_widget_constructors
 class LoginCheckCode extends StatefulWidget {
+  final String receiverId;
+  const LoginCheckCode({super.key, required this.receiverId});
   @override
   // ignore: library_private_types_in_public_api
   _LoginCheckCodeState createState() => _LoginCheckCodeState();
@@ -14,7 +19,28 @@ class LoginCheckCode extends StatefulWidget {
 
 class _LoginCheckCodeState extends State<LoginCheckCode> {
   String digits = "";
+  FirebaseAuth auth = FirebaseAuth.instance;
+  void verifyCode() async{
 
+    PhoneAuthCredential credential =  PhoneAuthProvider.credential(verificationId: widget.receiverId, smsCode: digits);
+
+    await auth.signInWithCredential(credential).then((value) {
+      if(value == true){
+        Navigator.pushNamed(context, "/terms_agree");
+      }
+      else{
+        Fluttertoast.showToast(
+          msg: "Verify code wrong!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+        );
+      }
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,6 +123,7 @@ class _LoginCheckCodeState extends State<LoginCheckCode> {
                             color: BUTTON_MAIN,
                             text: "つぎへ",
                             goNavigation: (id) {
+                              verifyCode();
                               Navigator.pushNamed(context, "/terms_agree");
                             },
                             isDisabled: digits.length < 6,

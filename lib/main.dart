@@ -50,14 +50,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:matching_app/firebase_options.dart';
 import 'package:matching_app/screen/main/matching_screen.dart';
 
-void main() async{
+Future<Null> main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  // await LineSDK.instance
-  //     .setup("2000073944")
-  //     .then((_) => print("Line prepared"));
+  await LineSDK.instance
+      .setup("2000374220")
+      .then((_) => print("Line prepared"));
   await Firebase.initializeApp(
+    name: 'Greeme',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // await Firebase.initializeApp();
   runApp(const ProviderScope(child: MatchingApp()));
 
   // runApp(const MatchingApp());
@@ -88,7 +90,7 @@ class MatchingApp extends StatelessWidget {
           routes: {
             '/': (context) => HomeScreenView(),
             '/phone_login': (context) => LoginView(),
-            '/check_code': (context) => LoginCheckCode(),
+            // '/check_code': (context) => LoginCheckCode(),
             '/terms_agree': (context) => TermsAgree(),
             '/nick_name': (context) => NickName(),
             '/b_day': (context) => BDay(),
