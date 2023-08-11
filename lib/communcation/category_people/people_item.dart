@@ -58,7 +58,6 @@ class PeopleItem {
   final String unread_message;
 
   factory PeopleItem.fromMap(Map<String, dynamic> data) {
-    print(data);
     return PeopleItem(
       user_id: data['user_id'].toString(),
       user_nickname: data['user_nickname'].toString(),

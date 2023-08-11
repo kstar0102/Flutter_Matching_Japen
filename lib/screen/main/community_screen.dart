@@ -25,7 +25,7 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
   List<dynamic> items = [];
 
   bool isModalShow = false;
-
+  bool _dataFetched = false;
   @override
   void initState() {
     super.initState();
@@ -48,6 +48,63 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
     final state = ref.watch(communicateProvider);
     final coms = state?.value ?? [];
     print(coms);
+    List<Widget> categoryHeaders = [];
+
+    for (int index = 0; index < coms.length-1; index++) {
+      final communicateItem = coms[index];
+
+      final bool isFirstItem = index == 0;
+      final bool isDifferentCategory = isFirstItem ||
+          communicateItem.category_id !=
+              coms[index - 1].category_id;
+
+      if (isFirstItem || isDifferentCategory) {
+        categoryHeaders.add(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: vww(context, 5),
+                      right: vww(context, 5)),
+                    child: Text(
+                      communicateItem.category_name.toString(),
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: vww(context, 0)),
+                    child: Image.network(
+                      "http://greeme.net/uploads/category/" +
+                          communicateItem.category_image,
+                      width: 25,
+                      height: 25,
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 25,),
+                child: Wrap(
+                  spacing: 5,
+                  runSpacing: 10,
+                  children: coms
+                      .where((item) => item.category_id == communicateItem.category_id)
+                      .map<Widget>((childItem) => CommunicateCard(
+                            info: childItem,
+                            onPressed: () {},
+                          ))
+                      .toList(),
+                ),
+              ),
+              SizedBox(height: 20,),
+            ],
+          ),
+        );
+      }
+    }
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -115,75 +172,40 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                         ],
                       ),
                     ),
+                    SizedBox(height: 30,),
                     Container(
-                      height: 320,
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          getData();
-                        },
-                        child: coms != null && coms.isNotEmpty
-                            ? ListView.builder(
+                      height:  MediaQuery.of(context).size.height / 2.1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Display the category headers
+                            ...categoryHeaders,
+
+                            // Display the ListView.builder
+                            Expanded(
+                              child: ListView.builder(
                                 itemCount: coms.length,
                                 itemBuilder: (context, index) {
                                   final communicateItem = coms[index];
-
-                                  final bool isDifferentCategory =
-                                      index == 0 || communicateItem.category_id != coms[index - 1].category_id;
+                                  
+                                  final bool isFirstItem = index == 0;
+                                  final bool isDifferentCategory = isFirstItem ||
+                                      communicateItem.category_id !=
+                                          coms[index - 1].category_id;
 
                                   if (isDifferentCategory) {
-                                    return Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                left: vww(context, 5),
-                                                right: vww(context, 5)),
-                                              child: Text(
-                                                communicateItem.category_name.toString(),
-                                                style: TextStyle(fontSize: 17),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(left: vww(context, 0)),
-                                              child: Image.network(
-                                                "http://greeme.net/uploads/category/" +
-                                                    communicateItem.category_image,
-                                                width: 25,
-                                                height: 25,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 25,),
-                                          child: Wrap(
-                                            spacing: 5,
-                                            runSpacing: 10,
-                                            children: coms
-                                                .where((item) => item.category_id == communicateItem.category_id)
-                                                .map<Widget>((childItem) => CommunicateCard(
-                                                      info: childItem,
-                                                      onPressed: () {},
-                                                    ))
-                                                .toList(),
-                                          ),
-                                        ),
-                                        SizedBox(height: 20,)
-                                      ],
-                                    );
+                                    return Container(); // Skip displaying items for the category headers
                                   } else {
                                     return Container();
                                   }
                                 },
-                              )
-                            : Center(child: Text("No data")),
-                      ),
-                    ),
-                    SizedBox(height: 20,),
-                  ]
-                );
+                              ),
+                            ),
+                          ],
+                        ),
+                  ),
+                ]
+              );
             }, childCount: 1)),
           ],
         ),

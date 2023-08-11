@@ -48,7 +48,6 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
 
     final state = ref.watch(followingProvider);
     final follows = state.value;
-    print(follows);
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -193,17 +192,17 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
                         : Container(),
                         Padding(
                           padding: EdgeInsets.symmetric(
-                            vertical: vhh(context, 3),
-                            horizontal: vww(context, 3.5),
+                          vertical: vhh(context, 1),
+                              horizontal: vww(context, 5),
                           ),
                           child: Container(
-                            height: 500,
+                            height: MediaQuery.of(context).size.height /1.5,
                             child: follows != null && follows.isNotEmpty
                               ? SingleChildScrollView(
                                   scrollDirection: Axis.vertical,
                                   child: Wrap(
-                                    spacing:5,
-                                    runSpacing: 5,
+                                    spacing:10,
+                                    runSpacing: 10,
                                     children: <Widget>[
                                       for (var i = 0; i < follows.length; i++)
                                         if (viewShow == '5' || i < 5)
@@ -316,6 +315,9 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
                               : Text("No data"),
                           ),
                         ),
+                      const SizedBox(
+                        height: 40,
+                      )
                   ]);
             }, childCount: 1)),  
           ],

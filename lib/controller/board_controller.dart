@@ -10,18 +10,13 @@ class BoardController extends StateNotifier<AsyncValue<BoardList>> {
 
   // AsyncValue<BoardList?> _state = const AsyncValue.loading();
 
-  Future<BoardList?> doFetchNotifs() async {
-    state = const AsyncValue.loading();
+  Future<void> doFetchNotifs() async {
+    // state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => notifRepo.doFetchNotifs());
-    if (mounted) {
+    // if (mounted) {
       state = newState;
-    }
-    // if (newState.hasError) {
-      
-    //   return newState.value;
-    // } else {
-    //   return newState.value;
     // }
+    return;
   }
 }
 

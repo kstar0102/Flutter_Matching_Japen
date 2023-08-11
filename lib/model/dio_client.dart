@@ -459,7 +459,6 @@ class DioClient {
     try {
       final response = await dio.get('/get_people_data/$sub_id/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
-      print(response.data);
       return response.data;
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
@@ -489,6 +488,7 @@ class DioClient {
   static Future<dynamic> doGetLikeData(String user_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
+    print(user_id);
     try {
       final response = await dio.get('/get_like_data/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
@@ -538,6 +538,20 @@ class DioClient {
     try {
        final response = await dio
           .post('/user_report', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
+  static Future<dynamic> closeAccount(String user_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    try {
+       final response = await dio
+          .post('/close_account', data: {'user_id': user_id});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();

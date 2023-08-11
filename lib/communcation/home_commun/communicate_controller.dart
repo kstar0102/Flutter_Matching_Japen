@@ -8,24 +8,16 @@ class CommunicateController extends StateNotifier<AsyncValue<CommunicateItemList
   CommunicateController({required this.notifRepo}) : super(const AsyncData([]));
 
   final CommunicationRepository notifRepo;
-  AsyncValue<CommunicateItemList> _state = const AsyncValue.loading();
-  AsyncValue<CommunicateItemList> get state => _state;
   // set state(AsyncValue<CommunicateItemList> listdata) => _state = listdata;
 
-  Future<CommunicateItemList?> doGetCommunicateData() async {
-    state = const AsyncLoading();
+  Future<void> doGetCommunicateData() async {
+    // state = const AsyncLoading();
     final newState = await AsyncValue.guard(() => notifRepo.doGetCommunicateData());
     
-    if (mounted) {
+    // if (mounted) {
       state = newState;
-    }
-    
-    if (newState.hasError) {
-      return newState.value;
-    } else {
-      _state = newState;
-      return newState.value;
-    }
+    // }
+    return;
   }
 }
 // final communicateProvider = StateNotifierProvider.autoDispose(

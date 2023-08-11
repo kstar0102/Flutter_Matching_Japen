@@ -277,7 +277,6 @@ class _BoardFunctionState extends ConsumerState<BoardFunction> {
                               )
                           ),
                           Container(
-                             
                             height: 500, 
                             child: RefreshIndicator(
                               onRefresh: () async {
@@ -324,15 +323,20 @@ class _BoardFunctionState extends ConsumerState<BoardFunction> {
                                           },
                                         );
                                       },
-                                      child: BoardCard(
-                                        info: element,
-                                        onPressed: () {},
-                                      ),
+                                      child: Column(children: [
+                                        BoardCard(
+                                          info: element,
+                                          onPressed: () {},
+                                        ),
+                                        SizedBox(height: 30,)
+                                      ],)
                                     );
                                   },
                                 )
-                              : Text(
-                                  "",
+                              : Center(
+                                  child: Text(
+                                    "No Data",
+                                  )
                               ),
                         ),
                       ),

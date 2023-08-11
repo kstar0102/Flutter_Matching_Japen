@@ -32,9 +32,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
-    getData();
-    ref.read(peopleProvider.notifier).doGetChattingData();
-    // startTimer();
+     WidgetsBinding.instance?.addPostFrameCallback((_) {
+      getData();
+      ref.read(peopleProvider.notifier).doGetChattingData();
+      startTimer();
+    });
   }
 
   void getData() async {
@@ -56,7 +58,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   }
 
   void startTimer() {
-    const duration = Duration(seconds: 2);
+    const duration = Duration(seconds: 10);
     _timer = Timer.periodic(duration, (timer) {
       getData();
     });

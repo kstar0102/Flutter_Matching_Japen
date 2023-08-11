@@ -34,7 +34,6 @@ class _UserListScreenState extends ConsumerState<UserListScreen>
 
     final state = ref.watch(peopleProvider);
     final peoples = state.value;
-    
     AppCubit appCubit = AppCubit.get(context);
     return Scaffold(
         backgroundColor: Colors.white,

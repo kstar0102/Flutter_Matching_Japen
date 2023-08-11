@@ -63,106 +63,105 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
     String badge_name = boardInfo.badge_name;
     List<String> numberArray = badge_name.split(",");
     List<String> badgeArray = boardInfo.badge_color.split(",");
-    print(boardInfo.badge_color);
     List<BadgeItemObject> badgeList = [];
     for (var i = 0; i < numberArray.length; i++) {
       badgeList.add(BadgeItemObject(i, numberArray[i], false, badgeArray[i]));
     }
-    
-    return Wrap(
-          children: [
-            Container(
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                  color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
-                  spreadRadius: 3,
-                  blurRadius: 8,
-                  offset: const Offset(0, 3))
-            ], borderRadius: BorderRadius.circular(10)),
-            child: Container(
-            decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10)),
-              child: SizedBox(
-                child:Wrap(
-                  children: [
-                    Column(
-                      children: [
-                        InkWell(
-                          onTap: (){
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => OtherProfile(info : boardInfo.user_id)),);
-                          },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                              "http://greeme.net/uploads/" + avatar,
-                              width: 165,
-                              height: 165,
-                            ),
+      return Wrap(
+        children: [
+          Container(
+          decoration: BoxDecoration(boxShadow: [
+            BoxShadow(
+                color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.7),
+                spreadRadius: 3,
+                blurRadius: 8,
+                offset: const Offset(0, 3))
+          ], borderRadius: BorderRadius.circular(10)),
+          child: Container(
+          decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10)),
+            child: SizedBox(
+              child:Wrap(
+                children: [
+                  Column(
+                    
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => OtherProfile(info : boardInfo.user_id)),);
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.network(
+                            "http://greeme.net/uploads/" + avatar,
+                            width: 165,
+                            height: 165,
                           ),
                         ),
-                        SizedBox(
-                          width: 150,
-                          child: Row(children: [
-                            SizedBox(width: 10,),
-                            Text(boardInfo.age+" 歳",
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                ),
+                      ),
+                      SizedBox(
+                        width: 150,
+                        child: Row(children: [
+                          SizedBox(width: 10,),
+                          Text(boardInfo.age+" 歳",
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                                color: Color.fromARGB(255, 0, 0, 0),
                               ),
-                            SizedBox(width: 30,),
-                            Text(boardInfo.residence, 
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                ),
-                              ),
-                            boardInfo.identity_state == "1"?
-                            Image.network("http://greeme.net/uploads/status/on.png", width: 15, height: 15,):
-                            Container()
-                          ],)
-                        ),
-                        SizedBox(height: 5,),
-                        SizedBox(
-                          width: 150, // Set the width statically
-                          child: IntrinsicWidth(
-                            child: Wrap(
-                              spacing: 2,
-                              runSpacing: 2,
-                              direction: Axis.horizontal, // Set the wrapDirection to horizontal
-                              children: badgeList.map((BadgeItemObject e) {
-                                String textColor = e.color;
-                                String textName = e.title;
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(width: 1, color: Color(int.parse(textColor.replaceAll('#', '0xFF'))),),
-                                    color: Color(int.parse(textColor.replaceAll('#', '0xFF'))).withOpacity(0.2)
-                                  ),
-                                  child: Text(
-                                    "${textName}",
-                                    style: TextStyle(fontSize: 12, color: Color(int.parse(textColor.replaceAll('#', '0xFF')))),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                );
-                              }).toList(),
                             ),
+                          SizedBox(width: 30,),
+                          Text(boardInfo.residence, 
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                          boardInfo.identity_state == "1"?
+                          Image.network("http://greeme.net/uploads/status/on.png", width: 15, height: 15,):
+                          Container()
+                        ],)
+                      ),
+                      SizedBox(height: 5,),
+                      SizedBox(
+                        width: 150, // Set the width statically
+                        child: IntrinsicWidth(
+                          child: Wrap(
+                            spacing: 2,
+                            runSpacing: 2,
+                            direction: Axis.horizontal, // Set the wrapDirection to horizontal
+                            children: badgeList.map((BadgeItemObject e) {
+                              String textColor = e.color;
+                              String textName = e.title;
+                              return Container(
+                                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(width: 1, color: Color(int.parse(textColor.replaceAll('#', '0xFF'))),),
+                                  color: Color(int.parse(textColor.replaceAll('#', '0xFF'))).withOpacity(0.2)
+                                ),
+                                child: Text(
+                                  "${textName}",
+                                  style: TextStyle(fontSize: 12, color: Color(int.parse(textColor.replaceAll('#', '0xFF')))),
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+                            }).toList(),
                           ),
-                        )
-                      ],
-                  ),])
-                )     
-            )
-          ),     
-        SizedBox(height: 30, width: 10,),
-      ]);
-    }
+                        ),
+                      )
+                    ],
+                ),
+              ])
+            ), 
+          )
+        ),     
+    ]);
   }
+}

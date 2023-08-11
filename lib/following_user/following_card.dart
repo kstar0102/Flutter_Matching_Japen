@@ -135,6 +135,7 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
                             Container()
                           ],)
                         ),
+                        SizedBox(height: 5,),
                         SizedBox(
                           width: 150, // Set the width statically
                           child: IntrinsicWidth(
@@ -167,7 +168,6 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
                 )     
             )
           ),     
-        SizedBox(height: 30, width: 10,),
       ]);
     }
   }

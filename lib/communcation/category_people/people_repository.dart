@@ -22,7 +22,6 @@ class PeopleRepository {
 
     if (result is List) {
       _peopleitems = result.map((data) => PeopleItem.fromMap(data)).toList();
-      print('doFetchResData() src=${_peopleitems.toString()}');
 
       return _peopleitems;
     } else {

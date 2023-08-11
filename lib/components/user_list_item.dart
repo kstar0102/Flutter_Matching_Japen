@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:matching_app/common.dart';
+import 'package:matching_app/screen/main/other_profile.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/communcation/category_people/people_item.dart';
 import 'package:matching_app/screen/main/profile_people_screen.dart';
@@ -69,7 +70,7 @@ class UserListItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text("${info.residence+ " " + info.age+"歳"}",
+                              Text("${info.residence+ "\t" + info.age+"歳"}",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                       fontSize: 12,
@@ -92,7 +93,7 @@ class UserListItem extends StatelessWidget {
                                         onTap: (){
                                           Navigator.push(
                                               context,
-                                              MaterialPageRoute(builder: (context) => ProfilePeopleScreen(info : info.user_id)),);
+                                              MaterialPageRoute(builder: (context) => OtherProfile(info : info.user_id)),);
                                         },
                                         child: Text("いいね",
                                           style: TextStyle(

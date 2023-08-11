@@ -3,6 +3,9 @@ import 'package:matching_app/common.dart';
 import 'package:matching_app/components/radius_button.dart';
 import 'package:matching_app/screen/main/layouts/setting_header_no_border.dart';
 import 'package:matching_app/utile/index.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../bloc/cubit.dart';
 
 class AccountCloseScreen extends StatefulWidget {
   const AccountCloseScreen({super.key});
@@ -14,9 +17,15 @@ class AccountCloseScreen extends StatefulWidget {
 class AccountCloseScreenState extends State<AccountCloseScreen>
     with SingleTickerProviderStateMixin {
   bool _isChecked = false;
+
+  Future<void> close() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('UserId', '0');
+  }
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
+    AppCubit appCubit = AppCubit.get(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -131,6 +140,8 @@ class AccountCloseScreenState extends State<AccountCloseScreen>
                     color: BUTTON_MAIN,
                     text: "退会する",
                     goNavigation: (id) {
+                      close();
+                      appCubit.closeAccount();
                       Navigator.pushNamed(context, "/");
                     },
                     isDisabled: !_isChecked,

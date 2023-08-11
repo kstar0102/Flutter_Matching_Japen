@@ -76,9 +76,9 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context);
-                                    //  Navigator.pushReplacement(
-                                    //             context, MaterialPageRoute(builder: (context) => CommunityScreen()));
+                                    // Navigator.pop(context);
+                                     Navigator.pushReplacement(
+                                                context, MaterialPageRoute(builder: (context) => CommunityScreen()));
                                   },
                                   style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero,
@@ -116,7 +116,7 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
                               horizontal: vww(context, 1),
                             ),
                             child: Container(
-                              height: 620,
+                              height: MediaQuery.of(context).size.height /1.3,
                               child: peoples != null && peoples.isNotEmpty
                                   ? SingleChildScrollView(
                                       scrollDirection: Axis.vertical,

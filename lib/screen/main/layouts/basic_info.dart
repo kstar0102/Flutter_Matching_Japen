@@ -69,13 +69,20 @@ class BasicInfo extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Text(
-                        appCubit.user.bodytype == ""?
-                          "未設定":appCubit.user.bodytype.toString(),
-                        style:
-                            TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
-                      ),
-                    )
+                      child: appCubit.user.bodytype==""? 
+                      Text(
+                            "未設定",
+                            style: const TextStyle(
+                                fontSize: 14,
+                                color:
+                                    Color.fromARGB(255, 0, 202, 157)),
+                          )
+                        : Text(
+                            appCubit.user.bodytype.toString(),
+                            // appCubit.user.bodytype,
+                            style: TextStyle(
+                                fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
+                      )),
                   ],
                 )),
             Padding(
@@ -92,13 +99,20 @@ class BasicInfo extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Text(
-                       appCubit.user.bloodType == ""?
-                          "未設定":appCubit.user.bloodType.toString(),
-                        style:
-                            TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
-                      ),
-                    )
+                      child: appCubit.user.bloodType==""? 
+                        Text(
+                          "未設定",
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color:
+                                  Color.fromARGB(255, 0, 202, 157)),
+                        )
+                      : Text(
+                          appCubit.user.bloodType.toString(),
+                          // appCubit.user.bodytype,
+                          style: TextStyle(
+                              fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
+                    )),
                   ],
                 )),
             Padding(
@@ -115,13 +129,20 @@ class BasicInfo extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Text(
-                        appCubit.user.usePurpose == ""?
-                          "未設定":appCubit.user.usePurpose.toString(),
-                        style:
-                            TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
-                      ),
-                    )
+                      child: appCubit.user.usePurpose==""? 
+                        Text(
+                          "未設定",
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color:
+                                  Color.fromARGB(255, 0, 202, 157)),
+                        )
+                      : Text(
+                          appCubit.user.usePurpose.toString(),
+                          // appCubit.user.bodytype,
+                          style: TextStyle(
+                              fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
+                    )),
                   ],
                 )),
             Padding(
@@ -138,13 +159,20 @@ class BasicInfo extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Text(
-                         appCubit.user.annualIncome == ""?
-                          "未設定":appCubit.user.annualIncome.toString(),
-                        style:
-                            TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
-                      ),
-                    )
+                      child: appCubit.user.annualIncome==""? 
+                        Text(
+                          "未設定",
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color:
+                                  Color.fromARGB(255, 0, 202, 157)),
+                        )
+                      : Text(
+                          appCubit.user.annualIncome.toString(),
+                          // appCubit.user.bodytype,
+                          style: TextStyle(
+                              fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
+                    )),
                   ],
                 )),
             Padding(
@@ -161,13 +189,20 @@ class BasicInfo extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Text(
-                        appCubit.user.cigarette == ""?
-                          "未設定":appCubit.user.cigarette.toString(),
-                        style:
-                            TextStyle(fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
-                      ),
-                    )
+                      child: appCubit.user.cigarette==""? 
+                        Text(
+                          "未設定",
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color:
+                                  Color.fromARGB(255, 0, 202, 157)),
+                        )
+                      : Text(
+                          appCubit.user.cigarette.toString(),
+                          // appCubit.user.bodytype,
+                          style: TextStyle(
+                              fontSize: 14, color: Color.fromARGB(255, 155, 155, 155)),
+                    )),
                   ],
                 ))
           ],

@@ -7,50 +7,32 @@ class PeopleController extends StateNotifier<AsyncValue<PeopleItemList>> {
   PeopleController({required this.notifRepo}) : super(const AsyncData([]));
 
   final PeopleRepository notifRepo;
-
-  AsyncValue<PeopleItemList?> _state = const AsyncValue.loading();
   // set state(AsyncValue<PeopleItemList?> value) => _state = value;
 
-  Future<PeopleItemList?> doGetPeopleData(String sub_id) async {
-    state = const AsyncValue.loading();
+  Future<void> doGetPeopleData(String sub_id) async {
+    // state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => notifRepo.doGetPeopleData(sub_id));
-    if (mounted) {
+    // if (mounted) {
       state = newState;
-    }
-
-    if (newState.hasError) {
-      return [];
-    } else {
-      return newState.value;
-    }
+    // }
+    return;
   }
 
-  Future<PeopleItemList?> doGetChattingData() async {
-    state = const AsyncValue.loading();
+  Future<void> doGetChattingData() async {
+    // state = const AsyncValue.loading();
     final newState = await AsyncValue.guard(() => notifRepo.doGetChattingData());
-    if (mounted) {
-      state = newState;
-    }
 
-    if (newState.hasError) {
-      return [];
-    } else {
-      return newState.value;
-    }
+      state = newState;
+      return;
   }
 
-  Future<PeopleItemList?> doGetLikeData() async {
-    state = const AsyncValue.loading();
+  Future<void> doGetLikeData() async {
+    
     final newState = await AsyncValue.guard(() => notifRepo.doGetLikeData());
-    if (mounted) {
-      state = newState;
-    }
+    
+    state = newState;
 
-    if (newState.hasError) {
-      return [];
-    } else {
-      return newState.value;
-    }
+    return;
   }
 }
 

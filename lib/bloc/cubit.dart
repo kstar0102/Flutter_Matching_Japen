@@ -356,6 +356,31 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
+  void closeAccount() async{
+     final data = await DioClient.closeAccount(UserId);
+     if(data['result'] == "success"){
+      Fluttertoast.showToast(
+        msg: "成功",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+      );
+    }
+    else if(data['result'] == 'error')
+    {
+      Fluttertoast.showToast(
+        msg: "失敗",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
+  }
+
 
   void searchFilter(String search_age_start, String search_age_end, String search_height_start, String search_height_end, String search_body, String search_holiday, String search_purpose, String search_ciga, String search_sake, String live_place, String VerifyChecked) async{
     s_age_start = search_age_start;
@@ -369,6 +394,7 @@ class AppCubit extends Cubit<AppState> {
     s_sake = search_sake;
     s_live = live_place;
     s_checked = VerifyChecked;
+    print(s_checked);
     emit(AppMain());
   }
 
@@ -652,7 +678,7 @@ class AppCubit extends Cubit<AppState> {
           user.photo4 = "$BASE_URL/uploads/${decodedData['data']['photo4']}";
           user.photo5 = "$BASE_URL/uploads/${decodedData['data']['photo5']}";
           user.photo6 = "$BASE_URL/uploads/${decodedData['data']['photo6']}";
-        emit(AppMain());
+        // emit(AppMain());
         return 1;
       } else {
         return 0;

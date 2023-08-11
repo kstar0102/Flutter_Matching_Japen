@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/screen/main/layouts/setting_header.dart';
 import 'package:matching_app/utile/index.dart';
+
+import '../../../bloc/cubit.dart';
 
 // ignore: use_key_in_widget_constructors
 class PrivacySettingScreen extends StatefulWidget {
@@ -17,6 +20,7 @@ class _PrivacySettingScreenState extends State<PrivacySettingScreen>
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
+    AppCubit appCubit = AppCubit.get(context);
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -52,16 +56,31 @@ class _PrivacySettingScreenState extends State<PrivacySettingScreen>
                               Text(_title[index],
                                   style: const TextStyle(
                                       color: PRIMARY_FONT_COLOR)),
+                                  appCubit.user.identityState == "承認"?
                                   Switch(
                                     value: _value[index],
                                     activeColor: Colors.green,
                                     onChanged: (value) {
                                       setState(() {
                                         _value[index] = value;
-                                        // Perform some action based on whether the switch is on or off
+
                                       });
-                                    },
-                                  ),
+                                    }
+                                  ):
+                                 Switch(
+                                    value: _value[index],
+                                    activeColor: Colors.green,
+                                    onChanged: (value) {
+                                      Fluttertoast.showToast(
+                                        msg: "この機能は利用できません。",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  )
                             ],
                           ),
                         ),
