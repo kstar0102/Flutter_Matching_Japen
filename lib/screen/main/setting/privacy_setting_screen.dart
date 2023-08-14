@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/screen/main/layouts/setting_header.dart';
@@ -15,13 +16,16 @@ class PrivacySettingScreen extends StatefulWidget {
 
 class _PrivacySettingScreenState extends State<PrivacySettingScreen>
     with SingleTickerProviderStateMixin {
-      final List _value = [false, false];
       final List _title = ["年齢認証していない人", "マッチしていない人"];
+
+
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     AppCubit appCubit = AppCubit.get(context);
-    return Scaffold(
+    final List _value = [appCubit.user.private_age =="1"?true:false,appCubit.user.private_matching=="1"?true:false];
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+      return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
           slivers: <Widget>[
@@ -63,11 +67,17 @@ class _PrivacySettingScreenState extends State<PrivacySettingScreen>
                                     onChanged: (value) {
                                       setState(() {
                                         _value[index] = value;
-
+                                        int isVal = 0;
+                                        if(_value[index] == true)
+                                        {
+                                          isVal = 1;
+                                        }
+                                        appCubit.changePrivate(index.toString(), isVal.toString());
+                                        
                                       });
                                     }
                                   ):
-                                 Switch(
+                                  Switch(
                                     value: _value[index],
                                     activeColor: Colors.green,
                                     onChanged: (value) {
@@ -90,5 +100,6 @@ class _PrivacySettingScreenState extends State<PrivacySettingScreen>
             }, childCount: 2)),
           ],
         ));
+    });
   }
 }

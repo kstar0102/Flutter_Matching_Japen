@@ -24,7 +24,7 @@ class _UserListScreenState extends ConsumerState<UserListScreen>
   }
 
   void getData() async {
-    ref.read(peopleProvider.notifier).doGetLikeData();
+    ref.read(peopleProvider.notifier).doGetPreview();
   }
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class _UserListScreenState extends ConsumerState<UserListScreen>
                                     child:Text("No Data")
                                   ),
                             ),
-                            ),
+                          ),
                         ]);
             }, childCount: 1)),
           ],

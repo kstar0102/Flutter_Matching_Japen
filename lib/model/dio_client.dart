@@ -11,7 +11,7 @@ import 'package:matching_app/model/dio_exception.dart';
 class DioClient {
   static final _baseOptions = BaseOptions(
     // baseUrl: 'http://mobileapp.swaconnect.net/api',
-    baseUrl: 'http://greeme.net/api',
+    baseUrl: 'http://192.168.142.55:8000/api',
     //connectTimeout: 10000, receiveTimeout: 10000,
     headers: {
       'Content-type': 'application/x-www-form-urlencoded',
@@ -430,6 +430,7 @@ class DioClient {
     try {
        final response = await dio
           .post('/add_user_today_like', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      print(response.data);
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -492,7 +493,42 @@ class DioClient {
     try {
       final response = await dio.get('/get_like_data/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
+      print(response.data);
       return response.data;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 401) {
+        // handle unauthorized error
+      } else {
+        throw e.message; // let DioExceptions handle other errors
+      }
+    }
+  }
+
+  static Future<dynamic> doGetPreview(String user_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    try {
+      final response = await dio.get('/get_preview_data/$user_id',
+          options: Options(headers: {'X-CSRF-TOKEN': token}));
+      return response.data;
+
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 401) {
+        // handle unauthorized error
+      } else {
+        throw e.message; // let DioExceptions handle other errors
+      }
+    }
+  }
+
+  static Future<dynamic> doGetBrock(String user_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    try {
+      final response = await dio.get('/get_brock_data/$user_id',
+          options: Options(headers: {'X-CSRF-TOKEN': token}));
+      return response.data;
+
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
         // handle unauthorized error
@@ -545,6 +581,21 @@ class DioClient {
     }
   }
 
+  static Future<dynamic> changeBlockStatus(String receiver_id, String send_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    try {
+       final response = await dio
+          .post('/change_block', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      print(response.data);
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
   static Future<dynamic> closeAccount(String user_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
@@ -552,6 +603,52 @@ class DioClient {
     try {
        final response = await dio
           .post('/close_account', data: {'user_id': user_id});
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
+  static Future<dynamic> changePrivate(String user_id, String index, String isVal) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    print(user_id+index+isVal);
+    try {
+       final response = await dio
+          .post('/change_private', data: {'user_id': user_id, 'index': index, 'isVal': isVal});
+      print(response.data);
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
+  static Future<dynamic> changePreview(String user_id, String id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    print(user_id + id);
+    try {
+       final response = await dio
+          .post('/change_preview', data: {'see_id': user_id, 'user_id': id});
+      print(response.data);
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
+  static Future<dynamic> doPayment(String month, DateTime resultDate, String user_id) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    try {
+       final response = await dio
+          .post('/do_payment', data: {'month': month, 'resultDate': resultDate, 'user_id': user_id});
+      print(response.data);
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();

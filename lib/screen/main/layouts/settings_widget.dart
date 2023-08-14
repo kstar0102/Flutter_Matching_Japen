@@ -6,9 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsWidget extends ConsumerStatefulWidget {
-  const SettingsWidget({super.key, required this.planType, required this.todays});
+  const SettingsWidget({super.key, required this.planType, required this.todays, required this.availDate, required this.payUser});
   final String planType;
   final String todays;
+  final String availDate;
+  final String payUser;
    @override
   // ignore: library_private_types_in_public_api
   ConsumerState<SettingsWidget> createState() => _SettingsWidgetState();
@@ -149,7 +151,7 @@ class _SettingsWidgetState extends ConsumerState<SettingsWidget>
                                             color: PRIMARY_FONT_COLOR))
                                   ],
                                 ),
-                                Text(widget.planType,
+                                Text(widget.payUser == "0" || widget.availDate =="0000-00-00" ? widget.planType: widget.availDate,
                                     style: const TextStyle(
                                         fontSize: 15,
                                         color:

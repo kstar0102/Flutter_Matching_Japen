@@ -1,8 +1,13 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:matching_app/components/chat_bubble.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/screen/main/layouts/pined_chatting_header.dart';
+import 'package:matching_app/screen/main/pay_screen.dart';
+import 'package:matching_app/screen/main/profile_screen.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,7 +16,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matching_app/controller/auth_controllers.dart';
 import 'package:intl/intl.dart';
 import 'package:matching_app/screen/verify_screen/identity_verify.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 // ignore: use_key_in_widget_constructors
 class ChattingScreen extends ConsumerStatefulWidget {
   final String receiverUserPhone;
@@ -26,7 +32,8 @@ class ChattingScreen extends ConsumerStatefulWidget {
   final String send_identy;
   final String address;
   final String age;
-  const ChattingScreen({super.key, required this.receiverUserPhone, required this.receiverUserToken, required this.receiverUserId, required this.receiverUserAvatar, required this.receiverUserName, required this.receiverUserBadgeName, required this.receiverUserBadgeColor, required this.senderUserId, required this.tab_val, required this.send_identy, required this.address, required this.age});
+  final String payUser;
+  const ChattingScreen({super.key, required this.receiverUserPhone, required this.receiverUserToken, required this.receiverUserId, required this.receiverUserAvatar, required this.receiverUserName, required this.receiverUserBadgeName, required this.receiverUserBadgeColor, required this.senderUserId, required this.tab_val, required this.send_identy, required this.address, required this.age,required this.payUser});
   @override
   // ignore: library_private_types_in_public_api
   ConsumerState<ChattingScreen> createState() => _ChattingScreenState();
@@ -40,6 +47,11 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
   // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   ScrollController _scrollController = ScrollController();
   ScrollController _scrollController1 = ScrollController();
+  
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final firebase_storage.FirebaseStorage _storage =
+      firebase_storage.FirebaseStorage.instance;
+  String? _uploadedImageUrl;
   bool isRead = false;
   String otherMessage = "";
   double screenHeight = 0;
@@ -143,7 +155,87 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
                 ],
         )));
       Future.delayed(const Duration(milliseconds: 1000), () {
-        showDialog(context: context, builder: (context) => dialog);
+        showDialog(context: context, builder: (context) => dialog, barrierDismissible: false,);
+      });
+       dialogShown = true;
+    }
+    if (!dialogShown && widget.send_identy != "ブロック" && widget.payUser != "1") {
+        final AlertDialog dialog = AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          titlePadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          actionsPadding: EdgeInsets.zero,
+          actions: [
+            Container(
+                padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 13),
+                      backgroundColor: BUTTON_MAIN),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PayScreen()),
+                    );
+                  },
+                  child: const Text('有料会員に登録する'),
+                )),
+            Container(
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 20, left: 50, right: 50),
+                width: double.infinity,
+                child: TextButton(
+                  style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 13),
+                      backgroundColor: Colors.transparent),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()),
+                    );
+                  },
+                  child: const Text('まだしない',
+                      style: TextStyle(color: BUTTON_MAIN)),
+                ))
+          ],
+          shape: roundedRectangleBorder,
+          content: Container(
+              padding: const EdgeInsets.only(
+                  top: 20),
+              height: 300,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Text(
+                    "ボード機能は\n有料会員登録が必要です。",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: PRIMARY_FONT_COLOR,
+                        fontSize: 18,
+                        letterSpacing: -2),
+                  ),
+                  Image(
+                      width: vww(context, 100),
+                      image: const AssetImage(
+                          "assets/images/pay.png"))
+                ],
+        )));
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        showDialog(context: context, builder: (context) => dialog, barrierDismissible: false,);
       });
        dialogShown = true;
     }
@@ -151,10 +243,16 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
       String msg = _messageController.text;
       _messageController.clear();
       if(msg.isNotEmpty) {
+        String imageUrl = '';
+        if (_uploadedImageUrl != null) {
+          imageUrl = await _storeImageToFirebaseStorage(_uploadedImageUrl!);
+        }
         final result = await _chatService.sendMessage(   
           widget.receiverUserToken, msg, widget.senderUserId);
           // clear the text controller after sending the message
-          
+        setState(() {
+          _uploadedImageUrl = null;
+        });
       }
       DateTime currentTime = DateTime.now();
       String formattedTime = DateFormat('hh:mm').format(currentTime);
@@ -164,7 +262,41 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
         },
       );
     }
+  }
+
+  Future<String?> _chooseImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
     
+    if (pickedFile != null) {
+        String imageUrl = '';
+        if (_uploadedImageUrl != null) {
+          imageUrl = await _storeImageToFirebaseStorage(_uploadedImageUrl!);
+        final result = await _chatService.sendMessage(   
+          widget.receiverUserToken, imageUrl, widget.senderUserId);
+          // clear the text controller after sending the message
+        setState(() {
+          _uploadedImageUrl = null;
+        });
+      }
+      DateTime currentTime = DateTime.now();
+      String formattedTime = DateFormat('hh:mm').format(currentTime);
+      final controller = ref.read(AuthProvider.notifier);
+      controller.doChatting(widget.receiverUserId, widget.receiverUserToken, imageUrl, formattedTime).then(
+        (value) {
+        },
+      );
+      return pickedFile.path;
+    }
+    return null;
+  }
+
+  Future<String> _storeImageToFirebaseStorage(String imagePath) async {
+    final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    final ref = _storage.ref().child('images/$fileName');
+    final uploadTask = ref.putFile(File(imagePath));
+    final snapshot = await uploadTask.whenComplete(() {});
+    return await snapshot.ref.getDownloadURL();
   }
 
   @override
@@ -299,6 +431,7 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
                   const SizedBox(height: 25,)
                 ],
               )),
+            Divider(),
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
@@ -324,7 +457,14 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
                             margin: const EdgeInsets.symmetric(horizontal: 1),
                             child: IconButton(
                               icon: const Icon(Icons.camera_alt_rounded),
-                              onPressed: () {},
+                              onPressed: () async {
+                                final imagePath = await _chooseImage();
+                                if (imagePath != null) {
+                                  setState(() {
+                                    _uploadedImageUrl = imagePath;
+                                  });
+                                }
+                              },
                               color: const Color.fromARGB(255, 193, 192, 201),
                             )),
                       ),

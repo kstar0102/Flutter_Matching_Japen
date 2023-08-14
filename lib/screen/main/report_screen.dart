@@ -43,7 +43,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: Image(
-                      image: NetworkImage("http://greeme.net/uploads/"+ widget.avatar),
+                      image: NetworkImage("http://192.168.142.55:8000/uploads/"+ widget.avatar),
                       height: 80,
                       width: 80,
                     ))),

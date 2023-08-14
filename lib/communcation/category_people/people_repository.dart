@@ -60,6 +60,39 @@ class PeopleRepository {
       return _peopleitems;
     }
   }
+
+  Future<PeopleItemList> doGetPreview() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? user_id = prefs.getString('UserId');
+    dynamic data = await DioClient.doGetPreview(user_id!);
+
+    final result = data['result'];
+
+    if (result is List) {
+      _peopleitems = result.map((data) => PeopleItem.fromMap(data)).toList();
+
+      return _peopleitems;
+    } else {
+      return _peopleitems;
+    }
+  }
+
+  
+  Future<PeopleItemList> doGetBrock() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? user_id = prefs.getString('UserId');
+    dynamic data = await DioClient.doGetBrock(user_id!);
+
+    final result = data['result'];
+
+    if (result is List) {
+      _peopleitems = result.map((data) => PeopleItem.fromMap(data)).toList();
+
+      return _peopleitems;
+    } else {
+      return _peopleitems;
+    }
+  }
 }
 
 final PeopleProvider = Provider<PeopleRepository>((ref) {

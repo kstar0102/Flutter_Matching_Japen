@@ -1,21 +1,41 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:matching_app/components/user_list_item.dart';
-import 'package:matching_app/screen/main/layouts/setting_header.dart';
+import 'package:matching_app/screen/main/layouts/user_list_header.dart';
+import 'package:matching_app/utile/async_value_ui.dart';
 import 'package:matching_app/utile/index.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:matching_app/communcation/category_people/people_controller.dart';
 
+import '../../../bloc/cubit.dart';
+import '../layouts/setting_header.dart';
 // ignore: use_key_in_widget_constructors
-class BlockedUsersScreen extends StatefulWidget {
+class BlockedUsersScreen extends ConsumerStatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
-  _BlockedUsersScreenState createState() => _BlockedUsersScreenState();
+  ConsumerState<BlockedUsersScreen> createState() => _BlockedUsersScreenState();
 }
 
-class _BlockedUsersScreenState extends State<BlockedUsersScreen>
+class _BlockedUsersScreenState extends ConsumerState<BlockedUsersScreen>
     with SingleTickerProviderStateMixin {
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  void getData() async {
+    ref.read(peopleProvider.notifier).doGetBrock();
+  }
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
+     ref.listen<AsyncValue>(peopleProvider.select((state) => state),
+    (_, state) => state.showAlertDialogOnError(context));
+
+    final state = ref.watch(peopleProvider);
+    final peoples = state.value;
+    AppCubit appCubit = AppCubit.get(context);
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -26,63 +46,32 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen>
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
               return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Padding(
-                    //     padding: EdgeInsets.symmetric(
-                    //         horizontal: vww(context, vww(context, 1))),
-                    //     child: Column(
-                    //       children: [
-                    //         TextButton(
-                    //           style: ButtonStyle(
-                    //             padding: MaterialStateProperty.all<
-                    //                 EdgeInsetsGeometry>(EdgeInsets.zero),
-                    //           ),
-                    //           onPressed: () {
-                    //             showDialog(
-                    //                 context: context,
-                    //                 builder: (context) => CupertinoAlertDialog(
-                    //                       content: const Text(
-                    //                           'ブロックをしても\nよろしいですか？',
-                    //                           style: TextStyle(fontSize: 16)),
-                    //                       actions: <Widget>[
-                    //                         TextButton(
-                    //                             onPressed: () {
-                    //                               Navigator.pop(context);
-                    //                             },
-                    //                             child: const Text('キャンセル',
-                    //                                 style: TextStyle(
-                    //                                     fontSize: 15))),
-                    //                         TextButton(
-                    //                           onPressed: () {
-                    //                           },
-                    //                           child: const Text('OK',
-                    //                               style:
-                    //                                   TextStyle(fontSize: 15)),
-                    //                         )
-                    //                       ],
-                    //                     ));
-                    //           },
-                    //           child: const UserListItem(isBlockedUser: true),
-                    //         ),
-                    //       ],
-                    //     )),
-                    // Padding(
-                    //     padding: EdgeInsets.symmetric(
-                    //         horizontal: vww(context, vww(context, 1))),
-                    //     child: Column(
-                    //       children: [
-                    //         TextButton(
-                    //           style: ButtonStyle(
-                    //             padding: MaterialStateProperty.all<
-                    //                 EdgeInsetsGeometry>(EdgeInsets.zero),
-                    //           ),
-                    //           onPressed: () {},
-                    //           child: const UserListItem(isBlockedUser: true),
-                    //         ),
-                    //       ],
-                    //     )),
-                  ]);
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                          Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: vww(context, vww(context, 1))),
+                              child: Container(
+                              height: MediaQuery.of(context).size.height / 1.2,
+                              child: peoples != null && peoples.isNotEmpty
+                                ? SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: Wrap(
+                                      spacing: 20,
+                                      runSpacing: 20,
+                                      children: peoples.map<Widget>((childItem) => UserListItem(
+                                          info: childItem,
+                                          onPressed: () {},
+                                          isBlockedUser: true,
+                                      )).toList(),
+                                    ),
+                                  )
+                                : Center(
+                                    child:Text("No Data")
+                                  ),
+                            ),
+                          ),
+                        ]);
             }, childCount: 1)),
           ],
         ));

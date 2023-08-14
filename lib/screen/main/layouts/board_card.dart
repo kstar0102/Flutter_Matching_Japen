@@ -71,16 +71,43 @@ class _BoardCardState extends State<BoardCard> {
                                           borderRadius:
                                               const BorderRadius.all(Radius.circular(50)),
                                           border: Border.all(color: Colors.black45)),
-                                      child: CircleAvatar(
-                                        backgroundImage: NetworkImage("http://greeme.net/uploads/"+avatar),
-                                        onBackgroundImageError: (exception, stackTrace) {
-                                          setState(() {
-                                            avatar =
-                                                "http://greeme.net/uploads/1.png";
-                                          });
-                                        },
-                                        backgroundColor: Colors.transparent,
-                                      )),
+                                      child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(20),
+                                          child: boardInfo.matching_check !="1"? boardInfo.private_age == "1" || boardInfo.private_matching == "1" ? ShaderMask(
+                                            shaderCallback: (rect) {
+                                              return LinearGradient(
+                                                colors: [Colors.transparent, Colors.transparent, Colors.black],
+                                                stops: [0, 0.1, 1],
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                              ).createShader(rect);
+                                            },
+                                            blendMode: BlendMode.dstIn,
+                                            child: Stack(
+                                              children: [
+                                                Image.network(
+                                                  "http://192.168.142.55:8000/uploads/" + avatar,
+                                                  width: 165,
+                                                  height: 165,
+                                                ),
+                                                Container(
+                                                  width: 165,
+                                                  height: 165,
+                                                  color: Colors.grey.withOpacity(0.9),
+                                                ),
+                                              ],
+                                            ),
+                                          ):Image.network(
+                                            "http://192.168.142.55:8000/uploads/" + avatar,
+                                            width: 165,
+                                            height: 165,
+                                          ):Image.network(
+                                            "http://192.168.142.55:8000/uploads/" + avatar,
+                                            width: 165,
+                                            height: 165,
+                                          )
+                                        ),
+                                      ),
                                     Container(width: 5),
                                       Text('${boardInfo.user_nickname??"TSUABA"}',
                                         style: TextStyle(

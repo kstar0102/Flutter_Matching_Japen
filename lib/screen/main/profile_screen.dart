@@ -160,7 +160,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                                     child: const Image(
                                         image: AssetImage(
                                             "assets/images/main/set-introduction.png")))),
-                        SettingsWidget(planType: appCubit.user.planType, todays: appCubit.user.today_recom),
+                        SettingsWidget(planType: appCubit.user.planType, todays: appCubit.user.today_recom, availDate: appCubit.user.avail_date, payUser: appCubit.user.pay_user),
                         MyCommunityWidget(
                             communityObjects: appCubit.user.community),
                         IntroductionWidget(introduce: appCubit.user.introduce),

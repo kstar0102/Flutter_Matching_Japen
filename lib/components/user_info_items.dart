@@ -84,7 +84,7 @@ class _UserInfoItemsState extends State<UserInfoItems> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image.network(
-              "http://greeme.net/uploads/" + avatar,
+              "http://192.168.142.55:8000/uploads/" + avatar,
               width: 165,
               height: 165,
             ),

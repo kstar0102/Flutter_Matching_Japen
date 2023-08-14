@@ -34,6 +34,24 @@ class PeopleController extends StateNotifier<AsyncValue<PeopleItemList>> {
 
     return;
   }
+
+   Future<void> doGetPreview() async {
+    
+    final newState = await AsyncValue.guard(() => notifRepo.doGetPreview());
+    
+    state = newState;
+
+    return;
+  }
+
+   Future<void> doGetBrock() async {
+    
+    final newState = await AsyncValue.guard(() => notifRepo.doGetBrock());
+    
+    state = newState;
+
+    return;
+  }
 }
 
 final peopleProvider = StateNotifierProvider.autoDispose<PeopleController,

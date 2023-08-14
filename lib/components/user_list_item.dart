@@ -5,6 +5,8 @@ import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/communcation/category_people/people_item.dart';
 import 'package:matching_app/screen/main/profile_people_screen.dart';
 
+import '../bloc/cubit.dart';
+
 class UserListItem extends StatelessWidget {
   final PeopleItem info;
   final VoidCallback onPressed;
@@ -19,6 +21,7 @@ class UserListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppCubit appCubit = AppCubit.get(context);
     return Container(
         height: 90,
         decoration: const BoxDecoration(
@@ -32,19 +35,41 @@ class UserListItem extends StatelessWidget {
             Container(
               width: 60.0,
               height: 60.0,
-              child: CircleAvatar(
-                backgroundImage:
-                    NetworkImage('http://greeme.net/uploads/' + info.photo1),
-                radius: 50,
-                backgroundColor: Colors.white,
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: Color.fromRGBO(
-                              244, 130, 34, 1)),
-                      borderRadius:
-                          BorderRadius.circular(55)),
-                ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: info.matching_check !="1"? info.private_age == "1" || info.private_matching == "1" ? ShaderMask(
+                  shaderCallback: (rect) {
+                    return LinearGradient(
+                      colors: [Colors.transparent, Colors.transparent, Colors.black],
+                      stops: [0, 0.1, 1],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ).createShader(rect);
+                  },
+                  blendMode: BlendMode.dstIn,
+                  child: Stack(
+                    children: [
+                      Image.network(
+                        "http://192.168.142.55:8000/uploads/" + info.photo1,
+                        width: 165,
+                        height: 165,
+                      ),
+                      Container(
+                        width: 165,
+                        height: 165,
+                        color: Colors.grey.withOpacity(0.9),
+                      ),
+                    ],
+                  ),
+                ):Image.network(
+                  "http://192.168.142.55:8000/uploads/" + info.photo1,
+                  width: 165,
+                  height: 165,
+                ):Image.network(
+                  "http://192.168.142.55:8000/uploads/" + info.photo1,
+                  width: 165,
+                  height: 165,
+                )
               ),
             ),
             Container(
@@ -62,7 +87,7 @@ class UserListItem extends StatelessWidget {
                             children: [
                               Text("${info.user_nickname}",
                                   style: TextStyle(
-                                      fontSize: 16, color: PRIMARY_FONT_COLOR))
+                                      fontSize: 16, color: PRIMARY_FONT_COLOR, fontWeight: FontWeight.bold ))
                             ])),
                     SizedBox(
                         width: vww(context, 90) - 70,
@@ -70,7 +95,7 @@ class UserListItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text("${info.residence+ "\t" + info.age+"歳"}",
+                              Text("${info.residence+ "                       " + info.age+"歳"}",
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                       fontSize: 12,
@@ -91,11 +116,17 @@ class UserListItem extends StatelessWidget {
                                           EdgeInsets.symmetric(horizontal: 15),
                                       child: InkWell(
                                         onTap: (){
-                                          Navigator.push(
+                                          if(isBlockedUser != true){
+                                            Navigator.push(
                                               context,
-                                              MaterialPageRoute(builder: (context) => OtherProfile(info : info.user_id)),);
+                                              MaterialPageRoute(builder: (context) => OtherProfile(info : info.user_id)));
+                                          }
+                                          else{
+                                            appCubit.changeBlockStatus(info.user_id);
+                                            Navigator.pushNamed(context, "/blocked_users_screen");
+                                          }
                                         },
-                                        child: Text("いいね",
+                                        child: Text("ブロック解除",
                                           style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.white)),

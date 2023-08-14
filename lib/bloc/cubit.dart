@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,6 +68,8 @@ class AppCubit extends Cubit<AppState> {
   String phone = "";
   String phone_token = "";
   String receiver_id = "";
+  String userInfo_indentity ="";
+  String userInfo_paycheck ="";
   //end
   AppCubit() : super(AppInitial());
 
@@ -123,6 +126,32 @@ class AppCubit extends Cubit<AppState> {
     phone_token = token;
     print(phone + phone_token);
     emit(AppRegister());
+  }
+
+  void changePrivate(String index, String isVal) async
+  {
+    final data = await DioClient.changePrivate(UserId,index,isVal);
+    if(data['result'] == "success"){
+      Fluttertoast.showToast(
+        msg: "成功。",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+      );
+    }
+    else if(data['result'] == 'error')
+    {
+      Fluttertoast.showToast(
+        msg: "失敗。",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
   }
 
 
@@ -295,6 +324,10 @@ class AppCubit extends Cubit<AppState> {
     emit(AppMain());
   }
 
+  void changePreview(String id) async{
+    await DioClient.changePreview(UserId, id);
+  }
+
    void changeBody(String body, String idx) async{
     body_type = body;
     body_id = idx;
@@ -333,6 +366,31 @@ class AppCubit extends Cubit<AppState> {
 
    void userReport(String receiver_token) async{
     final data = await DioClient.userReport(receiver_token, UserId);
+    if(data['result'] == "success"){
+      Fluttertoast.showToast(
+        msg: "成功",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+      );
+    }
+    else if(data['result'] == 'error')
+    {
+      Fluttertoast.showToast(
+        msg: "あなたはすでにこのユーザーの違反\nを報告しています。",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
+  }
+
+  void changeBlockStatus(String receiver_id) async{
+    final data = await DioClient.changeBlockStatus(receiver_id, UserId);
     if(data['result'] == "success"){
       Fluttertoast.showToast(
         msg: "成功",
@@ -495,6 +553,33 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
+  dynamic doPayment(int month, DateTime resultDate) async
+  {
+    final data = await DioClient.doPayment(month.toString(), resultDate, UserId);
+
+    if(data['result'] == "success"){
+      Fluttertoast.showToast(
+        msg: "成功。",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+      );
+    }
+    else
+    {
+      Fluttertoast.showToast(
+        msg: "失敗。",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
+  }
+
   Future<int> uploadProfile() async {
     String selectedCommunityList = "";
     for (var i = 0; i < communityList.length; i++) {
@@ -536,8 +621,11 @@ class AppCubit extends Cubit<AppState> {
       var decodedData = json.decode(responseData);
       if (decodedData["type"] == "success") {
         userId = decodedData["data"]["id"];
+        
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("UserId",userId.toString());
+        await prefs.setString("Phone_token",decodedData["data"]["phone_token"]);
+        await prefs.setString("identify_verify",decodedData["data"]["identity_state"]);
         return 1;
       } else {
         return 0;
@@ -692,10 +780,11 @@ class AppCubit extends Cubit<AppState> {
   Future<void> fetchProfileInfo1(String user_id) async {
     try {
       final response =
-          await http.get(Uri.parse('${API_URL}get_user?id=$user_id'));
+          await http.get(Uri.parse('${API_URL}get_user1?id=$user_id'));
       if (response.statusCode == 200) {
         user = User();
         Map<String, dynamic> jsonData = jsonDecode(response.body);
+        print(response.body);
         user.id = userId;
         user.name = jsonData['data']['user_name'] ?? "";
         user.nickname = jsonData['data']['user_nickname'] ?? "";
@@ -722,6 +811,11 @@ class AppCubit extends Cubit<AppState> {
         r_count = jsonData['count']['res_count'] ?? "0";
         user.phone_number = jsonData['data']['phone_number'] ?? "";
         user.phone_token = jsonData['data']['phone_token'] ?? "";
+        user.private_age = jsonData['data']['private_age'] ?? "";
+        user.private_matching = jsonData['data']['private_matching'] ?? "";
+        user.matching_check = jsonData['data']['matching_check'] ?? "";
+        user.pay_user = jsonData['data']['pay_user'] ?? "";
+
         avatarImages = [
           "$BASE_URL/uploads/${jsonData['data']['photo1']}",
           "$BASE_URL/uploads/${jsonData['data']['photo2']}",
@@ -801,7 +895,10 @@ class AppCubit extends Cubit<AppState> {
         r_count = jsonData['count']['res_count'] ?? "0";
         user.phone_number = jsonData['data']['phone_number'] ?? "";
         user.phone_token = jsonData['data']['phone_token'] ?? "";
-
+        user.private_age = jsonData['data']['private_age'] ?? "";
+        user.private_matching = jsonData['data']['private_matching'] ?? "";
+        user.matching_check = jsonData['data']['matching_check'] ?? "";
+        user.pay_user = jsonData['data']['pay_user'] ?? "";
         // user.phone = jsonData['data']['phone'] ?? "";
         user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
         user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";
@@ -853,11 +950,9 @@ class AppCubit extends Cubit<AppState> {
     try {
       final response =
           await http.get(Uri.parse('${API_URL}get_user?id=$UserId'));
-      print(response.body);
       if (response.statusCode == 200) {
         user = User();
         Map<String, dynamic> jsonData = jsonDecode(response.body);
-     
         user.id = userId;
         user.name = jsonData['data']['user_name'] ?? "";
         user.nickname = jsonData['data']['user_nickname'] ?? "";
@@ -881,6 +976,7 @@ class AppCubit extends Cubit<AppState> {
         user.annualIncome = jsonData['data']['annual_income'] ?? "";
         user.res_count = jsonData['count']['res_count'] ?? "0";
         user.today_recom = jsonData['today_recom']['today_count'].toString() ?? "0";
+        user.avail_date = jsonData['avail_date']['pay_date'];
         r_count = jsonData['count']['res_count'] ?? "0";
         user.phone_number = jsonData['data']['phone_number'] ?? "";
         user.phone_token = jsonData['data']['phone_token'] ?? "";
@@ -892,7 +988,12 @@ class AppCubit extends Cubit<AppState> {
         holi_info = jsonData['data']['holiday'] ?? "";
         ciga_info = jsonData['data']['cigarette'] ?? "";
         alcohol_info = jsonData['data']['alcohol'] ?? "";
-        // user.phone = jsonData['data']['phone'] ?? "";
+        user.private_age = jsonData['data']['private_age'] ?? "";
+        user.private_matching = jsonData['data']['private_matching'] ?? "";
+        user.matching_check = jsonData['data']['matching_check'] ?? "";
+        user.pay_user = jsonData['data']['pay_user'] ?? "";
+        userInfo_indentity = jsonData['data']['identity_state'] ?? "";
+        userInfo_paycheck =jsonData['data']['pay_user'] ?? "";
         user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
         user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";
         user.photo3 = "$BASE_URL/uploads/${jsonData['data']['photo3']}";

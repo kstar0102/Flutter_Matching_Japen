@@ -7,6 +7,8 @@ import 'package:matching_app/screen/main/layouts/board_card.dart';
 import 'package:matching_app/screen/main/layouts/board_message_modal.dart';
 import 'package:matching_app/screen/main/layouts/bottom_nav_bar.dart';
 import 'package:matching_app/screen/main/layouts/date_select_widget.dart';
+import 'package:matching_app/screen/main/pay_screen.dart';
+import 'package:matching_app/screen/main/profile_screen.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/controller/board_controller.dart';
 import 'package:matching_app/controller/board_repository.dart';
@@ -130,7 +132,10 @@ class _BoardFunctionState extends ConsumerState<BoardFunction> {
                           horizontal: 0, vertical: 13),
                       backgroundColor: Colors.transparent),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()),
+                    );
                   },
                   child: const Text('まだしない',
                       style: TextStyle(color: BUTTON_MAIN)),
@@ -160,7 +165,87 @@ class _BoardFunctionState extends ConsumerState<BoardFunction> {
                 ],
         )));
       Future.delayed(const Duration(milliseconds: 1000), () {
-        showDialog(context: context, builder: (context) => dialog);
+        showDialog(context: context, builder: (context) => dialog, barrierDismissible: false,);
+      });
+       dialogShown = true;
+    }
+    if (!dialogShown && appCubit.user.identityState != "ブロック" && appCubit.user.pay_user != "1") {
+        final AlertDialog dialog = AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          titlePadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          actionsPadding: EdgeInsets.zero,
+          actions: [
+            Container(
+                padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 13),
+                      backgroundColor: BUTTON_MAIN),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PayScreen()),
+                    );
+                  },
+                  child: const Text('有料会員に登録する'),
+                )),
+            Container(
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 20, left: 50, right: 50),
+                width: double.infinity,
+                child: TextButton(
+                  style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 13),
+                      backgroundColor: Colors.transparent),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()),
+                    );
+                  },
+                  child: const Text('まだしない',
+                      style: TextStyle(color: BUTTON_MAIN)),
+                ))
+          ],
+          shape: roundedRectangleBorder,
+          content: Container(
+              padding: const EdgeInsets.only(
+                  top: 20),
+              height: 300,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Text(
+                    "メッセージ機能には\n有料会員登録が必要です。",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: PRIMARY_FONT_COLOR,
+                        fontSize: 18,
+                        letterSpacing: -2),
+                  ),
+                  Image(
+                      width: vww(context, 100),
+                      image: const AssetImage(
+                          "assets/images/pay.png"))
+                ],
+        )));
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        showDialog(context: context, builder: (context) => dialog, barrierDismissible: false,);
       });
        dialogShown = true;
     }

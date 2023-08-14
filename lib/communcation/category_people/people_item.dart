@@ -31,6 +31,10 @@ class PeopleItem {
     required this.last_time,
     required this.is_read,
     required this.unread_message,
+    required this.private_age,
+    required this.private_matching,
+    required this.matching_check,
+    required this.pay_user
   });
 
   final String user_id;
@@ -56,38 +60,46 @@ class PeopleItem {
   final String last_time;
   final String is_read;
   final String unread_message;
+  final String private_age;
+  final String private_matching;
+  final String matching_check;
+  final String pay_user;
 
   factory PeopleItem.fromMap(Map<String, dynamic> data) {
     return PeopleItem(
-      user_id: data['user_id'].toString(),
-      user_nickname: data['user_nickname'].toString(),
-      photo1: data['photo1'].toString(),
-      badge_name: data['badge_name'].toString(),
-      age: data['age'].toString(),
-      residence: data['residence'].toString(),
-      identity_state: data['identity_state'].toString(),
-      badge_color: data['badge_color'].toString(),
-      height: data['height'].toString(),
-      body_name: data['body_name'].toString(),
-      holiday: data['holiday'].toString(),
-      use_purpose: data['use_purpose'].toString(),
-      cigarette: data['cigarette'].toString(),
-      alcohol: data['alcohol'].toString(),
-      phone_number: data['phone_number'].toString(),
-      phone_token: data['phone_token'].toString(),
-      created_at: data['created_at'],
-      status: data['status'].toString(),
-      online_status: data['online_status'].toString(),
+      user_id: data['user_id'].toString()?? "",
+      user_nickname: data['user_nickname'].toString()?? "",
+      photo1: data['photo1'].toString()?? "",
+      badge_name: data['badge_name'].toString()?? "",
+      age: data['age'].toString()?? "",
+      residence: data['residence'].toString()?? "",
+      identity_state: data['identity_state'].toString()?? "",
+      badge_color: data['badge_color'].toString() ?? "",
+      height: data['height'].toString() ?? "",
+      body_name: data['body_name'].toString() ?? "",
+      holiday: data['holiday'].toString() ?? "",
+      use_purpose: data['use_purpose'].toString() ?? "",
+      cigarette: data['cigarette'].toString() ?? "",
+      alcohol: data['alcohol'].toString() ?? "",
+      phone_number: data['phone_number'].toString() ?? "",
+      phone_token: data['phone_token'].toString() ?? "",
+      created_at: data['created_at'] ?? "",
+      status: data['status'].toString() ?? "",
+      online_status: data['online_status'].toString() ?? "",
       last_msg: data['last_msg'].toString() ?? "",
       last_time: data['last_time'].toString() ?? "",
       is_read: data['is_read'].toString() ?? "",
       unread_message: data['unread_message'].toString() ?? "",
+      private_age: data['private_age'].toString() ?? "",
+      private_matching: data['private_matching'].toString() ?? "",
+      matching_check: data['matching_check'].toString() ?? "",
+      pay_user: data['pay_user'].toString() ?? "",
     );
   }
 
   @override
   String toString() => 'doChattingAvailable(user_id: $user_id, user_nickname: $user_nickname, '
-      'photo1: $photo1, badge_name: $badge_name, age: $age, residence: $residence, identity_state: $identity_state, badge_color: $badge_color, height: $height, body_name: $body_name, holiday: $holiday, use_purpose: $use_purpose, cigarette: $cigarette, alcohol: $alcohol, phone_number: $phone_number, phone_token: $phone_token, is_read: $is_read, unread_message: $unread_message, last_msg: $last_msg, last_time: $last_time, online_status: $online_status, created_at: $created_at, status: $status)';
+      'photo1: $photo1, badge_name: $badge_name, age: $age, residence: $residence, identity_state: $identity_state, badge_color: $badge_color, height: $height, body_name: $body_name, holiday: $holiday, use_purpose: $use_purpose, cigarette: $cigarette, alcohol: $alcohol, phone_number: $phone_number, phone_token: $phone_token, is_read: $is_read, unread_message: $unread_message, last_msg: $last_msg, last_time: $last_time, online_status: $online_status, created_at: $created_at, status: $status , private_age: $private_age , private_matching: $private_matching, matching_check: $matching_check, pay_user: $pay_user)';
 }
 
 typedef PeopleItemList = List<PeopleItem>;

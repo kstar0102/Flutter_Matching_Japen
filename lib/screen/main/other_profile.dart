@@ -11,11 +11,18 @@ import 'package:matching_app/screen/main/layouts/intro_widget.dart';
 import 'package:matching_app/screen/main/layouts/introductory_badge_widget.dart';
 import 'package:matching_app/screen/main/layouts/my_community_widget.dart';
 import 'package:matching_app/screen/main/layouts/thumb_up_modal.dart';
+import 'package:matching_app/screen/main/pay_screen.dart';
+import 'package:matching_app/screen/main/profile_screen.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/bloc/cubit.dart';
 import 'package:matching_app/screen/main/layouts/profile_badge.dart';
 import 'package:matching_app/communcation/category_people/people_item.dart';
 import 'package:matching_app/controller/auth_controllers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
+
+import '../../services/chat/chat_service.dart';
+import '../verify_screen/identity_verify.dart';
 
 // ignore: use_key_in_widget_constructors
 class OtherProfile extends ConsumerStatefulWidget {
@@ -35,6 +42,8 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
   // ignore: unused_field
   late int _current = 0;
   bool isModalShow = false;
+  final TextEditingController _messageController = TextEditingController();
+  final ChatService _chatService = ChatService();
 
   @override
   void initState() {
@@ -44,15 +53,14 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
     AppCubit appCubit = AppCubit.get(context);
     setState(() {
       items = [
-        if (appCubit.user.photo1 != "http://greeme.net//uploads/null") appCubit.user.photo1,
-        if (appCubit.user.photo2!= "http://greeme.net//uploads/null") appCubit.user.photo2,
-        if (appCubit.user.photo3!= "http://greeme.net//uploads/null") appCubit.user.photo3,
-        if (appCubit.user.photo4!= "http://greeme.net//uploads/null") appCubit.user.photo4,
-        if (appCubit.user.photo5!= "http://greeme.net//uploads/null") appCubit.user.photo5,
-        if (appCubit.user.photo6!= "http://greeme.net//uploads/null") appCubit.user.photo6,
+        if (appCubit.user.photo1 != "http://192.168.142.55:8000//uploads/null") appCubit.user.photo1,
+        if (appCubit.user.photo2!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo2,
+        if (appCubit.user.photo3!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo3,
+        if (appCubit.user.photo4!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo4,
+        if (appCubit.user.photo5!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo5,
+        if (appCubit.user.photo6!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo6,
       ];
     });
-        print(items.length);
 
     badgeList = [
       BadgeObject("とにかく話したい", false, 1),
@@ -61,13 +69,218 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
     ];
     
   }
-
+  
   @override
   Widget build(BuildContext context) {
     String? info = widget.info;
 
     BlocProvider.of<AppCubit>(context).fetchProfileInfo1(info.toString());
     AppCubit appCubit = AppCubit.get(context);
+    String UserId;
+    String MyPhoneToken;
+    String Iden;
+    void sendMessage() async {
+    // only send message if there is something to send
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserId = await prefs.getString("UserId").toString();
+      MyPhoneToken = await prefs.getString("Phone_token").toString();
+      Iden = await prefs.getString("identify_verify").toString();
+      print(appCubit.user.identityState);
+
+      if (appCubit.userInfo_indentity != "承認") {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            // Update Iden here if necessary
+            final AlertDialog dialog = AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              titlePadding: EdgeInsets.zero,
+              insetPadding: EdgeInsets.zero,
+              actionsPadding: EdgeInsets.zero,
+              actions: [
+                Container(
+                  padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 13),
+                      backgroundColor: BUTTON_MAIN,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => IdentityVerify()),
+                      );
+                    },
+                    child: const Text('本人確認する'),
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.only(top: 10, bottom: 20, left: 50, right: 50),
+                  width: double.infinity,
+                  child: TextButton(
+                    style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 13),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfileScreen()),
+                      );
+                    },
+                    child: const Text('まだしない', style: TextStyle(color: BUTTON_MAIN)),
+                  ),
+                ),
+              ],
+              shape: roundedRectangleBorder,
+              content: Container(
+                padding: const EdgeInsets.only(top: 20),
+                height: 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const Text(
+                      "安心安全のため\n本人確認をしてください",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: PRIMARY_FONT_COLOR,
+                        fontSize: 18,
+                        letterSpacing: -2,
+                      ),
+                    ),
+                    Image(
+                      width: vww(context, 40),
+                      image: const AssetImage("assets/images/main/unidentified.png"),
+                    ),
+                  ],
+                ),
+              ),
+            );
+            
+            return dialog;
+          },
+        );
+      }
+       if (appCubit.userInfo_indentity == "承認" && appCubit.userInfo_paycheck != "1") {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            // Update Iden here if necessary
+            final AlertDialog dialog = AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              titlePadding: EdgeInsets.zero,
+              insetPadding: EdgeInsets.zero,
+              actionsPadding: EdgeInsets.zero,
+              actions: [
+                Container(
+                  padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 13),
+                      backgroundColor: BUTTON_MAIN,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PayScreen()),
+                      );
+                    },
+                    child: const Text('有料会員に登録する'),
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.only(top: 10, bottom: 20, left: 50, right: 50),
+                  width: double.infinity,
+                  child: TextButton(
+                    style: ElevatedButton.styleFrom(
+                      disabledForegroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      textStyle: const TextStyle(fontSize: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 13),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfileScreen()),
+                      );
+                    },
+                    child: const Text('まだしない', style: TextStyle(color: BUTTON_MAIN)),
+                  ),
+                ),
+              ],
+              shape: roundedRectangleBorder,
+              content: Container(
+                padding: const EdgeInsets.only(top: 20),
+                height: 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const Text(
+                      "メッセージ機能には\n有料会員登録が必要です。",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: PRIMARY_FONT_COLOR,
+                        fontSize: 18,
+                        letterSpacing: -2,
+                      ),
+                    ),
+                    Image(
+                      width: vww(context, 100),
+                      image: const AssetImage("assets/images/pay.png"),
+                    ),
+                  ],
+                ),
+              ),
+            );
+            
+            return dialog;
+          },
+        );
+      }
+      else{
+        String msg = _messageController.text;
+        _messageController.clear();
+        if(msg.isNotEmpty) {
+          final result = await _chatService.sendMessage(   
+            appCubit.user.phone_token, msg, UserId);
+            // clear the text controller after sending the message
+            
+        }
+        DateTime currentTime = DateTime.now();
+        String formattedTime = DateFormat('hh:mm').format(currentTime);
+        final controller = ref.read(AuthProvider.notifier);
+        controller.doChatting(UserId, appCubit.user.phone_token, msg, formattedTime).then(
+          (value) {
+          },
+        );
+      }
+    }
     return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
       return Scaffold(
         backgroundColor: Colors.white,
@@ -103,6 +316,38 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
                                       fit: BoxFit.cover,
                                     ),
                                   ),
+                                  child: Container(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    child: appCubit.user.matching_check !="1"? appCubit.user.private_age == "1" || appCubit.user.private_matching == "1" ? ShaderMask(
+                                      shaderCallback: (rect) {
+                                        return LinearGradient(
+                                          colors: [Colors.transparent, Colors.transparent, Colors.black],
+                                          stops: [0, 0.001, 0.001],
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                        ).createShader(rect);
+                                      },
+                                      blendMode: BlendMode.dstIn,
+                                      child: Stack(
+                                        children: [
+                                          Image.network(
+                                            item,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          Container(
+                                            color: Colors.grey.withOpacity(0.95),
+                                          ),
+                                        ],
+                                      ),
+                                    ):Image.network(
+                                      item,
+                                      fit: BoxFit.cover,
+                                    ):Image.network(
+                                      item,
+                                      fit: BoxFit.cover,
+                                    )
+                                  )
                                 );
                               }).toList(),
                               options: CarouselOptions(
@@ -235,7 +480,8 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
+        
+        floatingActionButton: appCubit.user.matching_check != "1"? Container(
           width: vww(context, 60),
           child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -301,7 +547,56 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
                           color: BUTTON_MAIN, size: 35),
                     )),
               ]),
-        ),
+                ):Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                           ),
+                      ),
+                    ),
+                    SizedBox(width: 15,),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                        ),
+                        child:TextFormField(
+                        maxLines: null,
+                        controller: _messageController,
+                        keyboardType: TextInputType.multiline,
+                        textInputAction: TextInputAction.newline,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "メッセージを入力",
+                          hintStyle: TextStyle(
+                              color: Color.fromARGB(255, 193, 192, 201)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 193, 192, 201))),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 193, 192, 201)),
+                          ),
+                          contentPadding: EdgeInsets.all(10),
+                        ),
+                      ),
+                    )),
+                    Material(
+                      color: Colors.transparent,
+                      child: IconButton(
+                        icon: const Icon(Icons.send),
+                        onPressed: () { sendMessage(); },
+                        color: BUTTON_MAIN,
+                      ),
+                    ),
+                  ],
+                ),
       );
     });
   }

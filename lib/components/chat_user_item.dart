@@ -62,7 +62,8 @@ class _ChatUserItemState extends State<ChatUserItem> {
               tab_val: "1",
               send_identy: appCubit.user.identityState,
               address: boardInfo.residence,
-              age: boardInfo.age
+              age: boardInfo.age,
+              payUser: boardInfo.pay_user,
           ),
         ));
       },
@@ -77,7 +78,7 @@ class _ChatUserItemState extends State<ChatUserItem> {
               height: 60.0,
               child: CircleAvatar(
                 backgroundImage:
-                    NetworkImage('http://greeme.net/uploads/' + boardInfo.photo1),
+                    NetworkImage('http://192.168.142.55:8000/uploads/' + boardInfo.photo1),
                 radius: 50,
                 backgroundColor: Colors.white,
                 child: Container(

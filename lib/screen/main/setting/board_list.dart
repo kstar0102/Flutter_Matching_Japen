@@ -17,6 +17,9 @@ class Board {
     required this.photo1,
     required this.residence,
     required this.age,
+    required this.private_age,
+    required this.private_matching,
+    required this.matching_check
   });
 
   final String id;
@@ -28,6 +31,9 @@ class Board {
   final String photo1;
   final String residence;
   final String age;
+  final String private_age;
+  final String private_matching;
+  final String matching_check;
 
   factory Board.fromMap(Map<String, dynamic> data) {
     return Board(
@@ -40,13 +46,17 @@ class Board {
       photo1: data['photo1'].toString(),
       residence: data['residence'].toString(),
       age: data['age'].toString(),
+      private_age: data['private_age'].toString(),
+      private_matching: data['private_matching'].toString(),
+      matching_check: data['matching_check'].toString(),
+
     );
   }
 
   @override
   String toString() => 'Board(id: $id, user_id: $user_id, '
       'created_date: $created_date, board_content: $board_content, user_nickname: $user_nickname, '
-      'birthday: $birthday, photo1: $photo1, residence: $residence, age: $age)';
+      'birthday: $birthday, photo1: $photo1, residence: $residence, age: $age, private_age: $private_age , private_matching: $private_matching, matching_check: $matching_check)';
 }
 
 typedef BoardList = List<Board>;

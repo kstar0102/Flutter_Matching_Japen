@@ -32,12 +32,14 @@ class ChatBubble extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               color: Color.fromARGB(255, 0, 202, 157),
             ),
-            child: Text(
-              message,
-              style: const TextStyle(fontSize: 16, color: Colors.white),
-              maxLines: 20,
-              overflow: TextOverflow.ellipsis,
-            ),
+            child: message.contains('https://firebasestorage.googleapis.com/v0/b/')
+            ? Image.network(message)
+            : Text(
+                message,
+                style: const TextStyle(fontSize: 16, color: Colors.white),
+                maxLines: 20,
+                overflow: TextOverflow.ellipsis,
+              ),
           ),
         ],
       )
@@ -51,12 +53,14 @@ class ChatBubble extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color:  Colors.grey[300]
               ),
-              child: Text(
-                message,
-                style: const TextStyle(fontSize: 16, color: Colors.black),
-                maxLines: 20,
-                overflow: TextOverflow.ellipsis,
-              ),
+              child: message.contains('https://firebasestorage.googleapis.com/v0/b/')
+              ? Image.network(message)
+              : Text(
+                  message,
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                  maxLines: 20,
+                  overflow: TextOverflow.ellipsis,
+                ),
             ),
             SizedBox(width: 3,),
             Align(

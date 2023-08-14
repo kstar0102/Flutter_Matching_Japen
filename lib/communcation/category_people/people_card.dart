@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/communcation/category_people/people_item.dart';
@@ -16,6 +18,8 @@ import 'package:matching_app/screen/main/board_res_detail.dart';
 import 'package:matching_app/screen/main/board_res_list.dart';
 import 'package:matching_app/screen/main/layouts/profile_badge.dart';
 import 'package:matching_app/screen/main/other_profile.dart';
+
+import '../../bloc/cubit.dart';
 
 // ignore: use_key_in_widget_constructors
 class PeopleCard extends ConsumerStatefulWidget {
@@ -64,6 +68,8 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
     List<String> numberArray = badge_name.split(",");
     List<String> badgeArray = boardInfo.badge_color.split(",");
     List<BadgeItemObject> badgeList = [];
+    AppCubit appCubit = AppCubit.get(context);
+
     for (var i = 0; i < numberArray.length; i++) {
       badgeList.add(BadgeItemObject(i, numberArray[i], false, badgeArray[i]));
     }
@@ -89,14 +95,44 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
                     children: [
                       InkWell(
                         onTap: (){
+                          appCubit.changePreview(boardInfo.user_id);
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => OtherProfile(info : boardInfo.user_id)),);
+                              MaterialPageRoute(builder: (context) => OtherProfile(info : boardInfo.user_id,)),);
                         },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            "http://greeme.net/uploads/" + avatar,
+                          child: boardInfo.matching_check != "1"? 
+                          boardInfo.private_age == "1" || boardInfo.private_matching == "1" ? ShaderMask(
+                            shaderCallback: (rect) {
+                              return LinearGradient(
+                                colors: [Colors.transparent, Colors.transparent, Colors.black],
+                                stops: [0, 0.1, 1],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ).createShader(rect);
+                            },
+                            blendMode: BlendMode.dstIn,
+                            child: Stack(
+                              children: [
+                                Image.network(
+                                  "http://192.168.142.55:8000/uploads/" + avatar,
+                                  width: 165,
+                                  height: 165,
+                                ),
+                                Container(
+                                  width: 165,
+                                  height: 165,
+                                  color: Colors.grey.withOpacity(0.9),
+                                ),
+                              ],
+                            ),
+                          ):Image.network(
+                            "http://192.168.142.55:8000/uploads/" + avatar,
+                            width: 165,
+                            height: 165,
+                          ):Image.network(
+                            "http://192.168.142.55:8000/uploads/" + avatar,
                             width: 165,
                             height: 165,
                           ),
@@ -124,7 +160,7 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
                               ),
                             ),
                           boardInfo.identity_state == "1"?
-                          Image.network("http://greeme.net/uploads/status/on.png", width: 15, height: 15,):
+                          Image.network("http://192.168.142.55:8000/uploads/status/on.png", width: 15, height: 15,):
                           Container()
                         ],)
                       ),

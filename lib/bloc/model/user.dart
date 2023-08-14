@@ -33,6 +33,11 @@ class User {
   String photo5 = "";
   String photo6 = "";
   String today_recom = "";
+  String private_age= "";
+  String private_matching= "";
+  String matching_check= "";
+  String pay_user = "";
+  String avail_date = "";
   List<CommunityObject> community = [];
   List<BadgeItemObject> introBadge = [];
 }
