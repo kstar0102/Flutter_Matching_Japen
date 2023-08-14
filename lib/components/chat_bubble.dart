@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:ui' as ui;
+
 class ChatBubble extends StatelessWidget {
   final String message;
   final String s_compare;
   final Timestamp time;
   final String read_val;
-  const ChatBubble({super.key, required this.message, required this.s_compare, required this.time, required this.read_val});
+  final String iden;
+  const ChatBubble({super.key, required this.message, required this.s_compare, required this.time, required this.read_val, required this.iden});
   
   @override
   Widget build(BuildContext context) {
@@ -53,14 +56,22 @@ class ChatBubble extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color:  Colors.grey[300]
               ),
-              child: message.contains('https://firebasestorage.googleapis.com/v0/b/')
+              child: iden == "承認" ? message.contains('https://firebasestorage.googleapis.com/v0/b/')
               ? Image.network(message)
               : Text(
                   message,
                   style: const TextStyle(fontSize: 16, color: Colors.black),
                   maxLines: 20,
                   overflow: TextOverflow.ellipsis,
-                ),
+                ):
+                message.contains('https://firebasestorage.googleapis.com/v0/b/')
+                ? Image.network(message)
+                : Text(
+                    message,
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
+                    maxLines: 20,
+                    overflow: TextOverflow.ellipsis,
+                  ),
             ),
             SizedBox(width: 3,),
             Align(

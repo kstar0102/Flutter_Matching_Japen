@@ -69,7 +69,7 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
     List<String> badgeArray = boardInfo.badge_color.split(",");
     List<BadgeItemObject> badgeList = [];
     AppCubit appCubit = AppCubit.get(context);
-
+    print(boardInfo.matching_check);
     for (var i = 0; i < numberArray.length; i++) {
       badgeList.add(BadgeItemObject(i, numberArray[i], false, badgeArray[i]));
     }
@@ -98,7 +98,7 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
                           appCubit.changePreview(boardInfo.user_id);
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => OtherProfile(info : boardInfo.user_id,)),);
+                              MaterialPageRoute(builder: (context) => OtherProfile(info : boardInfo.user_id, matching_data : boardInfo.matching_check)),);
                         },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),

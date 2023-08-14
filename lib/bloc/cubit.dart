@@ -553,9 +553,9 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  dynamic doPayment(int month, DateTime resultDate) async
+  dynamic doPayment(String month, DateTime resultDate) async
   {
-    final data = await DioClient.doPayment(month.toString(), resultDate, UserId);
+    final data = await DioClient.doPayment(month.toString(), resultDate.toString(), UserId);
 
     if(data['result'] == "success"){
       Fluttertoast.showToast(
@@ -699,7 +699,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<int> changeCoin(String price) async {
-    UserId = userId.toString();
+    print(UserId.toString());
     var request =
         http.MultipartRequest('POST', Uri.parse('${API_URL}upload_likes'));
     request.fields['id'] = UserId.toString();
@@ -813,7 +813,6 @@ class AppCubit extends Cubit<AppState> {
         user.phone_token = jsonData['data']['phone_token'] ?? "";
         user.private_age = jsonData['data']['private_age'] ?? "";
         user.private_matching = jsonData['data']['private_matching'] ?? "";
-        user.matching_check = jsonData['data']['matching_check'] ?? "";
         user.pay_user = jsonData['data']['pay_user'] ?? "";
 
         avatarImages = [
@@ -897,7 +896,6 @@ class AppCubit extends Cubit<AppState> {
         user.phone_token = jsonData['data']['phone_token'] ?? "";
         user.private_age = jsonData['data']['private_age'] ?? "";
         user.private_matching = jsonData['data']['private_matching'] ?? "";
-        user.matching_check = jsonData['data']['matching_check'] ?? "";
         user.pay_user = jsonData['data']['pay_user'] ?? "";
         // user.phone = jsonData['data']['phone'] ?? "";
         user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
@@ -946,14 +944,14 @@ class AppCubit extends Cubit<AppState> {
   Future<void> fetchProfileInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     UserId = await prefs.getString("UserId").toString();
-
+    print(UserId);
     try {
       final response =
           await http.get(Uri.parse('${API_URL}get_user?id=$UserId'));
       if (response.statusCode == 200) {
         user = User();
         Map<String, dynamic> jsonData = jsonDecode(response.body);
-        user.id = userId;
+        user.id = jsonData['data']['id'] ?? "";
         user.name = jsonData['data']['user_name'] ?? "";
         user.nickname = jsonData['data']['user_nickname'] ?? "";
         user.residenceId = jsonData['data']['residenceid'] ?? 0;
@@ -990,7 +988,6 @@ class AppCubit extends Cubit<AppState> {
         alcohol_info = jsonData['data']['alcohol'] ?? "";
         user.private_age = jsonData['data']['private_age'] ?? "";
         user.private_matching = jsonData['data']['private_matching'] ?? "";
-        user.matching_check = jsonData['data']['matching_check'] ?? "";
         user.pay_user = jsonData['data']['pay_user'] ?? "";
         userInfo_indentity = jsonData['data']['identity_state'] ?? "";
         userInfo_paycheck =jsonData['data']['pay_user'] ?? "";

@@ -27,8 +27,8 @@ import '../verify_screen/identity_verify.dart';
 // ignore: use_key_in_widget_constructors
 class OtherProfile extends ConsumerStatefulWidget {
   final String? info;
-
-  const OtherProfile({super.key, required this.info});
+  final String? matching_data;
+  const OtherProfile({super.key, required this.info, required this.matching_data});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -78,14 +78,12 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
     AppCubit appCubit = AppCubit.get(context);
     String UserId;
     String MyPhoneToken;
-    String Iden;
+
     void sendMessage() async {
     // only send message if there is something to send
       SharedPreferences prefs = await SharedPreferences.getInstance();
       UserId = await prefs.getString("UserId").toString();
       MyPhoneToken = await prefs.getString("Phone_token").toString();
-      Iden = await prefs.getString("identify_verify").toString();
-      print(appCubit.user.identityState);
 
       if (appCubit.userInfo_indentity != "承認") {
         showDialog(
@@ -319,7 +317,7 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
                                   child: Container(
                                     height: double.infinity,
                                     width: double.infinity,
-                                    child: appCubit.user.matching_check !="1"? appCubit.user.private_age == "1" || appCubit.user.private_matching == "1" ? ShaderMask(
+                                    child: widget.matching_data !="1"? appCubit.user.private_age == "1" || appCubit.user.private_matching == "1" ? ShaderMask(
                                       shaderCallback: (rect) {
                                         return LinearGradient(
                                           colors: [Colors.transparent, Colors.transparent, Colors.black],
@@ -481,7 +479,7 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         
-        floatingActionButton: appCubit.user.matching_check != "1"? Container(
+        floatingActionButton: widget.matching_data != "1"? Container(
           width: vww(context, 60),
           child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,

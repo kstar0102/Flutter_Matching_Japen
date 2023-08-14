@@ -106,7 +106,7 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
                             appCubit.changePreview(boardInfo.user_id);
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => OtherProfile(info : boardInfo.user_id)),);
+                                MaterialPageRoute(builder: (context) => OtherProfile(info : boardInfo.user_id, matching_data: "",)),);
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),

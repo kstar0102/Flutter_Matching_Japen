@@ -63,7 +63,7 @@ class _ChatUserItemState extends State<ChatUserItem> {
               send_identy: appCubit.user.identityState,
               address: boardInfo.residence,
               age: boardInfo.age,
-              payUser: boardInfo.pay_user,
+              payUser: appCubit.user.pay_user,
           ),
         ));
       },

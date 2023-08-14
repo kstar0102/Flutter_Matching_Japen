@@ -29,14 +29,13 @@ class _PayScreenState extends State<PayScreen>
 
       // Add 3 months to the current month
       DateTime resultDate = DateTime(now.year, now.month + month, now.day);
-
       // Check if the resulting month has fewer days
       if (resultDate.day != now.day) {
         // Adjust the date to the first day of the next month
         resultDate = DateTime(resultDate.year, resultDate.month + 1, 1);
       }
 
-      appCubit.doPayment(month, resultDate);
+      appCubit.doPayment(month.toString(), resultDate);
       Navigator.pushNamed(context, "/profile_screen");
     }
 

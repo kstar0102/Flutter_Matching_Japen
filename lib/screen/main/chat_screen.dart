@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/components/chat_user_item.dart';
 import 'package:matching_app/components/user_info_items.dart';
@@ -37,6 +38,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       ref.read(peopleProvider.notifier).doGetChattingData();
       startTimer();
     });
+    BlocProvider.of<AppCubit>(context).fetchProfileInfo();
+
   }
 
   void getData() async {

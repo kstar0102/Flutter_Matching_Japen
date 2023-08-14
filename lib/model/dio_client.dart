@@ -460,6 +460,7 @@ class DioClient {
     try {
       final response = await dio.get('/get_people_data/$sub_id/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
+      print(response.data);
       return response.data;
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
@@ -510,6 +511,7 @@ class DioClient {
     try {
       final response = await dio.get('/get_preview_data/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
+      print(response.data);
       return response.data;
 
     } on DioError catch (e) {
@@ -641,7 +643,7 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> doPayment(String month, DateTime resultDate, String user_id) async {
+  static Future<dynamic> doPayment(String month, String resultDate, String user_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;

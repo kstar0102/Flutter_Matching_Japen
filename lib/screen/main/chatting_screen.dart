@@ -18,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:matching_app/screen/verify_screen/identity_verify.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:shared_preferences/shared_preferences.dart';
 // ignore: use_key_in_widget_constructors
 class ChattingScreen extends ConsumerStatefulWidget {
   final String receiverUserPhone;
@@ -79,8 +80,9 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
     //   });
     // });
   }
-
   void sendMessage() async {
+    print(widget.send_identy);
+
     // only send message if there is something to send
     if (widget.send_identy != "承認") {
         final AlertDialog dialog = AlertDialog(
@@ -125,7 +127,10 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
                           horizontal: 0, vertical: 13),
                       backgroundColor: Colors.transparent),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()),
+                    );
                   },
                   child: const Text('まだしない',
                       style: TextStyle(color: BUTTON_MAIN)),
@@ -158,8 +163,9 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
         showDialog(context: context, builder: (context) => dialog, barrierDismissible: false,);
       });
        dialogShown = true;
+       return;
     }
-    if (!dialogShown && widget.send_identy != "ブロック" && widget.payUser != "1") {
+    if (!dialogShown && widget.payUser != "1") {
         final AlertDialog dialog = AlertDialog(
           contentPadding: EdgeInsets.zero,
           titlePadding: EdgeInsets.zero,
@@ -238,8 +244,12 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
         showDialog(context: context, builder: (context) => dialog, barrierDismissible: false,);
       });
        dialogShown = true;
+       return;
     }
     else{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String myPhoneToken = await prefs.getString("Phone_token").toString();
+    
       String msg = _messageController.text;
       _messageController.clear();
       if(msg.isNotEmpty) {
@@ -247,8 +257,9 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
         if (_uploadedImageUrl != null) {
           imageUrl = await _storeImageToFirebaseStorage(_uploadedImageUrl!);
         }
+        print(widget.receiverUserToken+widget.senderUserId);
         final result = await _chatService.sendMessage(   
-          widget.receiverUserToken, msg, widget.senderUserId);
+          widget.receiverUserToken, msg, myPhoneToken);
           // clear the text controller after sending the message
         setState(() {
           _uploadedImageUrl = null;
@@ -603,7 +614,7 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
             mainAxisAlignment: (data['senderId'] == widget.senderUserId)? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               const SizedBox(height: 15,),
-              ChatBubble(message: data['message'], s_compare: sendType.toString(), time: data['timestamp'], read_val: isRead.toString()),
+              ChatBubble(message: data['message'], s_compare: sendType.toString(), time: data['timestamp'], read_val: isRead.toString(), iden: widget.send_identy),
             ],
           ),
         ),

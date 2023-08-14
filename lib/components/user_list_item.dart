@@ -119,7 +119,7 @@ class UserListItem extends StatelessWidget {
                                           if(isBlockedUser != true){
                                             Navigator.push(
                                               context,
-                                              MaterialPageRoute(builder: (context) => OtherProfile(info : info.user_id)));
+                                              MaterialPageRoute(builder: (context) => OtherProfile(info : info.user_id, matching_data:info.matching_check,)));
                                           }
                                           else{
                                             appCubit.changeBlockStatus(info.user_id);
