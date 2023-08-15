@@ -50,7 +50,7 @@ class UserListItem extends StatelessWidget {
                   child: Stack(
                     children: [
                       Image.network(
-                        "http://192.168.142.55:8000/uploads/" + info.photo1,
+                        "http://greeme.net/uploads/" + info.photo1,
                         width: 165,
                         height: 165,
                       ),
@@ -62,11 +62,11 @@ class UserListItem extends StatelessWidget {
                     ],
                   ),
                 ):Image.network(
-                  "http://192.168.142.55:8000/uploads/" + info.photo1,
+                  "http://greeme.net/uploads/" + info.photo1,
                   width: 165,
                   height: 165,
                 ):Image.network(
-                  "http://192.168.142.55:8000/uploads/" + info.photo1,
+                  "http://greeme.net/uploads/" + info.photo1,
                   width: 165,
                   height: 165,
                 )

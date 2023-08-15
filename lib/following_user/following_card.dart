@@ -66,14 +66,14 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
     List<String> badgeArray = boardInfo.badge_color.split(",");
     AppCubit appCubit = AppCubit.get(context);
     print(avatar);
-    if (avatar == "http://192.168.142.55:8000/uploads/") {
-      avatar = "http://192.168.142.55:8000/uploads/good1.png";
+    if (avatar == "http://greeme.net/uploads/") {
+      avatar = "http://greeme.net/uploads/good1.png";
     }
     Widget image = avatar == null || avatar == "null.png"
     ? SizedBox( width: 170,
         height: 175, child: Text("Image Loading..."),)
     : Image.network(
-        "http://192.168.142.55:8000/uploads/" + avatar ?? "http://192.168.142.55:8000/uploads/good1.png",
+        "http://greeme.net/uploads/" + avatar ?? "http://greeme.net/uploads/good1.png",
         width: 170,
         height: 175,
       );
@@ -123,7 +123,7 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
                               child: Stack(
                                 children: [
                                   Image.network(
-                                    "http://192.168.142.55:8000/uploads/" + avatar,
+                                    "http://greeme.net/uploads/" + avatar,
                                     width: 165,
                                     height: 165,
                                   ),
@@ -135,11 +135,11 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
                                 ],
                               ),
                             ):Image.network(
-                              "http://192.168.142.55:8000/uploads/" + avatar,
+                              "http://greeme.net/uploads/" + avatar,
                               width: 165,
                               height: 165,
                             ):Image.network(
-                              "http://192.168.142.55:8000/uploads/" + avatar,
+                              "http://greeme.net/uploads/" + avatar,
                               width: 165,
                               height: 165,
                             )
@@ -167,7 +167,7 @@ class _FollowingCardState extends ConsumerState<FollowingCard> {
                                 ),
                               ),
                             boardInfo.identity_state == "1"?
-                            Image.network("http://192.168.142.55:8000/uploads/status/on.png", width: 15, height: 15,):
+                            Image.network("http://greeme.net/uploads/status/on.png", width: 15, height: 15,):
                             Container()
                           ],)
                         ),

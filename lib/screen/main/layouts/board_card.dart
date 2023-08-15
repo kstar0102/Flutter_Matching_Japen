@@ -86,7 +86,7 @@ class _BoardCardState extends State<BoardCard> {
                                             child: Stack(
                                               children: [
                                                 Image.network(
-                                                  "http://192.168.142.55:8000/uploads/" + avatar,
+                                                  "http://greeme.net/uploads/" + avatar,
                                                   width: 165,
                                                   height: 165,
                                                 ),
@@ -98,11 +98,11 @@ class _BoardCardState extends State<BoardCard> {
                                               ],
                                             ),
                                           ):Image.network(
-                                            "http://192.168.142.55:8000/uploads/" + avatar,
+                                            "http://greeme.net/uploads/" + avatar,
                                             width: 165,
                                             height: 165,
                                           ):Image.network(
-                                            "http://192.168.142.55:8000/uploads/" + avatar,
+                                            "http://greeme.net/uploads/" + avatar,
                                             width: 165,
                                             height: 165,
                                           )

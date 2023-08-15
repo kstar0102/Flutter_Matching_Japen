@@ -699,7 +699,6 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<int> changeCoin(String price) async {
-    print(UserId.toString());
     var request =
         http.MultipartRequest('POST', Uri.parse('${API_URL}upload_likes'));
     request.fields['id'] = UserId.toString();
@@ -944,7 +943,6 @@ class AppCubit extends Cubit<AppState> {
   Future<void> fetchProfileInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     UserId = await prefs.getString("UserId").toString();
-    print(UserId);
     try {
       final response =
           await http.get(Uri.parse('${API_URL}get_user?id=$UserId'));

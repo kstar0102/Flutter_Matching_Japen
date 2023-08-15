@@ -146,6 +146,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                                 photo: appCubit.user.photo1,
                                 age: DateTime.now().year -
                                     int.parse(appCubit.user.bday.split("-")[0]),
+                                address: appCubit.user.residence,
                                 name: appCubit.user.nickname)),
                         FolloingWidget(likesRate: appCubit.user.likesRate, resCount: appCubit.user.res_count),
                         appCubit.user.identityState == "承認"

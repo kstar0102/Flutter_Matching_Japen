@@ -6,9 +6,9 @@ class ProfileMainInfo extends StatelessWidget {
   final String photo;
   final int age;
   final String name;
-  
+  final String address;
   final String identityState;
-  const ProfileMainInfo({super.key, required this.photo, required this.age, required this.name, required this.identityState});
+  const ProfileMainInfo({super.key, required this.photo, required this.age, required this.name, required this.identityState, required this.address});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class ProfileMainInfo extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(name == "" ? "サスケ" : name, style: const TextStyle(fontSize: 17))),
-                Text("$age歳 東京都", style: const TextStyle(fontSize: 12)),
+                Text("$age歳 $address", style: const TextStyle(fontSize: 12)),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
               ]))
         ]),

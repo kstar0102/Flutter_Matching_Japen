@@ -41,12 +41,12 @@ class _LikeUserProfileState extends ConsumerState<LikeUserProfile> {
     BlocProvider.of<AppCubit>(context).fetchLikeRandom();
     AppCubit appCubit = AppCubit.get(context);
     items = [
-      if (appCubit.avatarImage != "http://192.168.142.55:8000//uploads/null") appCubit.avatarImage,
-      if (appCubit.avatarImage1!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo2,
-      if (appCubit.avatarImage2!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo3,
-      if (appCubit.avatarImage3!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo4,
-      if (appCubit.avatarImage4!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo5,
-      if (appCubit.avatarImage5!= "http://192.168.142.55:8000//uploads/null") appCubit.user.photo6,
+       if (appCubit.user.photo1 != "http://greeme.net//uploads/null") appCubit.user.photo1,
+        if (appCubit.user.photo2!= "http://greeme.net//uploads/null") appCubit.user.photo2,
+        if (appCubit.user.photo3!= "http://greeme.net//uploads/null") appCubit.user.photo3,
+        if (appCubit.user.photo4!= "http://greeme.net//uploads/null") appCubit.user.photo4,
+        if (appCubit.user.photo5!= "http://greeme.net//uploads/null") appCubit.user.photo5,
+        if (appCubit.user.photo6!= "http://greeme.net//uploads/null") appCubit.user.photo6,
     ];
 
     badgeList = [

@@ -94,7 +94,7 @@ class _CommunicateCardState extends ConsumerState<CommunicateCard> {
                                         //         NetworkImage(""), )),
                                         Column(
                                           children: [
-                                            Image.network("http://192.168.142.55:8000/uploads/"+boardInfo.community_photo, width: 100, height: 100,),
+                                            Image.network("http://greeme.net/uploads/"+boardInfo.community_photo, width: 100, height: 100,),
                                             Text(boardInfo.community_name, 
                                               style: TextStyle(
                                                 fontFamily: 'Montserrat',
@@ -141,7 +141,7 @@ class _CommunicateCardState extends ConsumerState<CommunicateCard> {
                         },
                         child: Column(
                           children: [
-                            Image.network("http://192.168.142.55:8000/uploads/"+boardInfo.community_photo, width: 100, height: 100,),
+                            Image.network("http://greeme.net/uploads/"+boardInfo.community_photo, width: 100, height: 100,),
                             Text(boardInfo.community_name, 
                               style: TextStyle(
                                 fontFamily: 'Montserrat',

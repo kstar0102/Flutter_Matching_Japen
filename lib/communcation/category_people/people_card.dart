@@ -116,7 +116,7 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
                             child: Stack(
                               children: [
                                 Image.network(
-                                  "http://192.168.142.55:8000/uploads/" + avatar,
+                                  "http://greeme.net/uploads/" + avatar,
                                   width: 165,
                                   height: 165,
                                 ),
@@ -128,11 +128,11 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
                               ],
                             ),
                           ):Image.network(
-                            "http://192.168.142.55:8000/uploads/" + avatar,
+                            "http://greeme.net/uploads/" + avatar,
                             width: 165,
                             height: 165,
                           ):Image.network(
-                            "http://192.168.142.55:8000/uploads/" + avatar,
+                            "http://greeme.net/uploads/" + avatar,
                             width: 165,
                             height: 165,
                           ),
@@ -160,7 +160,7 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
                               ),
                             ),
                           boardInfo.identity_state == "1"?
-                          Image.network("http://192.168.142.55:8000/uploads/status/on.png", width: 15, height: 15,):
+                          Image.network("http://greeme.net/uploads/status/on.png", width: 15, height: 15,):
                           Container()
                         ],)
                       ),

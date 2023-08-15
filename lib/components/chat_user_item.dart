@@ -78,7 +78,7 @@ class _ChatUserItemState extends State<ChatUserItem> {
               height: 60.0,
               child: CircleAvatar(
                 backgroundImage:
-                    NetworkImage('http://192.168.142.55:8000/uploads/' + boardInfo.photo1),
+                    NetworkImage('http://greeme.net/uploads/' + boardInfo.photo1),
                 radius: 50,
                 backgroundColor: Colors.white,
                 child: Container(

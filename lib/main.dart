@@ -53,7 +53,7 @@ import 'package:matching_app/screen/main/matching_screen.dart';
 Future<Null> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await LineSDK.instance
-      .setup("2000374220")
+      .setup("2000411815")
       .then((_) => print("Line prepared"));
   await Firebase.initializeApp(
     name: 'Greeme',

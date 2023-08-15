@@ -25,7 +25,7 @@ class EditAvatarWidget extends StatelessWidget {
     return FractionallySizedBox(
         widthFactor: 0.3,
         child: InkWell(
-            child: item == "http://192.168.142.55:8000//uploads/null"
+            child: item == "http://greeme.net//uploads/null"
                 ? GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
