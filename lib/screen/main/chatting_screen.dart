@@ -348,7 +348,7 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
     if (_isKeyboardVisible == true) {
       
     } else {
-      screenHeight = MediaQuery.of(context).size.height;
+      screenHeight = MediaQuery.of(context).size.height / 1.4;
       // keyboardHeight = 0;
     }
     return WillPopScope(
