@@ -31,11 +31,10 @@ class _LoginViewState extends ConsumerState<LoginView> {
   String phone_number = "";
   
   String digits = "";
-
   FirebaseAuth auth = FirebaseAuth.instance;
 
   String verificationIDReceived = "";
-
+  final verify_code = TextEditingController();
   bool otpCodeVisible = false;
   bool isLoading = false;
   bool isShow = true;
@@ -82,6 +81,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
   }
 
   void verifyCode() async {
+    digits = verify_code.text;
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationIDReceived,
         smsCode: digits);
@@ -257,27 +257,49 @@ class _LoginViewState extends ConsumerState<LoginView> {
             left: getDeviceWidth(context) / 47 * 3,
             right: getDeviceWidth(context) / 47 * 3),
         child: TextField(
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 27),
-          maxLength: 6,
-          buildCounter: null,
-          onChanged: (value2) {
-            value2 == "";
-            setState(() {
-              digits = value2.isNotEmpty ? value2 : "";
-            });
-          },
-          decoration: InputDecoration(
-            counterText: '',
-            filled: true,
-            fillColor: PRIMARY_GREY,
-            contentPadding:
-                const EdgeInsets.only(top: 15, bottom: 15),
-            border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(10)),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 27),
+            maxLength: 6,
+            controller: verify_code,
+            keyboardType: TextInputType.emailAddress,
+            //validator: (pwd) => passwordErrorText(pwd ?? ''),
+            obscureText: true,
+            autocorrect: false,
+            textInputAction:
+                TextInputAction.done,
+            cursorColor: Colors.grey,
+              decoration: InputDecoration(
+              counterText: '',
+              filled: true,
+              fillColor: PRIMARY_GREY,
+              contentPadding:
+                  const EdgeInsets.only(top: 15, bottom: 15),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(10)),
+            ),
           ),
-        ),
+        // TextField(
+        //   textAlign: TextAlign.center,
+        //   style: const TextStyle(fontSize: 27),
+        //   maxLength: 6,
+        //   buildCounter: null,
+        //   onChanged: (value2) {
+        //     setState(() {
+        //       digits = value2.isNotEmpty ? value2 : "";
+        //     });
+        //   },
+        //   decoration: InputDecoration(
+        //     counterText: '',
+        //     filled: true,
+        //     fillColor: PRIMARY_GREY,
+        //     contentPadding:
+        //         const EdgeInsets.only(top: 15, bottom: 15),
+        //     border: OutlineInputBorder(
+        //         borderSide: BorderSide.none,
+        //         borderRadius: BorderRadius.circular(10)),
+        //   ),
+        // ),
       );
     return Scaffold(
         backgroundColor: Colors.white,

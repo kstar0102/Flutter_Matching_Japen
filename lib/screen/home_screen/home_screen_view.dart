@@ -28,7 +28,7 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id = prefs.getString('UserId');
     print("OUTPUT:"+ user_id.toString());
-    if (user_id!= "0" && user_id!=null) {
+    if (user_id!= "0" || user_id!=null) {
       Timer(const Duration(microseconds: 1),
           () => Navigator.pushNamed(context, "/profile_screen"));
     } 

@@ -1,4 +1,6 @@
 // ignore: depend_on_referenced_packages
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -55,10 +57,20 @@ Future<Null> main() async{
   await LineSDK.instance
       .setup("2000411815")
       .then((_) => print("Line prepared"));
-  await Firebase.initializeApp(
-    name: 'Greeme',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp(
+  //   name: 'Greeme',
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  if (Platform.isAndroid) {
+    await Firebase.initializeApp(
+      name: 'Greeme',
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } else {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
   // await Firebase.initializeApp();
   runApp(const ProviderScope(child: MatchingApp()));
 
