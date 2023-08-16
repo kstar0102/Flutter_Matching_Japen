@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_app/bloc/cubit.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/components/Header.dart';
+import 'package:matching_app/screen/login/login_view.dart';
 import 'package:matching_app/screen/main/layouts/basic_info.dart';
 import 'package:matching_app/screen/main/layouts/bottom_nav_bar.dart';
 import 'package:matching_app/screen/main/layouts/introduction_widget.dart';

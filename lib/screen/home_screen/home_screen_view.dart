@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:matching_app/components/background_widget.dart';
 import 'package:matching_app/components/radius_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:matching_app/screen/main/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
+
+import '../../controller/auth_controllers.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class HomeScreenView extends ConsumerStatefulWidget {
   @override
@@ -27,8 +31,8 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
   Future<void> GetData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id = prefs.getString('UserId');
-    print("OUTPUT:"+ user_id.toString());
-    if (user_id!= "0" || user_id!=null) {
+    print(user_id);
+    if (user_id!= "0" && user_id!=null) {
       Timer(const Duration(microseconds: 1),
           () => Navigator.pushNamed(context, "/profile_screen"));
     } 
@@ -91,15 +95,15 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 15, left: 30, right: 30),
-                    child: RadiusButton(
-                        text: "Appleでサインイン",
-                        color: const Color.fromARGB(255, 0, 0, 0),
-                        goNavigation: goNavigation,
-                        id: 0,
-                        isDisabled: false)),
+                // Padding(
+                //     padding:
+                //         const EdgeInsets.only(bottom: 15, left: 30, right: 30),
+                //     child: RadiusButton(
+                //         text: "Appleでサインイン",
+                //         color: const Color.fromARGB(255, 0, 0, 0),
+                //         goNavigation: goNavigation,
+                //         id: 0,
+                //         isDisabled: false)),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 15, left: 30, right: 30),

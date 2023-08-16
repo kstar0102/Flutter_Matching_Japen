@@ -40,11 +40,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
   bool isShow = true;
   //send sms code in use firebase otp
 
-  void verifyUserPhoneNumber()
+  Future<void> verifyUserPhoneNumber () async
   {
     isShow = true;
     if(isLoading != true){
-      Timer(Duration(seconds: 30), () {
+      Timer(Duration(seconds: 60), () {
         setState(() {
           isLoading = false;
           isShow = false;
@@ -55,7 +55,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     setState(() {
       isLoading = true; // Start the loading indicator
     });
-    auth.verifyPhoneNumber(
+    await auth.verifyPhoneNumber(
       phoneNumber: "+"+phone_number,
       verificationCompleted: (PhoneAuthCredential credential) async{
         await auth.signInWithCredential(credential).then((value){
@@ -65,9 +65,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
       verificationFailed: (FirebaseAuthException exception){
         print(exception.message);
       }, 
-      codeSent: (String verificationID, int? resendToken){
+      codeSent: (String verificationID, int? resendToken) async{
         print("OkOk!");
-       
         verificationIDReceived = verificationID;
         otpCodeVisible = true;
         isShow =true;
@@ -261,9 +260,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
             style: const TextStyle(fontSize: 27),
             maxLength: 6,
             controller: verify_code,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.name,
             //validator: (pwd) => passwordErrorText(pwd ?? ''),
-            obscureText: true,
             autocorrect: false,
             textInputAction:
                 TextInputAction.done,

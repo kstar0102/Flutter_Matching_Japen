@@ -39,6 +39,8 @@ dependencies:
     cloud_firestore: ^4.8.4
     firebase_messaging: ^14.6.5
     firebase_storage: ^11.2.5
+    pay: ^1.1.2
+    sign_in_with_apple: ^5.0.0
 dev_dependencies:
     flutter_test:
         sdk: flutter
@@ -58,6 +60,8 @@ flutter:
         - assets/images/status/
         - assets/images/main/
         - assets/images/users/
+        - assets/gpay.json
+        - assets/applepay.json
   #  - images/a_dot_ham.jpeg
       
   # An image asset can refer to one or more resolution-specific "variants", see

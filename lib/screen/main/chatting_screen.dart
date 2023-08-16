@@ -60,6 +60,8 @@ class _ChattingScreenState extends ConsumerState<ChattingScreen>
   bool _isKeyboardVisible = false;
   bool dialogShown = false;
   final FocusNode _focusNode = FocusNode();
+  final picker = ImagePicker();
+
   @override
   void initState() {
     super.initState();

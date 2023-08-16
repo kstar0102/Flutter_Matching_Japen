@@ -132,17 +132,17 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
   //   return str;
   // }
 
- Future<bool> doLogout() async {
-    state = const AsyncValue.loading();
-    final newState =
-        await AsyncValue.guard(() => authRepo.doLogout());
-
-    if (mounted) {
-      state = newState;
-    }
-
-    return newState.hasValue;
+  Future<void> doLogout() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => authRepo.doLogout());
   }
+  Future<String> getLoggedInID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String str = prefs.getString('login_id') ?? 'not';
+    authRepo.setUid = str;
+    return str;
+  }
+
 }
 
 final AuthProvider =

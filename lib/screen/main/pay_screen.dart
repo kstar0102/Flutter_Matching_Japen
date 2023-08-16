@@ -132,12 +132,12 @@ class _PayScreenState extends State<PayScreen>
                                     SizedBox(height: 5,),
                                     Text(
                                       '72%',
-                                      style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(height: 5,),
                                     Text(
                                       'OFF',
-                                      style: TextStyle(fontSize: 17, color: Colors.white),
+                                      style: TextStyle(fontSize: 14, color: Colors.white),
                                     ),
                                     SizedBox(height: 5,),
                                   ]),),
@@ -222,12 +222,12 @@ class _PayScreenState extends State<PayScreen>
                                     SizedBox(height: 5,),
                                     Text(
                                       '55%',
-                                      style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(height: 5,),
                                     Text(
                                       'OFF',
-                                      style: TextStyle(fontSize: 17, color: Colors.white),
+                                      style: TextStyle(fontSize: 14, color: Colors.white),
                                     ),
                                     SizedBox(height: 5,),
                                   ]),),
@@ -312,12 +312,12 @@ class _PayScreenState extends State<PayScreen>
                                     SizedBox(height: 5,),
                                     Text(
                                       '44%',
-                                      style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(height: 5,),
                                     Text(
                                       'OFF',
-                                      style: TextStyle(fontSize: 17, color: Colors.white),
+                                      style: TextStyle(fontSize: 14, color: Colors.white),
                                     ),
                                     SizedBox(height: 5,),
                                   ]),),

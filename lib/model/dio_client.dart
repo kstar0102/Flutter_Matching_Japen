@@ -129,7 +129,7 @@ class DioClient {
     try {
        final response = await dio
           .post('/account_logout', data: {'id': uid});
-      // print(response.data);
+      print(response.data);
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
