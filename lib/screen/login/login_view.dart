@@ -30,7 +30,6 @@ class LoginView extends ConsumerStatefulWidget {
 
 class _LoginViewState extends ConsumerState<LoginView> {
   String phone_number = "";
-  
   String digits = "";
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -219,10 +218,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 semanticsLabel: "dot", width: 15, height: 15),
             Padding(
                 padding: EdgeInsets.only(left: 10),
+                // child: Text(
+                //   '${phone_number}'.substring(0, 3) + '-' +
+                //   '${phone_number}'.substring(3, 6) + '-' +
+                //   '${phone_number}'.substring(6),
+                //   style: TextStyle(fontSize: 17, color: PRIMARY_FONT_COLOR),
+                // ))
                 child: Text(
-                  '${phone_number}'.substring(0, 3) + '-' +
-                  '${phone_number}'.substring(3, 6) + '-' +
-                  '${phone_number}'.substring(6),
+                  '${phone_number}',
                   style: TextStyle(fontSize: 17, color: PRIMARY_FONT_COLOR),
                 ))
           ],
