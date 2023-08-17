@@ -181,21 +181,25 @@ class _LoginViewState extends ConsumerState<LoginView> {
         bool phoneNumberExists = querySnapshot.docs.isNotEmpty;
 
         if (phoneNumberExists) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('警告'),
-                content: Text('電話番号はすでに登録されています。'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+          // showDialog(
+          //   context: context,
+          //   builder: (context) {
+          //     return AlertDialog(
+          //       title: Text('警告'),
+          //       content: Text('電話番号はすでに登録されています。'),
+          //       actions: [
+          //         ElevatedButton(
+          //           onPressed: () => Navigator.pop(context),
+          //           child: Text('OK'),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
+          String PhoneNumberString = phone_number;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString("VerifyPhoneNumber", PhoneNumberString.toString());
+          Navigator.pushNamed(context, "/profile_screen");
           return;
         }
         // Add phone directly to the database and retrieve the ID
