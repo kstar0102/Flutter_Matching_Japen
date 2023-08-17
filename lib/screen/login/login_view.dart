@@ -18,6 +18,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: use_key_in_widget_constructors
 class LoginView extends ConsumerStatefulWidget {
@@ -132,21 +133,25 @@ class _LoginViewState extends ConsumerState<LoginView> {
         bool phoneNumberExists = querySnapshot.docs.isNotEmpty;
 
         if (phoneNumberExists) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Warning'),
-                content: Text('Phone number already registered.'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+          String PhoneNumberString = phone_number;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString("VerifyPhoneNumber", PhoneNumberString.toString());
+          Navigator.pushNamed(context, "/profile_screen");
+          // showDialog(
+          //   context: context,
+          //   builder: (context) {
+          //     return AlertDialog(
+          //       title: Text('Warning'),
+          //       content: Text('Phone number already registered.'),
+          //       actions: [
+          //         ElevatedButton(
+          //           onPressed: () => Navigator.pop(context),
+          //           child: Text('OK'),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
         } else {
           // Store the phone number in Firestore under the user's document
           await FirebaseFirestore.instance.collection('users').doc(userId).set({'phone': phone_number});
@@ -218,12 +223,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 semanticsLabel: "dot", width: 15, height: 15),
             Padding(
                 padding: EdgeInsets.only(left: 10),
-                // child: Text(
-                //   '${phone_number}'.substring(0, 3) + '-' +
-                //   '${phone_number}'.substring(3, 6) + '-' +
-                //   '${phone_number}'.substring(6),
-                //   style: TextStyle(fontSize: 17, color: PRIMARY_FONT_COLOR),
-                // ))
                 child: Text(
                   '${phone_number}',
                   style: TextStyle(fontSize: 17, color: PRIMARY_FONT_COLOR),

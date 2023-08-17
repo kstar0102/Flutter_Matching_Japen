@@ -245,6 +245,7 @@ class AuthRepository {
     preferences.setString('UserId', '0');
     preferences.setString('login_id', 'not');
     preferences.setBool('isLogin', false);
+    preferences.setString('VerifyPhoneNumber', '0');
 
     return true;
   }

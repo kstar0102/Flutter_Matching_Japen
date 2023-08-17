@@ -71,6 +71,7 @@ class AppCubit extends Cubit<AppState> {
   String receiver_id = "";
   String userInfo_indentity ="";
   String userInfo_paycheck ="";
+  String isLoginPhoneNumber = "";
   //end
   AppCubit() : super(AppInitial());
 
@@ -944,82 +945,164 @@ class AppCubit extends Cubit<AppState> {
   Future<void> fetchProfileInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     UserId = await prefs.getString("UserId").toString();
+    isLoginPhoneNumber = await prefs.getString("VerifyPhoneNumber").toString();    
+    print(UserId);
     try {
-      final response =
-          await http.get(Uri.parse('${API_URL}get_user?id=$UserId'));
-      if (response.statusCode == 200) {
-        user = User();
-        Map<String, dynamic> jsonData = jsonDecode(response.body);
-        user.id = jsonData['data']['id'] ?? "";
-        user.name = jsonData['data']['user_name'] ?? "";
-        user.nickname = jsonData['data']['user_nickname'] ?? "";
-        user.residenceId = jsonData['data']['residenceid'] ?? 0;
-        user.residence = jsonData['data']['residence'] ?? "";
-        user.bday = jsonData['data']['birthday'] ?? "";
-        user.height = double.parse(jsonData['data']['height'] ?? 130);
-        user.bodytypeId = jsonData['data']['bodytypeId'] ?? 0;
-        user.bodytype = jsonData['data']['bodytype'] ?? "";
-        user.usePurpose = jsonData['data']['use_purpose'] ?? "";
-        user.introduce = jsonData['data']['introduce'] ?? "";
-        user.planType = jsonData['data']['plan_type'] ?? "";
-        user.likesRate = int.parse(jsonData['data']['likes_rate'] ?? 0);
-        user.coin = double.parse(jsonData['data']['coin'] ?? 0);
-        user.identityState = jsonData['data']['identity_state'] ?? "";
-        user.bloodType = jsonData['data']['blood_type'] ?? "";
-        user.alcohol = jsonData['data']['alcohol'] ?? "";
-        user.cigarette = jsonData['data']['cigarette'] ?? "";
-        user.education = jsonData['data']['education'] ?? "";
-        user.holiday = jsonData['data']['holiday'] ?? "";
-        user.annualIncome = jsonData['data']['annual_income'] ?? "";
-        user.res_count = jsonData['count']['res_count'] ?? "0";
-        user.today_recom = jsonData['today_recom']['today_count'].toString() ?? "0";
-        user.avail_date = jsonData['avail_date']['pay_date'];
-        r_count = jsonData['count']['res_count'] ?? "0";
-        user.phone_number = jsonData['data']['phone_number'] ?? "";
-        user.phone_token = jsonData['data']['phone_token'] ?? "";
-        body_type = jsonData['data']['bodytype'] ?? "";
-        blood_type = jsonData['data']['blood_type'] ?? "";
-        edu_type = jsonData['data']['education'] ?? "";
-        purpose_type = jsonData['data']['use_purpose'] ?? "";
-        annual_budget = jsonData['data']['annual_income'] ?? "";
-        holi_info = jsonData['data']['holiday'] ?? "";
-        ciga_info = jsonData['data']['cigarette'] ?? "";
-        alcohol_info = jsonData['data']['alcohol'] ?? "";
-        user.private_age = jsonData['data']['private_age'] ?? "";
-        user.private_matching = jsonData['data']['private_matching'] ?? "";
-        user.pay_user = jsonData['data']['pay_user'] ?? "";
-        userInfo_indentity = jsonData['data']['identity_state'] ?? "";
-        userInfo_paycheck =jsonData['data']['pay_user'] ?? "";
-        user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
-        user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";
-        user.photo3 = "$BASE_URL/uploads/${jsonData['data']['photo3']}";
-        user.photo4 = "$BASE_URL/uploads/${jsonData['data']['photo4']}";
-        user.photo5 = "$BASE_URL/uploads/${jsonData['data']['photo5']}";
-        user.photo6 = "$BASE_URL/uploads/${jsonData['data']['photo6']}";
+      if(UserId != "0" && UserId != null){
+          final response =
+            await http.get(Uri.parse('${API_URL}get_user?id=$UserId'));
+          if (response.statusCode == 200) {
+          user = User();
+          Map<String, dynamic> jsonData = jsonDecode(response.body);
+          user.id = jsonData['data']['id'] ?? "";
+          user.name = jsonData['data']['user_name'] ?? "";
+          user.nickname = jsonData['data']['user_nickname'] ?? "";
+          user.residenceId = jsonData['data']['residenceid'] ?? 0;
+          user.residence = jsonData['data']['residence'] ?? "";
+          user.bday = jsonData['data']['birthday'] ?? "";
+          user.height = double.parse(jsonData['data']['height'] ?? 130);
+          user.bodytypeId = jsonData['data']['bodytypeId'] ?? 0;
+          user.bodytype = jsonData['data']['bodytype'] ?? "";
+          user.usePurpose = jsonData['data']['use_purpose'] ?? "";
+          user.introduce = jsonData['data']['introduce'] ?? "";
+          user.planType = jsonData['data']['plan_type'] ?? "";
+          user.likesRate = int.parse(jsonData['data']['likes_rate'] ?? 0);
+          user.coin = double.parse(jsonData['data']['coin'] ?? 0);
+          user.identityState = jsonData['data']['identity_state'] ?? "";
+          user.bloodType = jsonData['data']['blood_type'] ?? "";
+          user.alcohol = jsonData['data']['alcohol'] ?? "";
+          user.cigarette = jsonData['data']['cigarette'] ?? "";
+          user.education = jsonData['data']['education'] ?? "";
+          user.holiday = jsonData['data']['holiday'] ?? "";
+          user.annualIncome = jsonData['data']['annual_income'] ?? "";
+          user.res_count = jsonData['count']['res_count'] ?? "0";
+          user.today_recom = jsonData['today_recom']['today_count'].toString() ?? "0";
+          user.avail_date = jsonData['avail_date']['pay_date'];
+          r_count = jsonData['count']['res_count'] ?? "0";
+          user.phone_number = jsonData['data']['phone_number'] ?? "";
+          user.phone_token = jsonData['data']['phone_token'] ?? "";
+          body_type = jsonData['data']['bodytype'] ?? "";
+          blood_type = jsonData['data']['blood_type'] ?? "";
+          edu_type = jsonData['data']['education'] ?? "";
+          purpose_type = jsonData['data']['use_purpose'] ?? "";
+          annual_budget = jsonData['data']['annual_income'] ?? "";
+          holi_info = jsonData['data']['holiday'] ?? "";
+          ciga_info = jsonData['data']['cigarette'] ?? "";
+          alcohol_info = jsonData['data']['alcohol'] ?? "";
+          user.private_age = jsonData['data']['private_age'] ?? "";
+          user.private_matching = jsonData['data']['private_matching'] ?? "";
+          user.pay_user = jsonData['data']['pay_user'] ?? "";
+          userInfo_indentity = jsonData['data']['identity_state'] ?? "";
+          userInfo_paycheck =jsonData['data']['pay_user'] ?? "";
+          user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
+          user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";
+          user.photo3 = "$BASE_URL/uploads/${jsonData['data']['photo3']}";
+          user.photo4 = "$BASE_URL/uploads/${jsonData['data']['photo4']}";
+          user.photo5 = "$BASE_URL/uploads/${jsonData['data']['photo5']}";
+          user.photo6 = "$BASE_URL/uploads/${jsonData['data']['photo6']}";
 
-        var tempCommunityList = jsonData['data']['community'];
-        var tempBadgeList = jsonData['data']['intro_badge'];
-        for (var i = 0; i < tempCommunityList.length; i++) {
-          CommunityObject temp = CommunityObject(
-              tempCommunityList[i]['id'],
-              tempCommunityList[i]['community_name'],
-              false,
-              1,
-              int.parse(tempCommunityList[i]['community_category']),
-              "$BASE_URL/uploads/${tempCommunityList[i]['community_photo']}");
-          user.community.add(temp);
+          var tempCommunityList = jsonData['data']['community'];
+          var tempBadgeList = jsonData['data']['intro_badge'];
+          for (var i = 0; i < tempCommunityList.length; i++) {
+            CommunityObject temp = CommunityObject(
+                tempCommunityList[i]['id'],
+                tempCommunityList[i]['community_name'],
+                false,
+                1,
+                int.parse(tempCommunityList[i]['community_category']),
+                "$BASE_URL/uploads/${tempCommunityList[i]['community_photo']}");
+            user.community.add(temp);
+          }
+          for (var i = 0; i < tempBadgeList.length; i++) {
+            BadgeItemObject tempBadge = BadgeItemObject(
+                tempBadgeList[i]['id'],
+                tempBadgeList[i]['tag_text'],
+                false,
+                tempBadgeList[i]['tag_color']);
+            user.introBadge.add(tempBadge);
+          }
+          emit(AppMain());
+        } else {
+          print("Url Not Found!");
         }
-        for (var i = 0; i < tempBadgeList.length; i++) {
-          BadgeItemObject tempBadge = BadgeItemObject(
-              tempBadgeList[i]['id'],
-              tempBadgeList[i]['tag_text'],
-              false,
-              tempBadgeList[i]['tag_color']);
-          user.introBadge.add(tempBadge);
+      }
+      else{
+        final response =
+          await http.get(Uri.parse('${API_URL}get_user_phone?phone_id=$isLoginPhoneNumber'));
+        if (response.statusCode == 200) {
+          user = User();
+          Map<String, dynamic> jsonData = jsonDecode(response.body);
+          user.id = jsonData['data']['id'] ?? "";
+          user.name = jsonData['data']['user_name'] ?? "";
+          user.nickname = jsonData['data']['user_nickname'] ?? "";
+          user.residenceId = jsonData['data']['residenceid'] ?? 0;
+          user.residence = jsonData['data']['residence'] ?? "";
+          user.bday = jsonData['data']['birthday'] ?? "";
+          user.height = double.parse(jsonData['data']['height'] ?? 130);
+          user.bodytypeId = jsonData['data']['bodytypeId'] ?? 0;
+          user.bodytype = jsonData['data']['bodytype'] ?? "";
+          user.usePurpose = jsonData['data']['use_purpose'] ?? "";
+          user.introduce = jsonData['data']['introduce'] ?? "";
+          user.planType = jsonData['data']['plan_type'] ?? "";
+          user.likesRate = int.parse(jsonData['data']['likes_rate'] ?? 0);
+          user.coin = double.parse(jsonData['data']['coin'] ?? 0);
+          user.identityState = jsonData['data']['identity_state'] ?? "";
+          user.bloodType = jsonData['data']['blood_type'] ?? "";
+          user.alcohol = jsonData['data']['alcohol'] ?? "";
+          user.cigarette = jsonData['data']['cigarette'] ?? "";
+          user.education = jsonData['data']['education'] ?? "";
+          user.holiday = jsonData['data']['holiday'] ?? "";
+          user.annualIncome = jsonData['data']['annual_income'] ?? "";
+          user.res_count = jsonData['count']['res_count'] ?? "0";
+          user.today_recom = jsonData['today_recom']['today_count'].toString() ?? "0";
+          user.avail_date = jsonData['avail_date']['pay_date'];
+          r_count = jsonData['count']['res_count'] ?? "0";
+          user.phone_number = jsonData['data']['phone_number'] ?? "";
+          user.phone_token = jsonData['data']['phone_token'] ?? "";
+          body_type = jsonData['data']['bodytype'] ?? "";
+          blood_type = jsonData['data']['blood_type'] ?? "";
+          edu_type = jsonData['data']['education'] ?? "";
+          purpose_type = jsonData['data']['use_purpose'] ?? "";
+          annual_budget = jsonData['data']['annual_income'] ?? "";
+          holi_info = jsonData['data']['holiday'] ?? "";
+          ciga_info = jsonData['data']['cigarette'] ?? "";
+          alcohol_info = jsonData['data']['alcohol'] ?? "";
+          user.private_age = jsonData['data']['private_age'] ?? "";
+          user.private_matching = jsonData['data']['private_matching'] ?? "";
+          user.pay_user = jsonData['data']['pay_user'] ?? "";
+          userInfo_indentity = jsonData['data']['identity_state'] ?? "";
+          userInfo_paycheck =jsonData['data']['pay_user'] ?? "";
+          user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
+          user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";
+          user.photo3 = "$BASE_URL/uploads/${jsonData['data']['photo3']}";
+          user.photo4 = "$BASE_URL/uploads/${jsonData['data']['photo4']}";
+          user.photo5 = "$BASE_URL/uploads/${jsonData['data']['photo5']}";
+          user.photo6 = "$BASE_URL/uploads/${jsonData['data']['photo6']}";
+
+          var tempCommunityList = jsonData['data']['community'];
+          var tempBadgeList = jsonData['data']['intro_badge'];
+          for (var i = 0; i < tempCommunityList.length; i++) {
+            CommunityObject temp = CommunityObject(
+                tempCommunityList[i]['id'],
+                tempCommunityList[i]['community_name'],
+                false,
+                1,
+                int.parse(tempCommunityList[i]['community_category']),
+                "$BASE_URL/uploads/${tempCommunityList[i]['community_photo']}");
+            user.community.add(temp);
+          }
+          for (var i = 0; i < tempBadgeList.length; i++) {
+            BadgeItemObject tempBadge = BadgeItemObject(
+                tempBadgeList[i]['id'],
+                tempBadgeList[i]['tag_text'],
+                false,
+                tempBadgeList[i]['tag_color']);
+            user.introBadge.add(tempBadge);
+          }
+          emit(AppMain());
+        } else {
+          print("Url Not Found!");
         }
-        emit(AppMain());
-      } else {
-        print("Url Not Found!");
       }
     } catch (e) {
       print("Error---------->${e}");
