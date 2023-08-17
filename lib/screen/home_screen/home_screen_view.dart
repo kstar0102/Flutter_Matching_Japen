@@ -95,15 +95,15 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // Padding(
-                //     padding:
-                //         const EdgeInsets.only(bottom: 15, left: 30, right: 30),
-                //     child: RadiusButton(
-                //         text: "Appleでサインイン",
-                //         color: const Color.fromARGB(255, 0, 0, 0),
-                //         goNavigation: goNavigation,
-                //         id: 0,
-                //         isDisabled: false)),
+                Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 15, left: 30, right: 30),
+                    child: RadiusButton(
+                        text: "Appleでサインイン",
+                        color: const Color.fromARGB(255, 0, 0, 0),
+                        goNavigation: goNavigation,
+                        id: 0,
+                        isDisabled: false)),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 15, left: 30, right: 30),

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:matching_app/common.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,6 +43,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   Future<void> verifyUserPhoneNumber () async
   {
+    print(phone_number);
     isShow = true;
     if(isLoading != true){
       Timer(Duration(seconds: 60), () {
@@ -56,7 +58,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       isLoading = true; // Start the loading indicator
     });
     await auth.verifyPhoneNumber(
-      phoneNumber: "+"+phone_number,
+      phoneNumber: phone_number,
       verificationCompleted: (PhoneAuthCredential credential) async{
         await auth.signInWithCredential(credential).then((value){
           print("You are logged in successfully");
@@ -218,36 +220,32 @@ class _LoginViewState extends ConsumerState<LoginView> {
             Padding(
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                    style: TextStyle(
-                        fontSize: 17, color: PRIMARY_FONT_COLOR),
-                    "${phone_number}"))
+                  '${phone_number}'.substring(0, 3) + '-' +
+                  '${phone_number}'.substring(3, 6) + '-' +
+                  '${phone_number}'.substring(6),
+                  style: TextStyle(fontSize: 17, color: PRIMARY_FONT_COLOR),
+                ))
           ],
         )):Container();
    
     Widget phone_input = otpCodeVisible == false ? 
-     Padding(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20),
-        child: TextField(
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 27),
-          // , letterSpacing: 5
-          maxLength: 11,
-          buildCounter: null,
-          onChanged: (value) {
+      Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: IntlPhoneField(
+          initialCountryCode: 'US',
+          onChanged: (phone) {
             setState(() {
-              phone_number = value;
+              phone_number = phone.completeNumber;
             });
           },
           decoration: InputDecoration(
-            counterText: '',
             filled: true,
-            fillColor: PRIMARY_GREY,
-            contentPadding:
-                const EdgeInsets.only(top: 15, bottom: 15),
+            fillColor: Colors.grey[200],
+            contentPadding: EdgeInsets.all(15),
             border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(10)),
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
         ),
       ):
@@ -277,27 +275,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   borderRadius: BorderRadius.circular(10)),
             ),
           ),
-        // TextField(
-        //   textAlign: TextAlign.center,
-        //   style: const TextStyle(fontSize: 27),
-        //   maxLength: 6,
-        //   buildCounter: null,
-        //   onChanged: (value2) {
-        //     setState(() {
-        //       digits = value2.isNotEmpty ? value2 : "";
-        //     });
-        //   },
-        //   decoration: InputDecoration(
-        //     counterText: '',
-        //     filled: true,
-        //     fillColor: PRIMARY_GREY,
-        //     contentPadding:
-        //         const EdgeInsets.only(top: 15, bottom: 15),
-        //     border: OutlineInputBorder(
-        //         borderSide: BorderSide.none,
-        //         borderRadius: BorderRadius.circular(10)),
-        //   ),
-        // ),
       );
     return Scaffold(
         backgroundColor: Colors.white,
