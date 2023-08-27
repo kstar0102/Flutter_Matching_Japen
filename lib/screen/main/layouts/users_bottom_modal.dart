@@ -47,6 +47,7 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
     final state = ref.watch(peopleProvider);
     final peoples = state.value;
     AppCubit appCubit = AppCubit.get(context);
+
     return Scaffold(
         body: Container(
           padding: EdgeInsets.symmetric(

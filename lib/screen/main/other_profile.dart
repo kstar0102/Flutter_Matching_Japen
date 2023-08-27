@@ -77,8 +77,7 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
     BlocProvider.of<AppCubit>(context).fetchProfileInfo1(info.toString());
     AppCubit appCubit = AppCubit.get(context);
     String UserId;
-    String MyPhoneToken;
-
+    String? MyPhoneToken;
     void sendMessage() async {
     // only send message if there is something to send
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -266,7 +265,7 @@ class _OtherProfileScreenState extends ConsumerState<OtherProfile> {
         _messageController.clear();
         if(msg.isNotEmpty) {
           final result = await _chatService.sendMessage(   
-            appCubit.user.phone_token, msg, UserId);
+            appCubit.user.phone_token, msg, MyPhoneToken.toString());
             // clear the text controller after sending the message
             
         }

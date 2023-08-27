@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:matching_app/common.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: use_key_in_widget_constructors
 class LoginView extends ConsumerStatefulWidget {
@@ -29,23 +31,22 @@ class LoginView extends ConsumerStatefulWidget {
 
 class _LoginViewState extends ConsumerState<LoginView> {
   String phone_number = "";
-  
   String digits = "";
-
   FirebaseAuth auth = FirebaseAuth.instance;
 
   String verificationIDReceived = "";
-
+  final verify_code = TextEditingController();
   bool otpCodeVisible = false;
   bool isLoading = false;
   bool isShow = true;
   //send sms code in use firebase otp
 
-  void verifyUserPhoneNumber()
+  Future<void> verifyUserPhoneNumber () async
   {
+    print(phone_number);
     isShow = true;
     if(isLoading != true){
-      Timer(Duration(seconds: 30), () {
+      Timer(Duration(seconds: 60), () {
         setState(() {
           isLoading = false;
           isShow = false;
@@ -56,8 +57,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
     setState(() {
       isLoading = true; // Start the loading indicator
     });
-    auth.verifyPhoneNumber(
-      phoneNumber: "+"+phone_number,
+    await auth.verifyPhoneNumber(
+      phoneNumber: phone_number,
       verificationCompleted: (PhoneAuthCredential credential) async{
         await auth.signInWithCredential(credential).then((value){
           print("You are logged in successfully");
@@ -66,9 +67,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
       verificationFailed: (FirebaseAuthException exception){
         print(exception.message);
       }, 
-      codeSent: (String verificationID, int? resendToken){
+      codeSent: (String verificationID, int? resendToken) async{
         print("OkOk!");
-       
         verificationIDReceived = verificationID;
         otpCodeVisible = true;
         isShow =true;
@@ -82,6 +82,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
   }
 
   void verifyCode() async {
+    digits = verify_code.text;
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationIDReceived,
         smsCode: digits);
@@ -132,21 +133,25 @@ class _LoginViewState extends ConsumerState<LoginView> {
         bool phoneNumberExists = querySnapshot.docs.isNotEmpty;
 
         if (phoneNumberExists) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Warning'),
-                content: Text('Phone number already registered.'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+          String PhoneNumberString = phone_number;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString("VerifyPhoneNumber", PhoneNumberString.toString());
+          Navigator.pushNamed(context, "/profile_screen");
+          // showDialog(
+          //   context: context,
+          //   builder: (context) {
+          //     return AlertDialog(
+          //       title: Text('Warning'),
+          //       content: Text('Phone number already registered.'),
+          //       actions: [
+          //         ElevatedButton(
+          //           onPressed: () => Navigator.pop(context),
+          //           child: Text('OK'),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
         } else {
           // Store the phone number in Firestore under the user's document
           await FirebaseFirestore.instance.collection('users').doc(userId).set({'phone': phone_number});
@@ -176,21 +181,25 @@ class _LoginViewState extends ConsumerState<LoginView> {
         bool phoneNumberExists = querySnapshot.docs.isNotEmpty;
 
         if (phoneNumberExists) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('警告'),
-                content: Text('電話番号はすでに登録されています。'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+          // showDialog(
+          //   context: context,
+          //   builder: (context) {
+          //     return AlertDialog(
+          //       title: Text('警告'),
+          //       content: Text('電話番号はすでに登録されています。'),
+          //       actions: [
+          //         ElevatedButton(
+          //           onPressed: () => Navigator.pop(context),
+          //           child: Text('OK'),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
+          String PhoneNumberString = phone_number;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString("VerifyPhoneNumber", PhoneNumberString.toString());
+          Navigator.pushNamed(context, "/profile_screen");
           return;
         }
         // Add phone directly to the database and retrieve the ID
@@ -219,36 +228,30 @@ class _LoginViewState extends ConsumerState<LoginView> {
             Padding(
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                    style: TextStyle(
-                        fontSize: 17, color: PRIMARY_FONT_COLOR),
-                    "${phone_number}"))
+                  '${phone_number}',
+                  style: TextStyle(fontSize: 17, color: PRIMARY_FONT_COLOR),
+                ))
           ],
         )):Container();
    
     Widget phone_input = otpCodeVisible == false ? 
-     Padding(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20),
-        child: TextField(
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 27),
-          // , letterSpacing: 5
-          maxLength: 11,
-          buildCounter: null,
-          onChanged: (value) {
+      Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: IntlPhoneField(
+          initialCountryCode: 'US',
+          onChanged: (phone) {
             setState(() {
-              phone_number = value;
+              phone_number = phone.completeNumber;
             });
           },
           decoration: InputDecoration(
-            counterText: '',
             filled: true,
-            fillColor: PRIMARY_GREY,
-            contentPadding:
-                const EdgeInsets.only(top: 15, bottom: 15),
+            fillColor: Colors.grey[200],
+            contentPadding: EdgeInsets.all(15),
             border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(10)),
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
         ),
       ):
@@ -257,27 +260,27 @@ class _LoginViewState extends ConsumerState<LoginView> {
             left: getDeviceWidth(context) / 47 * 3,
             right: getDeviceWidth(context) / 47 * 3),
         child: TextField(
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 27),
-          maxLength: 6,
-          buildCounter: null,
-          onChanged: (value2) {
-            value2 == "";
-            setState(() {
-              digits = value2.isNotEmpty ? value2 : "";
-            });
-          },
-          decoration: InputDecoration(
-            counterText: '',
-            filled: true,
-            fillColor: PRIMARY_GREY,
-            contentPadding:
-                const EdgeInsets.only(top: 15, bottom: 15),
-            border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(10)),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 27),
+            maxLength: 6,
+            controller: verify_code,
+            keyboardType: TextInputType.name,
+            //validator: (pwd) => passwordErrorText(pwd ?? ''),
+            autocorrect: false,
+            textInputAction:
+                TextInputAction.done,
+            cursorColor: Colors.grey,
+              decoration: InputDecoration(
+              counterText: '',
+              filled: true,
+              fillColor: PRIMARY_GREY,
+              contentPadding:
+                  const EdgeInsets.only(top: 15, bottom: 15),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(10)),
+            ),
           ),
-        ),
       );
     return Scaffold(
         backgroundColor: Colors.white,

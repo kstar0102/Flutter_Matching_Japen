@@ -69,7 +69,7 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
     List<String> badgeArray = boardInfo.badge_color.split(",");
     List<BadgeItemObject> badgeList = [];
     AppCubit appCubit = AppCubit.get(context);
-    print(boardInfo.matching_check);
+    print("asdasdasd"+boardInfo.matching_check);
     for (var i = 0; i < numberArray.length; i++) {
       badgeList.add(BadgeItemObject(i, numberArray[i], false, badgeArray[i]));
     }

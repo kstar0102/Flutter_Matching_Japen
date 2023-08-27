@@ -47,16 +47,16 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
 
     final state = ref.watch(communicateProvider);
     final coms = state?.value ?? [];
-    print(coms);
+    print(coms.length);
     List<Widget> categoryHeaders = [];
 
-    for (int index = 0; index < coms.length-1; index++) {
+    for (int index = 1; index < coms.length -2; index++) {
       final communicateItem = coms[index];
 
-      final bool isFirstItem = index == 0;
+      final bool isFirstItem = index == 1;
       final bool isDifferentCategory = isFirstItem ||
           communicateItem.category_id !=
-              coms[index - 1].category_id;
+              coms[index -2].category_id;
 
       if (isFirstItem || isDifferentCategory) {
         categoryHeaders.add(
@@ -182,25 +182,25 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
                             ...categoryHeaders,
 
                             // Display the ListView.builder
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: coms.length,
-                                itemBuilder: (context, index) {
-                                  final communicateItem = coms[index];
+                            // Expanded(
+                            //   child: ListView.builder(
+                            //     itemCount: coms.length,
+                            //     itemBuilder: (context, index) {
+                            //       final communicateItem = coms[index];
                                   
-                                  final bool isFirstItem = index == 0;
-                                  final bool isDifferentCategory = isFirstItem ||
-                                      communicateItem.category_id !=
-                                          coms[index - 1].category_id;
+                            //       final bool isFirstItem = index == 0;
+                            //       final bool isDifferentCategory = isFirstItem ||
+                            //           communicateItem.category_id !=
+                            //               coms[index - 1].category_id;
 
-                                  if (isDifferentCategory) {
-                                    return Container(); // Skip displaying items for the category headers
-                                  } else {
-                                    return Container();
-                                  }
-                                },
-                              ),
-                            ),
+                            //       if (isDifferentCategory) {
+                            //         return Container(); // Skip displaying items for the category headers
+                            //       } else {
+                            //         return Container();
+                            //       }
+                            //     },
+                            //   ),
+                            // ),
                           ],
                         ),
                   ),

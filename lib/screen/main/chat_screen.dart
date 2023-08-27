@@ -36,7 +36,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
      WidgetsBinding.instance?.addPostFrameCallback((_) {
       getData();
       ref.read(peopleProvider.notifier).doGetChattingData();
-      startTimer();
+      // startTimer();
     });
     BlocProvider.of<AppCubit>(context).fetchProfileInfo();
 

@@ -240,16 +240,14 @@ class AuthRepository {
   }
 
   Future<bool> doLogout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? user_id = prefs.getString('UserId');
-    final data = await DioClient.doLogout(user_id!);
-    var result = data['result'];
-    if (result == 'success') {
-      return true;
-    } else if(result == "error") {
-      return false;
-    } 
-    return false;
+     SharedPreferences preferences =
+        await SharedPreferences.getInstance();
+    preferences.setString('UserId', '0');
+    preferences.setString('login_id', 'not');
+    preferences.setBool('isLogin', false);
+    preferences.setString('VerifyPhoneNumber', '0');
+
+    return true;
   }
 
 }

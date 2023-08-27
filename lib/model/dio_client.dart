@@ -129,7 +129,7 @@ class DioClient {
     try {
        final response = await dio
           .post('/account_logout', data: {'id': uid});
-      // print(response.data);
+      print(response.data);
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -441,10 +441,12 @@ class DioClient {
   static Future<dynamic> doGetCommunicateData(String user_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
+    print(user_id);
     try {
       final response = await dio.get('/get_communication_data/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
       return response.data;
+
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
         // handle unauthorized error
@@ -460,7 +462,6 @@ class DioClient {
     try {
       final response = await dio.get('/get_people_data/$sub_id/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
-      print(response.data);
       return response.data;
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {

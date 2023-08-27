@@ -31,14 +31,10 @@ class _SettingScreenState extends ConsumerState<SettingScreen>
   ];
 
   Future<void> logout() async {
-    SharedPreferences preferences =
-        await SharedPreferences.getInstance();
-    preferences.setString('UserId', '0');
+   
     final controller = ref.read(AuthProvider.notifier);
-    controller.doLogout().then(
-      (value) {
-      },
-    );
+    controller.doLogout();
+    Navigator.pushNamed(context, "/");
   }
 
 
