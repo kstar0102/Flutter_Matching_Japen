@@ -14,6 +14,9 @@ import '../../controller/auth_controllers.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:provider/provider.dart';
 
+import '../../controller/auth_controllers.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 class HomeScreenView extends ConsumerStatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
