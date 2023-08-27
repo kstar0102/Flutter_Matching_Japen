@@ -1027,21 +1027,14 @@ class AppCubit extends Cubit<AppState> {
         }
       }
       else{
-<<<<<<< HEAD
-      print("UUUUUUUUUUUUUUUUUUUUU");
-=======
->>>>>>> cf98d6a5e4d51fbaf1cdfc40cc64e279fd16efc1
         final response =
           await http.get(Uri.parse('${API_URL}get_user_phone?phone_id=$isLoginPhoneNumber'));
         if (response.statusCode == 200) {
           user = User();
           Map<String, dynamic> jsonData = jsonDecode(response.body);
-<<<<<<< HEAD
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString("Phone_token",jsonData["data"]["phone_token"]);
           userId = jsonData['data']['id'];
-=======
->>>>>>> cf98d6a5e4d51fbaf1cdfc40cc64e279fd16efc1
           user.id = jsonData['data']['id'] ?? "";
           user.name = jsonData['data']['user_name'] ?? "";
           user.nickname = jsonData['data']['user_nickname'] ?? "";
@@ -1088,10 +1081,6 @@ class AppCubit extends Cubit<AppState> {
           user.photo4 = "$BASE_URL/uploads/${jsonData['data']['photo4']}";
           user.photo5 = "$BASE_URL/uploads/${jsonData['data']['photo5']}";
           user.photo6 = "$BASE_URL/uploads/${jsonData['data']['photo6']}";
-<<<<<<< HEAD
-=======
-
->>>>>>> cf98d6a5e4d51fbaf1cdfc40cc64e279fd16efc1
           var tempCommunityList = jsonData['data']['community'];
           var tempBadgeList = jsonData['data']['intro_badge'];
           for (var i = 0; i < tempCommunityList.length; i++) {
@@ -1112,10 +1101,7 @@ class AppCubit extends Cubit<AppState> {
                 tempBadgeList[i]['tag_color']);
             user.introBadge.add(tempBadge);
           }
-<<<<<<< HEAD
         await prefs.setString("UserId",userId.toString());
-=======
->>>>>>> cf98d6a5e4d51fbaf1cdfc40cc64e279fd16efc1
           emit(AppMain());
         } else {
           print("Url Not Found!");
