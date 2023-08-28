@@ -38,7 +38,7 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
 
   Future<bool> doPhoneVaild(String phone_number) async {
     state = const AsyncValue.loading();
-    print("+++++++++++++"+phone_number);
+    print("+++++++++++++" + phone_number);
     final newState =
         await AsyncValue.guard(() => authRepo.doPhoneVaild(phone_number));
 
@@ -48,12 +48,11 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
     return newState.hasValue;
   }
 
-   Future<bool> doBoardReply(String userId, String Id, String message) async {
- 
+  Future<bool> doBoardReply(String userId, String Id, String message) async {
     state = const AsyncValue.loading();
 
-    final newState =
-        await AsyncValue.guard(() => authRepo.doBoardReply(userId, Id, message));
+    final newState = await AsyncValue.guard(
+        () => authRepo.doBoardReply(userId, Id, message));
     if (mounted) {
       state = newState;
     }
@@ -61,11 +60,10 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
   }
 
   Future<bool> addBoardData(String selectedItems, String board_text) async {
- 
     state = const AsyncValue.loading();
 
-    final newState =
-        await AsyncValue.guard(() => authRepo.addBoardData(selectedItems,board_text));
+    final newState = await AsyncValue.guard(
+        () => authRepo.addBoardData(selectedItems, board_text));
 
     if (mounted) {
       state = newState;
@@ -96,10 +94,23 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
     return newState.hasValue;
   }
 
-  Future<bool> doChatting(String sender_id, String receiver_id, String message, String time) async {
+  Future<bool> doAppleLogin(String appleEmail) async {
     state = const AsyncValue.loading();
     final newState =
-        await AsyncValue.guard(() => authRepo.doChatting(receiver_id, sender_id, message, time));
+        await AsyncValue.guard(() => authRepo.doAppleLogin(appleEmail));
+
+    if (mounted) {
+      state = newState;
+    }
+
+    return newState.value!;
+  }
+
+  Future<bool> doChatting(
+      String sender_id, String receiver_id, String message, String time) async {
+    state = const AsyncValue.loading();
+    final newState = await AsyncValue.guard(
+        () => authRepo.doChatting(receiver_id, sender_id, message, time));
 
     if (mounted) {
       state = newState;
@@ -110,8 +121,8 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
 
   Future<bool> doMessage(String sender_id, String receiver_id) async {
     state = const AsyncValue.loading();
-    final newState =
-        await AsyncValue.guard(() => authRepo.doMessage(receiver_id, sender_id));
+    final newState = await AsyncValue.guard(
+        () => authRepo.doMessage(receiver_id, sender_id));
 
     if (mounted) {
       state = newState;
@@ -136,13 +147,13 @@ class AuthController extends StateNotifier<AsyncValue<bool>> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => authRepo.doLogout());
   }
+
   Future<String> getLoggedInID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String str = prefs.getString('login_id') ?? 'not';
     authRepo.setUid = str;
     return str;
   }
-
 }
 
 final AuthProvider =

@@ -55,8 +55,8 @@ class AppCubit extends Cubit<AppState> {
   String body_id = "";
   String UserId = "";
   int? r_count = 0;
-  String s_age_start= "";
-  String s_age_end= "";
+  String s_age_start = "";
+  String s_age_end = "";
   String s_height_start = "";
   String s_height_end = "";
   String s_body = "";
@@ -69,8 +69,8 @@ class AppCubit extends Cubit<AppState> {
   String phone = "";
   String phone_token = "";
   String receiver_id = "";
-  String userInfo_indentity ="";
-  String userInfo_paycheck ="";
+  String userInfo_indentity = "";
+  String userInfo_paycheck = "";
   String isLoginPhoneNumber = "";
   //end
   AppCubit() : super(AppInitial());
@@ -80,10 +80,9 @@ class AppCubit extends Cubit<AppState> {
     emit(AppRegister());
   }
 
-  void formatButton() async
-  {
-    s_age_start= "";
-    s_age_end= "";
+  void formatButton() async {
+    s_age_start = "";
+    s_age_end = "";
     s_height_start = "";
     s_height_end = "";
     s_body = "";
@@ -130,10 +129,9 @@ class AppCubit extends Cubit<AppState> {
     emit(AppRegister());
   }
 
-  void changePrivate(String index, String isVal) async
-  {
-    final data = await DioClient.changePrivate(UserId,index,isVal);
-    if(data['result'] == "success"){
+  void changePrivate(String index, String isVal) async {
+    final data = await DioClient.changePrivate(UserId, index, isVal);
+    if (data['result'] == "success") {
       Fluttertoast.showToast(
         msg: "成功。",
         toastLength: Toast.LENGTH_SHORT,
@@ -142,9 +140,7 @@ class AppCubit extends Cubit<AppState> {
         backgroundColor: Colors.blue,
         textColor: Colors.white,
       );
-    }
-    else if(data['result'] == 'error')
-    {
+    } else if (data['result'] == 'error') {
       Fluttertoast.showToast(
         msg: "失敗。",
         toastLength: Toast.LENGTH_SHORT,
@@ -155,7 +151,6 @@ class AppCubit extends Cubit<AppState> {
       );
     }
   }
-
 
   void changeBDay(String value) {
     bDay = value;
@@ -243,7 +238,7 @@ class AppCubit extends Cubit<AppState> {
         Map<String, dynamic> list = jsonDecode(response.body);
         for (var i = 0; i < list['data'].length; i++) {
           purposeList.add(PurposeTypeObject(
-              list['data'][i]['id'], list['data'][i]['use_purpose'],false));
+              list['data'][i]['id'], list['data'][i]['use_purpose'], false));
         }
         emit(AppRegister());
       } else {
@@ -314,33 +309,33 @@ class AppCubit extends Cubit<AppState> {
 
   void changeMultiAvatar(String uri, int item_id) {
     avatarImages[item_id] = uri;
-    uploadAvatarImage((item_id+1).toString(), uri);
+    uploadAvatarImage((item_id + 1).toString(), uri);
     emit(AppRegister());
   }
 
-  void changeAddress(String address, String idx) async{
+  void changeAddress(String address, String idx) async {
     address_info = address;
     address_id = idx;
     print(UserId);
-    final data = await DioClient.changeAddressData(UserId,address_id);
+    final data = await DioClient.changeAddressData(UserId, address_id);
     emit(AppMain());
   }
 
-  void changePreview(String id) async{
+  void changePreview(String id) async {
     await DioClient.changePreview(UserId, id);
   }
 
-   void changeBody(String body, String idx) async{
+  void changeBody(String body, String idx) async {
     body_type = body;
     body_id = idx;
-    final data = await DioClient.changeBodyData(UserId,idx);
+    final data = await DioClient.changeBodyData(UserId, idx);
     emit(AppMain());
   }
 
-  void addMatching(String receiver_token) async{
+  void addMatching(String receiver_token) async {
     final data = await DioClient.addMatching(receiver_token, UserId);
     print(data['result']);
-    if(data['result'] == "success"){
+    if (data['result'] == "success") {
       Fluttertoast.showToast(
         msg: "成功",
         toastLength: Toast.LENGTH_SHORT,
@@ -352,9 +347,9 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  void removeMatching(String receiver_token) async{
+  void removeMatching(String receiver_token) async {
     final data = await DioClient.removeMatching(receiver_token, UserId);
-    if(data['result'] == "success"){
+    if (data['result'] == "success") {
       Fluttertoast.showToast(
         msg: "成功",
         toastLength: Toast.LENGTH_SHORT,
@@ -366,9 +361,9 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-   void userReport(String receiver_token) async{
+  void userReport(String receiver_token) async {
     final data = await DioClient.userReport(receiver_token, UserId);
-    if(data['result'] == "success"){
+    if (data['result'] == "success") {
       Fluttertoast.showToast(
         msg: "成功",
         toastLength: Toast.LENGTH_SHORT,
@@ -377,9 +372,7 @@ class AppCubit extends Cubit<AppState> {
         backgroundColor: Colors.blue,
         textColor: Colors.white,
       );
-    }
-    else if(data['result'] == 'error')
-    {
+    } else if (data['result'] == 'error') {
       Fluttertoast.showToast(
         msg: "あなたはすでにこのユーザーの違反\nを報告しています。",
         toastLength: Toast.LENGTH_SHORT,
@@ -391,9 +384,9 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  void changeBlockStatus(String receiver_id) async{
+  void changeBlockStatus(String receiver_id) async {
     final data = await DioClient.changeBlockStatus(receiver_id, UserId);
-    if(data['result'] == "success"){
+    if (data['result'] == "success") {
       Fluttertoast.showToast(
         msg: "成功",
         toastLength: Toast.LENGTH_SHORT,
@@ -402,9 +395,7 @@ class AppCubit extends Cubit<AppState> {
         backgroundColor: Colors.blue,
         textColor: Colors.white,
       );
-    }
-    else if(data['result'] == 'error')
-    {
+    } else if (data['result'] == 'error') {
       Fluttertoast.showToast(
         msg: "あなたはすでにこのユーザーの違反\nを報告しています。",
         toastLength: Toast.LENGTH_SHORT,
@@ -416,9 +407,9 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  void closeAccount() async{
-     final data = await DioClient.closeAccount(UserId);
-     if(data['result'] == "success"){
+  void closeAccount() async {
+    final data = await DioClient.closeAccount(UserId);
+    if (data['result'] == "success") {
       Fluttertoast.showToast(
         msg: "成功",
         toastLength: Toast.LENGTH_SHORT,
@@ -427,9 +418,7 @@ class AppCubit extends Cubit<AppState> {
         backgroundColor: Colors.blue,
         textColor: Colors.white,
       );
-    }
-    else if(data['result'] == 'error')
-    {
+    } else if (data['result'] == 'error') {
       Fluttertoast.showToast(
         msg: "失敗",
         toastLength: Toast.LENGTH_SHORT,
@@ -441,8 +430,18 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-
-  void searchFilter(String search_age_start, String search_age_end, String search_height_start, String search_height_end, String search_body, String search_holiday, String search_purpose, String search_ciga, String search_sake, String live_place, String VerifyChecked) async{
+  void searchFilter(
+      String search_age_start,
+      String search_age_end,
+      String search_height_start,
+      String search_height_end,
+      String search_body,
+      String search_holiday,
+      String search_purpose,
+      String search_ciga,
+      String search_sake,
+      String live_place,
+      String VerifyChecked) async {
     s_age_start = search_age_start;
     s_age_end = search_age_end;
     s_height_start = search_height_start;
@@ -458,108 +457,92 @@ class AppCubit extends Cubit<AppState> {
     emit(AppMain());
   }
 
-  void changeTallHeight(String t_height) async
-  {
+  void changeTallHeight(String t_height) async {
     tall_height = t_height;
     UserId = userId.toString();
-    final data = await DioClient.changeHeightData(UserId,tall_height);
+    final data = await DioClient.changeHeightData(UserId, tall_height);
     emit(AppMain());
   }
 
-  void changeBlood(String blood_t) async
-  {
+  void changeBlood(String blood_t) async {
     blood_type = blood_t;
-    final data = await DioClient.changeBloodData(UserId,blood_t);
+    final data = await DioClient.changeBloodData(UserId, blood_t);
     emit(AppMain());
   }
 
-  void changeEducation(String edu) async
-  {
+  void changeEducation(String edu) async {
     edu_type = edu;
-    final data = await DioClient.changeEducation(UserId,edu);
+    final data = await DioClient.changeEducation(UserId, edu);
     emit(AppMain());
   }
 
-  void changePurposeInfo(String pur_info, String idx) async
-  {
+  void changePurposeInfo(String pur_info, String idx) async {
     purpose_type = pur_info;
     UserId = userId.toString();
-    final data = await DioClient.changePurpose(UserId,idx);
+    final data = await DioClient.changePurpose(UserId, idx);
     emit(AppMain());
   }
 
-  void postIntroduce(String intro) async
-  {
+  void postIntroduce(String intro) async {
     intro_text = intro;
-    final data = await DioClient.postIntroduce(UserId.toString(),intro);
+    final data = await DioClient.postIntroduce(UserId.toString(), intro);
     emit(AppMain());
   }
 
-  void changeNick(String nicky)
-  {
+  void changeNick(String nicky) {
     change_nickname = nicky;
     emit(AppMain());
   }
 
-  void changeBudget(String annual) async
-  {
+  void changeBudget(String annual) async {
     annual_budget = annual;
-    final data = await DioClient.changeBudget(UserId,annual);
+    final data = await DioClient.changeBudget(UserId, annual);
     emit(AppMain());
   }
 
-  void changeHoliday(String holi) async
-  {
+  void changeHoliday(String holi) async {
     holi_info = holi;
-    final data = await DioClient.changeHoliday(UserId,holi);
+    final data = await DioClient.changeHoliday(UserId, holi);
     emit(AppMain());
   }
 
-  void changeCiga(String ciga) async
-  {
+  void changeCiga(String ciga) async {
     ciga_info = ciga;
-    final data = await DioClient.changeCiga(UserId,ciga);
+    final data = await DioClient.changeCiga(UserId, ciga);
     emit(AppMain());
   }
 
-  void changeAlcohol(String al_info) async
-  {
+  void changeAlcohol(String al_info) async {
     alcohol_info = al_info;
-    final data = await DioClient.changeAlcohol(UserId,al_info);
+    final data = await DioClient.changeAlcohol(UserId, al_info);
     emit(AppMain());
   }
 
-  dynamic addLikesData(String receiver_id, String send_id) async
-  {
+  dynamic addLikesData(String receiver_id, String send_id) async {
     final data = await DioClient.addLikesData(send_id, receiver_id);
     var result = data['result'];
-    if(result == "success")
-    {
+    if (result == "success") {
       return true;
-    }
-    else if(result == "error"){
+    } else if (result == "error") {
       return false;
     }
   }
 
-  dynamic addTodayLikesData(String receiver_id, String send_id) async
-  {
+  dynamic addTodayLikesData(String receiver_id, String send_id) async {
     final data = await DioClient.addTodayLikesData(send_id, receiver_id);
     var result = data['result'];
-    if(result == "success")
-    {
+    if (result == "success") {
       return true;
-    }
-    else if(result == "error"){
+    } else if (result == "error") {
       return false;
     }
   }
 
-  dynamic doPayment(String month, DateTime resultDate) async
-  {
-    final data = await DioClient.doPayment(month.toString(), resultDate.toString(), UserId);
+  dynamic doPayment(String month, DateTime resultDate) async {
+    final data = await DioClient.doPayment(
+        month.toString(), resultDate.toString(), UserId);
 
-    if(data['result'] == "success"){
+    if (data['result'] == "success") {
       Fluttertoast.showToast(
         msg: "成功。",
         toastLength: Toast.LENGTH_SHORT,
@@ -568,9 +551,7 @@ class AppCubit extends Cubit<AppState> {
         backgroundColor: Colors.blue,
         textColor: Colors.white,
       );
-    }
-    else
-    {
+    } else {
       Fluttertoast.showToast(
         msg: "失敗。",
         toastLength: Toast.LENGTH_SHORT,
@@ -584,9 +565,11 @@ class AppCubit extends Cubit<AppState> {
 
   Future<int> uploadProfile() async {
     String selectedCommunityList = "";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String AppleId = await prefs.getString("appleId").toString();
     for (var i = 0; i < communityList.length; i++) {
       if (communityList[i].isChecked) {
-        print(communityList[i].idx); 
+        print(communityList[i].idx);
         selectedCommunityList += "${communityList[i].idx},";
       }
     }
@@ -609,6 +592,7 @@ class AppCubit extends Cubit<AppState> {
     request.fields['phone_number'] = phone.toString();
     request.fields['phone_token'] = phone_token.toString();
     request.fields['edtIntroBadge'] = selectedBadges;
+    request.fields['appleId'] = AppleId;
     var imageFile = File(avatarImage);
     var imageStream = http.ByteStream(imageFile.openRead());
     var imageLength = await imageFile.length();
@@ -623,11 +607,13 @@ class AppCubit extends Cubit<AppState> {
       var decodedData = json.decode(responseData);
       if (decodedData["type"] == "success") {
         userId = decodedData["data"]["id"];
-        
+
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString("UserId",userId.toString());
-        await prefs.setString("Phone_token",decodedData["data"]["phone_token"]);
-        await prefs.setString("identify_verify",decodedData["data"]["identity_state"]);
+        await prefs.setString("UserId", userId.toString());
+        await prefs.setString(
+            "Phone_token", decodedData["data"]["phone_token"]);
+        await prefs.setString(
+            "identify_verify", decodedData["data"]["identity_state"]);
         return 1;
       } else {
         return 0;
@@ -637,8 +623,6 @@ class AppCubit extends Cubit<AppState> {
       return 0;
     }
   }
-
-  
 
   // !--------> register end
 
@@ -721,15 +705,15 @@ class AppCubit extends Cubit<AppState> {
           textColor: Colors.white,
         );
         return 1;
-      } else  {
-         Fluttertoast.showToast(
+      } else {
+        Fluttertoast.showToast(
           msg: "コインを埋める必要があります。",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-         );
+        );
         return 0;
       }
     } else {
@@ -760,13 +744,13 @@ class AppCubit extends Cubit<AppState> {
           .bytesToString(); // Convert response stream to string
       var decodedData = json.decode(responseData);
       if (decodedData["type"] == "success") {
-          user = User();
-          user.photo1 = "$BASE_URL/uploads/${decodedData['data']['photo1']}";
-          user.photo2 = "$BASE_URL/uploads/${decodedData['data']['photo2']}";
-          user.photo3 = "$BASE_URL/uploads/${decodedData['data']['photo3']}";
-          user.photo4 = "$BASE_URL/uploads/${decodedData['data']['photo4']}";
-          user.photo5 = "$BASE_URL/uploads/${decodedData['data']['photo5']}";
-          user.photo6 = "$BASE_URL/uploads/${decodedData['data']['photo6']}";
+        user = User();
+        user.photo1 = "$BASE_URL/uploads/${decodedData['data']['photo1']}";
+        user.photo2 = "$BASE_URL/uploads/${decodedData['data']['photo2']}";
+        user.photo3 = "$BASE_URL/uploads/${decodedData['data']['photo3']}";
+        user.photo4 = "$BASE_URL/uploads/${decodedData['data']['photo4']}";
+        user.photo5 = "$BASE_URL/uploads/${decodedData['data']['photo5']}";
+        user.photo6 = "$BASE_URL/uploads/${decodedData['data']['photo6']}";
         // emit(AppMain());
         return 1;
       } else {
@@ -791,7 +775,8 @@ class AppCubit extends Cubit<AppState> {
         user.nickname = jsonData['data']['user_nickname'] ?? "";
         user.residenceId = jsonData['data']['residenceid'] ?? 0;
         user.residence = jsonData['data']['residence'] ?? "";
-        int age = DateTime.now().year - int.parse(jsonData['data']['birthday'].split("-")[0]);
+        int age = DateTime.now().year -
+            int.parse(jsonData['data']['birthday'].split("-")[0]);
         user.bday = age.toString();
         user.height = double.parse(jsonData['data']['height'] ?? 130);
         user.bodytypeId = jsonData['data']['bodytypeId'] ?? 0;
@@ -874,7 +859,8 @@ class AppCubit extends Cubit<AppState> {
         user.nickname = jsonData['data']['user_nickname'] ?? "";
         user.residenceId = jsonData['data']['residenceid'] ?? 0;
         user.residence = jsonData['data']['residence'] ?? "";
-        int age = DateTime.now().year - int.parse(jsonData['data']['birthday'].split("-")[0]);
+        int age = DateTime.now().year -
+            int.parse(jsonData['data']['birthday'].split("-")[0]);
         user.bday = age.toString();
         user.height = double.parse(jsonData['data']['height'] ?? 130);
         user.bodytypeId = jsonData['data']['bodytypeId'] ?? 0;
@@ -945,13 +931,14 @@ class AppCubit extends Cubit<AppState> {
   Future<void> fetchProfileInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     UserId = await prefs.getString("UserId").toString();
-    isLoginPhoneNumber = await prefs.getString("VerifyPhoneNumber").toString();    
+    print(UserId);
+    isLoginPhoneNumber = await prefs.getString("VerifyPhoneNumber").toString();
     try {
       print("asdasdasdasdasd");
-      if(UserId != "0" && UserId != "null" ){
-          final response =
+      if (UserId != "0" && UserId != "null") {
+        final response =
             await http.get(Uri.parse('${API_URL}get_user?id=$UserId'));
-          if (response.statusCode == 200) {
+        if (response.statusCode == 200) {
           user = User();
           Map<String, dynamic> jsonData = jsonDecode(response.body);
           user.id = jsonData['data']['id'] ?? "";
@@ -976,7 +963,8 @@ class AppCubit extends Cubit<AppState> {
           user.holiday = jsonData['data']['holiday'] ?? "";
           user.annualIncome = jsonData['data']['annual_income'] ?? "";
           user.res_count = jsonData['count']['res_count'] ?? "0";
-          user.today_recom = jsonData['today_recom']['today_count'].toString() ?? "0";
+          user.today_recom =
+              jsonData['today_recom']['today_count'].toString() ?? "0";
           user.avail_date = jsonData['avail_date']['pay_date'];
           r_count = jsonData['count']['res_count'] ?? "0";
           user.phone_number = jsonData['data']['phone_number'] ?? "";
@@ -993,7 +981,7 @@ class AppCubit extends Cubit<AppState> {
           user.private_matching = jsonData['data']['private_matching'] ?? "";
           user.pay_user = jsonData['data']['pay_user'] ?? "";
           userInfo_indentity = jsonData['data']['identity_state'] ?? "";
-          userInfo_paycheck =jsonData['data']['pay_user'] ?? "";
+          userInfo_paycheck = jsonData['data']['pay_user'] ?? "";
           user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
           user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";
           user.photo3 = "$BASE_URL/uploads/${jsonData['data']['photo3']}";
@@ -1025,15 +1013,14 @@ class AppCubit extends Cubit<AppState> {
         } else {
           print("Url Not Found!");
         }
-      }
-      else{
-        final response =
-          await http.get(Uri.parse('${API_URL}get_user_phone?phone_id=$isLoginPhoneNumber'));
+      } else {
+        final response = await http.get(
+            Uri.parse('${API_URL}get_user_phone?phone_id=$isLoginPhoneNumber'));
         if (response.statusCode == 200) {
           user = User();
           Map<String, dynamic> jsonData = jsonDecode(response.body);
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString("Phone_token",jsonData["data"]["phone_token"]);
+          await prefs.setString("Phone_token", jsonData["data"]["phone_token"]);
           userId = jsonData['data']['id'];
           user.id = jsonData['data']['id'] ?? "";
           user.name = jsonData['data']['user_name'] ?? "";
@@ -1057,7 +1044,8 @@ class AppCubit extends Cubit<AppState> {
           user.holiday = jsonData['data']['holiday'] ?? "";
           user.annualIncome = jsonData['data']['annual_income'] ?? "";
           user.res_count = jsonData['count']['res_count'] ?? "0";
-          user.today_recom = jsonData['today_recom']['today_count'].toString() ?? "0";
+          user.today_recom =
+              jsonData['today_recom']['today_count'].toString() ?? "0";
           user.avail_date = jsonData['avail_date']['pay_date'];
           r_count = jsonData['count']['res_count'] ?? "0";
           user.phone_number = jsonData['data']['phone_number'] ?? "";
@@ -1074,7 +1062,7 @@ class AppCubit extends Cubit<AppState> {
           user.private_matching = jsonData['data']['private_matching'] ?? "";
           user.pay_user = jsonData['data']['pay_user'] ?? "";
           userInfo_indentity = jsonData['data']['identity_state'] ?? "";
-          userInfo_paycheck =jsonData['data']['pay_user'] ?? "";
+          userInfo_paycheck = jsonData['data']['pay_user'] ?? "";
           user.photo1 = "$BASE_URL/uploads/${jsonData['data']['photo1']}";
           user.photo2 = "$BASE_URL/uploads/${jsonData['data']['photo2']}";
           user.photo3 = "$BASE_URL/uploads/${jsonData['data']['photo3']}";
@@ -1101,7 +1089,7 @@ class AppCubit extends Cubit<AppState> {
                 tempBadgeList[i]['tag_color']);
             user.introBadge.add(tempBadge);
           }
-        await prefs.setString("UserId",userId.toString());
+          await prefs.setString("UserId", userId.toString());
           emit(AppMain());
         } else {
           print("Url Not Found!");

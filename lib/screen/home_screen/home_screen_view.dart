@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:matching_app/components/background_widget.dart';
 import 'package:matching_app/components/radius_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,9 +15,6 @@ import '../../apple_provider/authentication_provider.dart';
 import '../../controller/auth_controllers.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:provider/provider.dart';
-
-import '../../controller/auth_controllers.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class HomeScreenView extends ConsumerStatefulWidget {
   @override
@@ -54,37 +53,63 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
     }
   }
 
+// Admin20829
   void appleSign() async {
-    AuthorizationResult authorizationResult =
-        await TheAppleSignIn.performRequests([
-      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-    ]);
+    if (Platform.isAndroid) {
+      Fluttertoast.showToast(
+        msg: "Androidデバイスでは利用できません。",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
+    else{
+      AuthorizationResult authorizationResult =
+          await TheAppleSignIn.performRequests([
+        AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+      ]);
 
-    switch (authorizationResult.status) {
-      case AuthorizationStatus.authorized:
-        print("authorized");
-        try {
-          AppleIdCredential? appleCredentials = authorizationResult.credential;
-          OAuthProvider oAuthProvider = OAuthProvider("apple.com");
-          OAuthCredential oAuthCredential = oAuthProvider.credential(
-              idToken: String.fromCharCodes(appleCredentials!.identityToken!),
-              accessToken:
-                  String.fromCharCodes(appleCredentials.authorizationCode!));
-          UserCredential userCredential =
-              await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
-          if (userCredential.user != null) {
-            Navigator.pushNamed(context, "profile_screen");
+      switch (authorizationResult.status) {
+        case AuthorizationStatus.authorized:
+          print("authorized");
+          try {
+            AppleIdCredential? appleCredentials = authorizationResult.credential;
+            OAuthProvider oAuthProvider = OAuthProvider("apple.com");
+            OAuthCredential oAuthCredential = oAuthProvider.credential(
+                idToken: String.fromCharCodes(appleCredentials!.identityToken!),
+                accessToken:
+                    String.fromCharCodes(appleCredentials.authorizationCode!));
+            UserCredential userCredential =
+                await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
+            if (userCredential.user != null) {
+              String appleID = userCredential.user!.uid;
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setString("appleId", appleID.toString());
+              final controller = ref.read(AuthProvider.notifier);
+              controller.doAppleLogin(appleID).then(
+                (value) {
+                  print(value);
+                  if (value == true) {
+                    Navigator.pushNamed(context, "/profile_screen");
+                  } else {
+                    Navigator.pushNamed(context, "/phone_login");
+                  }
+                },
+              );
+            }
+          } catch (e) {
+            print("apple auth failed $e");
           }
-        } catch (e) {
-          print("apple auth failed $e");
-        }
-        break;
-      case AuthorizationStatus.error:
-        break;
-      case AuthorizationStatus.cancelled:
-        break;
-      default:
-        break;
+          break;
+        case AuthorizationStatus.error:
+          break;
+        case AuthorizationStatus.cancelled:
+          break;
+        default:
+          break;
+      }
     }
   }
 

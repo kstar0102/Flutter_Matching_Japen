@@ -56,7 +56,7 @@ class DioClient {
     }
   }
 
-    // * POST: '/NickName'
+  // * POST: '/NickName'
   static Future<dynamic> postNickname(String uId, String nick_name) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
@@ -78,8 +78,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-      final response = await dio
-          .post('/phone_valid', data: {'phone': phone_number});
+      final response =
+          await dio.post('/phone_valid', data: {'phone': phone_number});
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -111,8 +111,8 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
     // print('=============+++++++++++${uid}+++++++++++++===============');
     try {
-       final response = await dio
-          .post('/residence_update', data: {'id': uid, 'data': idx});
+      final response =
+          await dio.post('/residence_update', data: {'id': uid, 'data': idx});
       // print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -127,8 +127,7 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
     print('=============+++++++++++${uid}+++++++++++++===============');
     try {
-       final response = await dio
-          .post('/account_logout', data: {'id': uid});
+      final response = await dio.post('/account_logout', data: {'id': uid});
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -143,8 +142,8 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
     // print('=============+++++++++++${uid}+++++++++++++===============');
     try {
-       final response = await dio
-          .post('/bodytype_update', data: {'id': uid, 'data': idx});
+      final response =
+          await dio.post('/bodytype_update', data: {'id': uid, 'data': idx});
       // print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -159,8 +158,8 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
     // print('=============+++++++++++${uid}+++++++++++++===============');
     try {
-       final response = await dio
-          .post('/height_update', data: {'id': uid, 'data': idx});
+      final response =
+          await dio.post('/height_update', data: {'id': uid, 'data': idx});
       // print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -175,7 +174,7 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
     // print('=============+++++++++++${uid}+++++++++++++===============');
     try {
-       final response = await dio
+      final response = await dio
           .post('/bloodtype_update', data: {'id': uid, 'data': blood_info});
       // print(response.data);
       return response.data;
@@ -190,7 +189,7 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
+      final response = await dio
           .post('/education_update', data: {'id': uid, 'data': edu_info});
       return response.data;
     } on DioError catch (e) {
@@ -204,8 +203,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/use_purpose', data: {'id': uid, 'data': idx});
+      final response =
+          await dio.post('/use_purpose', data: {'id': uid, 'data': idx});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -218,7 +217,7 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
+      final response = await dio
           .post('/annualincome_update', data: {'id': uid, 'data': budget});
       return response.data;
     } on DioError catch (e) {
@@ -232,8 +231,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/holiday_update', data: {'id': uid, 'data': holi});
+      final response =
+          await dio.post('/holiday_update', data: {'id': uid, 'data': holi});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -246,8 +245,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/smoking_update', data: {'id': uid, 'data': ciga});
+      final response =
+          await dio.post('/smoking_update', data: {'id': uid, 'data': ciga});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -255,13 +254,13 @@ class DioClient {
     }
   }
 
-   static Future<dynamic> changeAlcohol(String uid, String alcohol) async {
+  static Future<dynamic> changeAlcohol(String uid, String alcohol) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/alcohol_update', data: {'id': uid, 'data': alcohol});
+      final response =
+          await dio.post('/alcohol_update', data: {'id': uid, 'data': alcohol});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -269,7 +268,7 @@ class DioClient {
     }
   }
 
-    // * GET '/BoardList/all'
+  // * GET '/BoardList/all'
 
   static Future<dynamic> getBoardData(String uid) async {
     final token = await _getToken();
@@ -319,13 +318,18 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> postBoardReply(String uid, String id, String message, String res_id) async {
+  static Future<dynamic> postBoardReply(
+      String uid, String id, String message, String res_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/post_board_data', data: {'board_id': id, 'active_user_id': uid, 'res_board_content':message, 'res_user_id': res_id});
+      final response = await dio.post('/post_board_data', data: {
+        'board_id': id,
+        'active_user_id': uid,
+        'res_board_content': message,
+        'res_user_id': res_id
+      });
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -333,13 +337,17 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> addBoardData(String uid, String selectedItems, String board_text) async {
+  static Future<dynamic> addBoardData(
+      String uid, String selectedItems, String board_text) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/active_board_data', data: {'uid': uid, 'created_date': selectedItems, 'board_text': board_text});
+      final response = await dio.post('/active_board_data', data: {
+        'uid': uid,
+        'created_date': selectedItems,
+        'board_text': board_text
+      });
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -352,8 +360,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/add_matching_data', data: {'res_id': res_id});
+      final response =
+          await dio.post('/add_matching_data', data: {'res_id': res_id});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -361,14 +369,15 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> doPeopleRecom(String send_id, String receiver_id) async {
+  static Future<dynamic> doPeopleRecom(
+      String send_id, String receiver_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
-    print(send_id+receiver_id);
+    print(send_id + receiver_id);
     try {
-       final response = await dio
-          .post('/add_like_data', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      final response = await dio.post('/add_like_data',
+          data: {'send_id': send_id, 'receiver_id': receiver_id});
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -377,13 +386,18 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> doChatting(String send_id, String receiver_id, String msg, String curtime) async {
+  static Future<dynamic> doChatting(
+      String send_id, String receiver_id, String msg, String curtime) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/update_like_data', data: {'send_id': send_id, 'receiver_id' : receiver_id, 'msg' : msg, 'curtime' : curtime});
+      final response = await dio.post('/update_like_data', data: {
+        'send_id': send_id,
+        'receiver_id': receiver_id,
+        'msg': msg,
+        'curtime': curtime
+      });
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -397,8 +411,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/update_message_data', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      final response = await dio.post('/update_message_data',
+          data: {'send_id': send_id, 'receiver_id': receiver_id});
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -407,14 +421,15 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> addLikesData(String send_id, String receiver_id) async {
+  static Future<dynamic> addLikesData(
+      String send_id, String receiver_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
-    print(send_id+receiver_id);
+    print(send_id + receiver_id);
     try {
-       final response = await dio
-          .post('/add_user_like', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      final response = await dio.post('/add_user_like',
+          data: {'send_id': send_id, 'receiver_id': receiver_id});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -422,14 +437,15 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> addTodayLikesData(String send_id, String receiver_id) async {
+  static Future<dynamic> addTodayLikesData(
+      String send_id, String receiver_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
-    print(send_id+receiver_id);
+    print(send_id + receiver_id);
     try {
-       final response = await dio
-          .post('/add_user_today_like', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      final response = await dio.post('/add_user_today_like',
+          data: {'send_id': send_id, 'receiver_id': receiver_id});
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -446,7 +462,6 @@ class DioClient {
       final response = await dio.get('/get_communication_data/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
       return response.data;
-
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
         // handle unauthorized error
@@ -455,7 +470,7 @@ class DioClient {
       }
     }
   }
-  
+
   static Future<dynamic> doGetPeopleData(String sub_id, String user_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
@@ -514,7 +529,6 @@ class DioClient {
           options: Options(headers: {'X-CSRF-TOKEN': token}));
       print(response.data);
       return response.data;
-
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
         // handle unauthorized error
@@ -531,7 +545,6 @@ class DioClient {
       final response = await dio.get('/get_brock_data/$user_id',
           options: Options(headers: {'X-CSRF-TOKEN': token}));
       return response.data;
-
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
         // handle unauthorized error
@@ -546,8 +559,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/add_matching', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      final response = await dio.post('/add_matching',
+          data: {'send_id': send_id, 'receiver_id': receiver_id});
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -556,13 +569,14 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> removeMatching(String receiver_id, String send_id) async {
+  static Future<dynamic> removeMatching(
+      String receiver_id, String send_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/remove_matching', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      final response = await dio.post('/remove_matching',
+          data: {'send_id': send_id, 'receiver_id': receiver_id});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -575,8 +589,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/user_report', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      final response = await dio.post('/user_report',
+          data: {'send_id': send_id, 'receiver_id': receiver_id});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -584,13 +598,14 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> changeBlockStatus(String receiver_id, String send_id) async {
+  static Future<dynamic> changeBlockStatus(
+      String receiver_id, String send_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/change_block', data: {'send_id': send_id, 'receiver_id' : receiver_id});
+      final response = await dio.post('/change_block',
+          data: {'send_id': send_id, 'receiver_id': receiver_id});
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -604,8 +619,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/close_account', data: {'user_id': user_id});
+      final response =
+          await dio.post('/close_account', data: {'user_id': user_id});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -613,14 +628,15 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> changePrivate(String user_id, String index, String isVal) async {
+  static Future<dynamic> changePrivate(
+      String user_id, String index, String isVal) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
-    print(user_id+index+isVal);
+    print(user_id + index + isVal);
     try {
-       final response = await dio
-          .post('/change_private', data: {'user_id': user_id, 'index': index, 'isVal': isVal});
+      final response = await dio.post('/change_private',
+          data: {'user_id': user_id, 'index': index, 'isVal': isVal});
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -635,7 +651,7 @@ class DioClient {
     dio.options.headers['X-CSRF-TOKEN'] = token;
     print(user_id + id);
     try {
-       final response = await dio
+      final response = await dio
           .post('/change_preview', data: {'see_id': user_id, 'user_id': id});
       print(response.data);
     } on DioError catch (e) {
@@ -644,13 +660,30 @@ class DioClient {
     }
   }
 
-  static Future<dynamic> doPayment(String month, String resultDate, String user_id) async {
+  static Future<dynamic> doPayment(
+      String month, String resultDate, String user_id) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-       final response = await dio
-          .post('/do_payment', data: {'month': month, 'resultDate': resultDate, 'user_id': user_id});
+      final response = await dio.post('/do_payment',
+          data: {'month': month, 'resultDate': resultDate, 'user_id': user_id});
+      print(response.data);
+      return response.data;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
+    }
+  }
+
+  static Future<dynamic> doAppleLogin(String appleEmail) async {
+    final token = await _getToken();
+    var dio = Dio(_baseOptions);
+    dio.options.headers['X-CSRF-TOKEN'] = token;
+    print(appleEmail);
+    try {
+      final response =
+          await dio.post('/apple_login', data: {'appleEmail': appleEmail});
       print(response.data);
       return response.data;
     } on DioError catch (e) {

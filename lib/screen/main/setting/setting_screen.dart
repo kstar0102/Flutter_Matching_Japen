@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:matching_app/screen/home_screen/home_screen_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matching_app/controller/auth_controllers.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // ignore: use_key_in_widget_constructors
 class SettingScreen extends ConsumerStatefulWidget {
@@ -31,12 +32,11 @@ class _SettingScreenState extends ConsumerState<SettingScreen>
   ];
 
   Future<void> logout() async {
-   
     final controller = ref.read(AuthProvider.notifier);
     controller.doLogout();
+    await FirebaseAuth.instance.signOut();
     Navigator.pushNamed(context, "/");
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,10 @@ class _SettingScreenState extends ConsumerState<SettingScreen>
                                             onPressed: () {
                                               logout();
                                               Navigator.pushReplacement(
-                                                context, MaterialPageRoute(builder: (context) => HomeScreenView()));
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          HomeScreenView()));
                                             },
                                             child: const Text('ログアウト',
                                                 style:
