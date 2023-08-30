@@ -30,18 +30,18 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
   @override
   void initState() {
     super.initState();
-    GetData();
+    // GetData();
   }
 
-  Future<void> GetData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    user_id = prefs.getString('UserId').toString();
-    print("Hello" + user_id.toString());
-    if (user_id != "0" && user_id != "null") {
-      Timer(const Duration(microseconds: 1),
-          () => Navigator.pushNamed(context, "/profile_screen"));
-    }
-  }
+  // Future<void> GetData() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   user_id = prefs.getString('UserId').toString();
+  //   print("Hello" + user_id.toString());
+  //   if (user_id != "0" && user_id != "null") {
+  //     Timer(const Duration(microseconds: 1),
+  //         () => Navigator.pushNamed(context, "/profile_screen"));
+  //   }
+  // }
 
   Future<void> _lineLogin(BuildContext context) async {
     try {
