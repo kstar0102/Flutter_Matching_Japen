@@ -25,23 +25,22 @@ class HomeScreenView extends ConsumerStatefulWidget {
 class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
 // ignore: use_key_in_widget_constructors
 // class HomeScreenView extends StatelessWidget {
-  String user_id = "";
+  bool? user_id;
 
   @override
   void initState() {
     super.initState();
-    // GetData();
+    GetData();
   }
 
-  // Future<void> GetData() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   user_id = prefs.getString('UserId').toString();
-  //   print("Hello" + user_id.toString());
-  //   if (user_id != "0" && user_id != "null") {
-  //     Timer(const Duration(microseconds: 1),
-  //         () => Navigator.pushNamed(context, "/profile_screen"));
-  //   }
-  // }
+  Future<void> GetData() async {
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id = prefs.getBool('isLogin') ?? false;
+    if (user_id!) {
+      Timer(const Duration(microseconds: 1),
+          () => Navigator.pushNamed(context, "/profile_screen"));
+    }
+  }
 
   Future<void> _lineLogin(BuildContext context) async {
     try {
@@ -84,7 +83,7 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
             UserCredential userCredential =
                 await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
             if (userCredential.user != null) {
-              String appleID = userCredential.user!.uid;
+              String appleID = userCredential.user!.email.toString();
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.setString("appleId", appleID.toString());
               final controller = ref.read(AuthProvider.notifier);

@@ -931,6 +931,7 @@ class AppCubit extends Cubit<AppState> {
   Future<void> fetchProfileInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     UserId = await prefs.getString("UserId").toString();
+    await prefs.setBool('isLogin', true);
     print(UserId);
     isLoginPhoneNumber = await prefs.getString("VerifyPhoneNumber").toString();
     try {
