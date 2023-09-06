@@ -30,7 +30,9 @@ class LoginView extends ConsumerStatefulWidget {
 }
 
 class _LoginViewState extends ConsumerState<LoginView> {
+  final _phoneNumberController = TextEditingController();
   String phone_number = "";
+  String number = "";
   String digits = "";
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -43,6 +45,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   Future<void> verifyUserPhoneNumber () async
   {
+    // String newNumberString = phone_number.substring(1); // remove the first character
+    // String sent_number = "+81"+newNumberString.toString();
     print(phone_number);
     isShow = true;
     if(isLoading != true){
@@ -91,7 +95,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       final authResult = await auth.signInWithCredential(credential);
         // Success: User signed in with the provided SMS code
         Fluttertoast.showToast(
-          msg: "Successfully",
+          msg: "電話番号の確認が成功しました。",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -103,7 +107,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       print("Error: Invalid SMS code");
       // Error: An error occurred during verificationz
       Fluttertoast.showToast(
-        msg: "Verification failed",
+        msg: "認証確認失敗。",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -228,30 +232,56 @@ class _LoginViewState extends ConsumerState<LoginView> {
             Padding(
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                  '${phone_number}',
+                  '${number}',
                   style: TextStyle(fontSize: 17, color: PRIMARY_FONT_COLOR),
                 ))
           ],
         )):Container();
    
     Widget phone_input = otpCodeVisible == false ? 
+      // Padding(
+      //   padding: const EdgeInsets.only(left: 20, right: 20),
+      //   child: IntlPhoneField(
+      //     initialCountryCode: 'US',
+      //     onChanged: (phone) {
+      //       setState(() {
+      //         phone_number = phone.completeNumber;
+      //       });
+      //     },
+      //     decoration: InputDecoration(
+      //       filled: true,
+      //       fillColor: Colors.grey[200],
+      //       contentPadding: EdgeInsets.all(15),
+      //       border: OutlineInputBorder(
+      //         borderSide: BorderSide.none,
+      //         borderRadius: BorderRadius.circular(10),
+      //       ),
+      //     ),
+      //   ),
+      // ):
       Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: IntlPhoneField(
-          initialCountryCode: 'US',
-          onChanged: (phone) {
+        padding: EdgeInsets.only(
+            left: getDeviceWidth(context) / 47 * 3,
+            right: getDeviceWidth(context) / 47 * 3),
+        child: TextField(
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 27),
+          maxLength: 11,
+          buildCounter: null,
+          onChanged: (value) {
             setState(() {
-              phone_number = phone.completeNumber;
+              number = value;
             });
           },
           decoration: InputDecoration(
+            counterText: '',
             filled: true,
-            fillColor: Colors.grey[200],
-            contentPadding: EdgeInsets.all(15),
+            fillColor: PRIMARY_GREY,
+            contentPadding:
+                const EdgeInsets.only(top: 15, bottom: 15),
             border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(10),
-            ),
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(10)),
           ),
         ),
       ):
@@ -312,7 +342,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 Visibility(
                   visible: isLoading,
                   child: Column(children: [
-                    CircularProgressIndicator(),Text("waiting...")
+                    CircularProgressIndicator(),Text("しばらくお待ちください...")
                   ],)
                 ),
                 Visibility(
@@ -334,17 +364,20 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           child: RadiusButton(
                             id: 0,
                             color: BUTTON_MAIN,
-                            text: otpCodeVisible ?"つぎへ": "つぎへ",
+                            text: "つぎへ",
                             goNavigation: (id) {
                               if(otpCodeVisible)
                               {
                                 verifyCode();
                               }
                               else{
+                                String newNumberString = number.substring(1); // remove the first character
+                                phone_number = "+81"+newNumberString.toString();
+                                print(phone_number);
                                 verifyUserPhoneNumber();
                               }
                             },
-                            isDisabled: phone_number.length < 11 && !isLoading,
+                            isDisabled: number.length < 11,
                           ),
                         ))),
                         

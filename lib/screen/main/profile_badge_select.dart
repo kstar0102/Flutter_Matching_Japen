@@ -9,34 +9,16 @@ import 'package:matching_app/bloc/cubit.dart';
 // import 'package:flutter_redux/flutter_redux.dart';
 // ignore: use_key_in_widget_constructors
 class ProfileBadgeSelect extends StatefulWidget {
+  const ProfileBadgeSelect({super.key, required this.badges});
+
+  final List<BadgeItemObject> badges;
   @override
   // ignore: library_private_types_in_public_api
   _ProfileBadgeSelectState createState() => _ProfileBadgeSelectState();
 }
 
 class _ProfileBadgeSelectState extends State<ProfileBadgeSelect> {
-  List<BadgeObject> selectedList = [
-    BadgeObject("お相手に合わせる", true, 1),
-    BadgeObject("いつでも", true, 2),
-    BadgeObject("鉄板焼き", true, 3),
-  ];
-  List<BadgeObject> badgeList = [
-    BadgeObject("とにかく話したい", false, 1),
-    BadgeObject("メッセージ苦手", false, 1),
-    BadgeObject("電話派", false, 1),
-    BadgeObject("まずは会いたい", false, 1),
-    BadgeObject("ビデオ電話派", false, 1),
-    BadgeObject("ちょっとずつ", false, 1),
-    BadgeObject("お相手に合わせる", false, 1),
-    BadgeObject("", false, 0),
-    BadgeObject("いつでも", false, 2),
-    BadgeObject("夜会いたい", false, 2),
-    BadgeObject("時間ある時に", false, 2),
-    BadgeObject("お昼に会いたい", false, 2),
-    BadgeObject("", false, 0),
-    BadgeObject("鉄板焼き", false, 3),
-    BadgeObject("お寿司", false, 3)
-  ];
+ 
   @override
   Widget build(BuildContext context) {
     AppCubit appCubit = AppCubit.get(context);
@@ -68,53 +50,40 @@ class _ProfileBadgeSelectState extends State<ProfileBadgeSelect> {
                     ),
                   ),
                   child: 
-                 Wrap(
-                        spacing: 8,
-                        runSpacing: -8,
-                        children: selectedList.map((BadgeObject e) {
-                          String textColor = e.color == 1
-                              ? "#00CA9D"
-                              : e.color == 2
-                                  ? "#FCBC2C"
-                                  : e.color == 3
-                                      ? "#FC7C2C"
-                                      : "#20B07E";
-                          if (e.color == 0) {
-                            return Padding(
-                                padding: const EdgeInsets.only(top: 20),
-                                child: Container());
-                          }
-                          return FilterChip(
-                              label: Text(e.title,
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      color: e.isChecked
-                                          ? Colors.white
-                                          : Color(int.parse(
-                                                  textColor.substring(1, 7),
-                                                  radix: 16) +
-                                              0xFF000000))),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                                side: BorderSide(
-                                    color: Color(int.parse(
-                                            textColor.substring(1, 7),
-                                            radix: 16) +
-                                        0xFF000000),
-                                    width: 1.0),
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              backgroundColor: e.isChecked
-                                  ? Color(int.parse(textColor.substring(1, 7),
-                                          radix: 16) +
-                                      0xFF000000)
-                                  : Color(int.parse(textColor.substring(1, 7),
-                                          radix: 16) +
-                                      0x33000000),
-                              selectedColor: Color(
-                                  int.parse(textColor.substring(1, 7), radix: 16) + 0xFF000000),
-                              onSelected: (isSelected) {});
-                        }).toList())
+                  Wrap(
+                spacing: 8,
+                runSpacing: -8,
+                children: widget.badges.map((BadgeItemObject e) {
+                  String textColor = e.color;
+                  return FilterChip(
+                    label: Text(e.title,
+                        style: TextStyle(
+                            fontSize: 13,
+                            color: e.isChecked
+                                ? Colors.white
+                                : Colors.white)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      side: BorderSide(
+                          color: Color(int.parse(textColor.substring(1, 7),
+                                  radix: 16) +
+                              0xFF000000),
+                          width: 1.0),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    backgroundColor: e.isChecked
+                        ? Color(int.parse(textColor.substring(1, 7),
+                                radix: 16) +
+                            0xFF000000)
+                        : Color(int.parse(textColor.substring(1, 7),
+                                radix: 16) +
+                            0xFF000000),
+                    selectedColor: Color(
+                        int.parse(textColor.substring(1, 7), radix: 16) +
+                            0xFF000000),
+                    onSelected: (bool value) {},
+                  );
+                }).toList())
                 ),
                 Padding(
                     padding: EdgeInsets.symmetric(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/components/filter_badges.dart';
+import 'package:matching_app/screen/main/layouts/user_filter_by_address.dart';
 import 'package:matching_app/screen/main/layouts/users_bottom_modal.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/bloc/cubit.dart';
@@ -9,7 +10,9 @@ import 'package:matching_app/bloc/cubit.dart';
 class UserFilterByInfo extends StatefulWidget {
   final String info_id;
   final String live_info;
-  const UserFilterByInfo({super.key,  required this.info_id, required this.live_info, });
+  final String info_name;
+  final String name;
+  const UserFilterByInfo({super.key,  required this.info_id, required this.live_info, required this.info_name,required this.name });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -18,7 +21,7 @@ class UserFilterByInfo extends StatefulWidget {
 
 class _UserFilterByInfoState extends State<UserFilterByInfo> {
   // ignore: constant_identifier_names
-  String get liveInfo => widget.live_info;
+  String get liveInfo => widget.live_info ?? "0";
   static const double MIN_AGE = 18,
       // ignore: constant_identifier_names
       MAX_AGE = 60,
@@ -214,8 +217,30 @@ class _UserFilterByInfoState extends State<UserFilterByInfo> {
                                       style: TextStyle(
                                           color: PRIMARY_FONT_COLOR,
                                           fontSize: 14)),
+                                  GestureDetector(
+                                    onTap:() {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => UserFilterByAddress(info: widget.info_id, name: widget.name,),));
+                                        
+                                    },
+                                    child:Text("問わない",
+                                      style: TextStyle(
+                                          color: PRIMARY_FONT_COLOR,
+                                          fontSize: 14)),       
+                                  )
+                                ],
+                              )),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: vww(context, 3)),
+                              child:  Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
                                   SizedBox(
-                                    width: 150,
+                                    width: MediaQuery.of(context).size.width /1.2,
                                     child: Text(
                                       liveInfo == "[]"?"":liveInfo,
                                       style: TextStyle(
@@ -223,7 +248,7 @@ class _UserFilterByInfoState extends State<UserFilterByInfo> {
                                           color: Color.fromARGB(
                                               255, 155, 155, 155)),
                                     ),
-                                  )
+                                  ),
                                 ],
                               )),
                           const SizedBox(height: 10),
@@ -428,39 +453,40 @@ class _UserFilterByInfoState extends State<UserFilterByInfo> {
               width: 200,
               child: TextButton(
                   onPressed: () {
-                    String age_start = _age_values.start.toInt().toString();
-                    String age_end = _age_values.end.toInt().toString();
-                    String height_start= _height_values.start.toInt().toString();
-                    String height_end = _height_values.end.toInt().toString();
+                    String age_start = _age_values.start.toInt().toString()??'18';
+                    String age_end = _age_values.end.toInt().toString()??"60";
+                    String height_start= _height_values.start.toInt().toString()??"130";
+                    String height_end = _height_values.end.toInt().toString()??"210";
                     String body_value = selectedBody.toString() == []?"":selectedBody.toString();
                     String bodyNamesString = body_value;
                     bodyNamesString = bodyNamesString.substring(1, bodyNamesString.length - 1);
                     bodyNamesString = bodyNamesString.split(',').map((e) => e.trim()).join(',');
-                    String holi_value = selectedHoliday.toString() == []?"":selectedHoliday.toString();
-                    String holidayString = holi_value;
+                    String holi_value = selectedHoliday.toString() == []?"":selectedHoliday.toString()??"";
+                    String holidayString = holi_value??"";
                     holidayString = holidayString.substring(1, holidayString.length - 1);
                     holidayString = holidayString.split(',').map((e) => e.trim()).join(',');
                     String purpose_value = selectedPurpose.toString() == []?"":selectedPurpose.toString();
-                    String purposeString = purpose_value;
+                    String purposeString = purpose_value??"";
                     purposeString = purposeString.substring(1, purposeString.length - 1);
                     purposeString = purposeString.split(',').map((e) => e.trim()).join(',');
 
                     String ciga_value = selectedCigarettes.toString() == []?"":selectedCigarettes.toString();
-                    String cigaString = ciga_value;
+                    String cigaString = ciga_value??"";
                     cigaString = cigaString.substring(1, cigaString.length - 1);
                     cigaString = cigaString.split(',').map((e) => e.trim()).join(',');
                     
                     String sake_value = selectedSake.toString() == []?"":selectedSake.toString();
-                    String sakeString = sake_value;
+                    String sakeString = sake_value??"";
                     sakeString = sakeString.substring(1, sakeString.length - 1);
                     sakeString = sakeString.split(',').map((e) => e.trim()).join(',');
 
                     String live_value = liveInfo.toString() == []?"":liveInfo.toString();
-                    String liveString = live_value;
+                    String liveString = live_value??"1";
                     liveString = liveString.substring(1, liveString.length - 1);
                     liveString = liveString.split(',').map((e) => e.trim()).join(',');
 
                     String verifyCheck = _isVerifyChecked == false?"0":"1";
+                    print(age_start);
                     showModalBottomSheet(
                         isScrollControlled: true,
                         context: context,
@@ -472,7 +498,7 @@ class _UserFilterByInfoState extends State<UserFilterByInfo> {
                         builder: (context) {
                           appCubit.searchFilter(age_start,age_end,height_start,height_end,bodyNamesString.toString(),holidayString.toString(),purposeString.toString(),cigaString.toString(),sakeString.toString(), liveString.toString(), verifyCheck.toString());
                               
-                          return UsersBottomModal(sub_id: widget.info_id);
+                          return UsersBottomModal(sub_id: widget.info_id, sub_name: widget.info_name);
                         });
                   },
                   style: ButtonStyle(

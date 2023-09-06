@@ -7,18 +7,22 @@ import 'package:matching_app/bloc/cubit.dart';
 typedef OnPressed = void Function(bool state);
 
 
-class ProfileInfoBodyType extends StatelessWidget {
+class ProfileInfoBodyType extends StatefulWidget {
 	final String title, value;
 
 	final bool isShowWheel;
 	final OnPressed onPressed;
   final List<dynamic>? list;
 	const ProfileInfoBodyType(
-			{super.key,
+			{Key? key,
 			required this.title,
 			required this.value,
-			required this.isShowWheel, required this.onPressed, this.list});
+			required this.isShowWheel, required this.onPressed, this.list}): super(key: key);
+  @override
+  _ProfileInfoBodyTypeState createState() => _ProfileInfoBodyTypeState();
+}
 
+class _ProfileInfoBodyTypeState extends State<ProfileInfoBodyType> {
 	@override
 	Widget build(BuildContext context) {
     String body_info = "";
@@ -44,7 +48,7 @@ class ProfileInfoBodyType extends StatelessWidget {
 										Expanded(
 											flex: 3,
 											child: Text(
-												title,
+												widget.title,
 												style: const TextStyle(
 														fontSize: 14, color: PRIMARY_FONT_COLOR),
 											),
@@ -53,11 +57,11 @@ class ProfileInfoBodyType extends StatelessWidget {
 											flex: 2,
 											child: GestureDetector(
 													onTap: () {
-														onPressed(!isShowWheel);
+														widget.onPressed(!widget.isShowWheel);
 													},
-													child: value != ""
+													child: widget.value != ""
 															? Text(
-																	value,
+																	widget.value,
 																	style: const TextStyle(
 																			fontSize: 14,
 																			color:
@@ -72,18 +76,18 @@ class ProfileInfoBodyType extends StatelessWidget {
 										),
 									],
 								)),
-						isShowWheel == true
+						widget.isShowWheel == true
 								? Column(
                     children: [
                       SizedBox(
                         height: 150,
                         width: vww(context, 100),
                         child: WheelChooser.custom(
-                          onValueChanged: (id) { body_info = list![id].title.toString(); body_id = (list![id].id).toString();},
+                          onValueChanged: (id) { body_info = widget.list![id].title.toString(); body_id = (widget.list![id].id).toString();},
                           children: List.generate(
-                            list!.length,
+                            widget.list!.length,
                             (index) {
-                              return Text(list![index].title);
+                              return Text(widget.list![index].title);
                             },
                           ),
                         ),
@@ -92,6 +96,16 @@ class ProfileInfoBodyType extends StatelessWidget {
                       // Add your button here
                       ElevatedButton(
                         onPressed: () {
+                          setState(() {
+                            widget.onPressed(false);
+                          });
+                          if(body_info == "")
+                          {
+                            body_info = "細め";
+                          }
+                          if(body_id == ""){
+                            body_id = "1";
+                          }
                           appCubit.changeBody(body_info, body_id.toString());
                           
                         },

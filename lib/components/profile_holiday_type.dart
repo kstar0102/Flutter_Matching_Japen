@@ -7,18 +7,23 @@ import 'package:matching_app/bloc/cubit.dart';
 typedef OnPressed = void Function(bool state);
 
 
-class ProfileHolidayType extends StatelessWidget {
+class ProfileHolidayType extends StatefulWidget {
 	final String title, value;
 
 	final bool isShowWheel;
 	final OnPressed onPressed;
   final List<dynamic>? list;
 	const ProfileHolidayType(
-			{super.key,
+			{Key? key,
 			required this.title,
 			required this.value,
-			required this.isShowWheel, required this.onPressed, this.list});
+			required this.isShowWheel, required this.onPressed, this.list}) : super(key: key);
 
+  @override
+  _ProfileHolidayTypeState createState() => _ProfileHolidayTypeState();
+}
+
+class _ProfileHolidayTypeState extends State<ProfileHolidayType> {
 	@override
 	Widget build(BuildContext context) {
     String holiday_info = "";
@@ -43,7 +48,7 @@ class ProfileHolidayType extends StatelessWidget {
 										Expanded(
 											flex: 3,
 											child: Text(
-												title,
+												widget.title,
 												style: const TextStyle(
 														fontSize: 14, color: PRIMARY_FONT_COLOR),
 											),
@@ -52,11 +57,11 @@ class ProfileHolidayType extends StatelessWidget {
 											flex: 2,
 											child: GestureDetector(
 													onTap: () {
-														onPressed(!isShowWheel);
+														widget.onPressed(!widget.isShowWheel);
 													},
-													child: value != ""
+													child: widget.value != ""
 															? Text(
-																	value,
+																	widget.value,
 																	style: const TextStyle(
 																			fontSize: 14,
 																			color:
@@ -71,18 +76,18 @@ class ProfileHolidayType extends StatelessWidget {
 										),
 									],
 								)),
-						isShowWheel == true
+						widget.isShowWheel == true
 								? Column(
                     children: [
                       SizedBox(
                         height: 150,
                         width: vww(context, 100),
                         child: WheelChooser.custom(
-                          onValueChanged: (id) { holiday_info = list![id];},
+                          onValueChanged: (id) { holiday_info = widget.list![id];},
                           children: List.generate(
-                            list!.length,
+                            widget.list!.length,
                             (index) {
-                              return Text(list![index]);
+                              return Text(widget.list![index]);
                             },
                           ),
                         ),
@@ -91,6 +96,13 @@ class ProfileHolidayType extends StatelessWidget {
                       // Add your button here
                       ElevatedButton(
                         onPressed: () {
+                          setState(() {
+                            widget.onPressed(false);
+                          });
+                          if(holiday_info == "")
+                          {
+                            holiday_info = "平日";
+                          }
                           appCubit.changeHoliday(holiday_info);
                           
                         },

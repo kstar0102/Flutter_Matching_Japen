@@ -7,7 +7,7 @@ import 'package:matching_app/bloc/cubit.dart';
 typedef OnPressed = void Function(bool state);
 
 
-class ProfileInfoItem extends StatelessWidget {
+class ProfileInfoItem extends StatefulWidget {
 	final String title, value;
 
 	final bool isShowWheel;
@@ -19,6 +19,11 @@ class ProfileInfoItem extends StatelessWidget {
 			required this.value,
 			required this.isShowWheel, required this.onPressed, this.list});
 
+  @override
+  _ProfileInfoItemState createState() => _ProfileInfoItemState();
+}
+
+class _ProfileInfoItemState extends State<ProfileInfoItem> {
 	@override
 	Widget build(BuildContext context) {
     String al_info = "";
@@ -43,7 +48,7 @@ class ProfileInfoItem extends StatelessWidget {
 										Expanded(
 											flex: 3,
 											child: Text(
-												title,
+												widget.title,
 												style: const TextStyle(
 														fontSize: 14, color: PRIMARY_FONT_COLOR),
 											),
@@ -52,11 +57,11 @@ class ProfileInfoItem extends StatelessWidget {
 											flex: 2,
 											child: GestureDetector(
 													onTap: () {
-														onPressed(!isShowWheel);
+														widget.onPressed(!widget.isShowWheel);
 													},
-													child: value != ""
+													child: widget.value != ""
 															? Text(
-																	value,
+																	widget.value,
 																	style: const TextStyle(
 																			fontSize: 14,
 																			color:
@@ -70,18 +75,18 @@ class ProfileInfoItem extends StatelessWidget {
 										),
 									],
 								)),
-						isShowWheel == true
+						widget.isShowWheel == true
 								? Column(
                     children: [
                       SizedBox(
                         height: 150,
                         width: vww(context, 100),
                         child: WheelChooser.custom(
-                          onValueChanged: (id) { al_info = list![id];},
+                          onValueChanged: (id) { al_info = widget.list![id];},
                           children: List.generate(
-                            list!.length,
+                            widget.list!.length,
                             (index) {
-                              return Text(list![index]);
+                              return Text(widget.list![index]);
                             },
                           ),
                         ),
@@ -90,6 +95,13 @@ class ProfileInfoItem extends StatelessWidget {
                       // Add your button here
                       ElevatedButton(
                         onPressed: () {
+                          setState(() {
+                            widget.onPressed(false);
+                          });
+                          if(al_info == "")
+                          {
+                            al_info = "選択しない";
+                          }
                           appCubit.changeAlcohol(al_info);
                           
                         },

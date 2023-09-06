@@ -442,6 +442,7 @@ class AppCubit extends Cubit<AppState> {
       String search_sake,
       String live_place,
       String VerifyChecked) async {
+    print(s_age_start+s_age_end+s_height_start+s_height_end+s_body+s_holiday+s_purpose+s_ciga+s_sake+s_live+s_checked);
     s_age_start = search_age_start;
     s_age_end = search_age_end;
     s_height_start = search_height_start;
@@ -459,7 +460,7 @@ class AppCubit extends Cubit<AppState> {
 
   void changeTallHeight(String t_height) async {
     tall_height = t_height;
-    UserId = userId.toString();
+    UserId = UserId.toString();
     final data = await DioClient.changeHeightData(UserId, tall_height);
     emit(AppMain());
   }
@@ -478,7 +479,7 @@ class AppCubit extends Cubit<AppState> {
 
   void changePurposeInfo(String pur_info, String idx) async {
     purpose_type = pur_info;
-    UserId = userId.toString();
+    UserId = UserId.toString();
     final data = await DioClient.changePurpose(UserId, idx);
     emit(AppMain());
   }
@@ -629,12 +630,16 @@ class AppCubit extends Cubit<AppState> {
   // !--------> identity verify start
 
   Future<int> uploadIdentifyImage(String file) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    UserId = await prefs.getString("UserId").toString();
+    print(UserId);
     var request =
         http.MultipartRequest('POST', Uri.parse('${API_URL}identify_verify'));
-    request.fields['user_id'] = userId.toString();
+    request.fields['user_id'] = UserId.toString();
     request.fields['user_name'] = "";
     request.fields['nick_name'] = nickName;
     request.fields['identity_type'] = "運転免許証";
+    user.identityState = "ブロック";
     var imageFile = File(file);
     var imageStream = http.ByteStream(imageFile.openRead());
     var imageLength = await imageFile.length();
@@ -642,6 +647,7 @@ class AppCubit extends Cubit<AppState> {
     var multipartFile = http.MultipartFile('image', imageStream, imageLength,
         filename: imageFile.path);
     request.files.add(multipartFile);
+    print(nickName);
     var response = await request.send();
     if (response.statusCode == 200) {
       var responseData = await response.stream
@@ -785,7 +791,7 @@ class AppCubit extends Cubit<AppState> {
         user.introduce = jsonData['data']['introduce'] ?? "";
         user.planType = jsonData['data']['plan_type'] ?? "";
         // user.likesRate = int.parse(jsonData['data']['likes_rate'] ?? 0);
-        user.coin = double.parse(jsonData['data']['coin'] ?? 0);
+        user.coin = int.parse(jsonData['data']['coin'] ?? 0);
         user.identityState = jsonData['data']['identity_state'] ?? "";
         user.bloodType = jsonData['data']['blood_type'] ?? "";
         user.alcohol = jsonData['data']['alcohol'] ?? "";
@@ -869,7 +875,7 @@ class AppCubit extends Cubit<AppState> {
         user.introduce = jsonData['data']['introduce'] ?? "";
         user.planType = jsonData['data']['plan_type'] ?? "";
         // user.likesRate = int.parse(jsonData['data']['likes_rate'] ?? 0);
-        user.coin = double.parse(jsonData['data']['coin'] ?? 0);
+        user.coin = int.parse(jsonData['data']['coin'] ?? 0);
         user.identityState = jsonData['data']['identity_state'] ?? "";
         user.bloodType = jsonData['data']['blood_type'] ?? "";
         user.alcohol = jsonData['data']['alcohol'] ?? "";
@@ -955,7 +961,7 @@ class AppCubit extends Cubit<AppState> {
           user.introduce = jsonData['data']['introduce'] ?? "";
           user.planType = jsonData['data']['plan_type'] ?? "";
           user.likesRate = int.parse(jsonData['data']['likes_rate'] ?? 0);
-          user.coin = double.parse(jsonData['data']['coin'] ?? 0);
+          user.coin = int.parse(jsonData['data']['coin'] ?? 0);
           user.identityState = jsonData['data']['identity_state'] ?? "";
           user.bloodType = jsonData['data']['blood_type'] ?? "";
           user.alcohol = jsonData['data']['alcohol'] ?? "";
@@ -1036,7 +1042,7 @@ class AppCubit extends Cubit<AppState> {
           user.introduce = jsonData['data']['introduce'] ?? "";
           user.planType = jsonData['data']['plan_type'] ?? "";
           user.likesRate = int.parse(jsonData['data']['likes_rate'] ?? 0);
-          user.coin = double.parse(jsonData['data']['coin'] ?? 0);
+          user.coin = int.parse(jsonData['data']['coin'] ?? 0);
           user.identityState = jsonData['data']['identity_state'] ?? "";
           user.bloodType = jsonData['data']['blood_type'] ?? "";
           user.alcohol = jsonData['data']['alcohol'] ?? "";

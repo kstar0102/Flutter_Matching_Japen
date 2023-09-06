@@ -126,6 +126,11 @@ class _LikeUserProfileState extends ConsumerState<LikeUserProfile> {
     }
   }
 
+  dynamic updateLikeData() async{
+    AppCubit appCubit = AppCubit.get(context);
+    BlocProvider.of<AppCubit>(context).fetchLikeRandom();
+  }
+
   @override
   Widget build(BuildContext context) {
     AppCubit appCubit = AppCubit.get(context);
@@ -355,8 +360,7 @@ class _LikeUserProfileState extends ConsumerState<LikeUserProfile> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(
-                                            context, "/profile_screen");
+                        updateLikeData();
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(EdgeInsets.zero),

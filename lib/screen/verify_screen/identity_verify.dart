@@ -77,7 +77,7 @@ class _IdentityVerifyState extends State<IdentityVerify> {
 																	TextStyle(color: Colors.white, fontSize: vhh(context, 2))),
 													Text("本人確認が必要です",
 															style:
-																	TextStyle(color: Colors.white, fontSize: vhh(context, 4.5))),
+																	TextStyle(color: Colors.white, fontSize: vhh(context, 4.1), fontWeight: FontWeight.w700)),
 													Padding(
 														padding:
 																EdgeInsets.symmetric(vertical: vh(context, 2)),
@@ -254,7 +254,7 @@ class _IdentityVerifyState extends State<IdentityVerify> {
 																																						left:
 																																								30),
 																																				child: Text(
-																																						"写真を撮る",
+																																						"ライブラリから選択",
 																																						style:
 																																								TextStyle(fontSize: 17)))
 																																	],
@@ -294,7 +294,77 @@ class _IdentityVerifyState extends State<IdentityVerify> {
 																							)),
 																					Container(height: 20),
 																					ElevatedButton(
-																							onPressed: () {},
+																							onPressed: () {
+                                                showModalBottomSheet(
+																										context: context,
+																										builder: (context) {
+																											return SizedBox(
+																												height: 150,
+																												child: Column(
+																													mainAxisAlignment: MainAxisAlignment.spaceAround,
+																													children: [
+																														InkWell(
+																																onTap: () {
+																																	openImages(ImageSource.camera);
+																																},
+																																child: Row(
+																																	children: [
+																																		SizedBox(
+																																				width: vw(
+																																						context,
+																																						3),
+																																				height:
+																																						10),
+																																		const Image(
+																																			image: AssetImage(
+																																					"assets/images/identity/photo-camera-svgrepo-com.png"),
+																																			height:
+																																					30,
+																																		),
+																																		const Padding(
+																																				padding: EdgeInsets.only(
+																																						left:
+																																								30),
+																																				child: Text(
+																																						"写真を撮る",
+																																						style:
+																																								TextStyle(fontSize: 17)))
+																																	],
+																																)),
+																														InkWell(
+																																onTap: () {
+																																	openImages(ImageSource.gallery);
+																																},
+																																child: Row(
+																																	children: [
+																																		SizedBox(
+																																				width: vw(
+																																						context,
+																																						3),
+																																				height:
+																																						10),
+																																		const Image(
+																																			image: AssetImage(
+																																					"assets/images/identity/imagesmajor-svgrepo-com.png"),
+																																			height:
+																																					30,
+																																		),
+																																		const Padding(
+																																				padding: EdgeInsets.only(
+																																						left:
+																																								30),
+																																				child: Text(
+																																						"ライブラリから選択",
+																																						style:
+																																								TextStyle(fontSize: 17)))
+																																	],
+																																)),
+																														const SizedBox(height: 1)
+																													],
+																												),
+																											);
+																										});
+                                              },
 																							style: ElevatedButton.styleFrom(
 																									backgroundColor: BUTTON_MAIN,
 																									shape: RoundedRectangleBorder(
@@ -337,7 +407,9 @@ class _IdentityVerifyState extends State<IdentityVerify> {
 										child: SizedBox(
 												width: MediaQuery.of(context).size.width,
 												child: InkWell(
-														onTap: () {},
+														onTap: () {
+                              Navigator.pushNamed(context, "/profile_screen");
+                            },
 														child: Padding(
 																padding: EdgeInsets.only(
 																		top: vh(context, 2),

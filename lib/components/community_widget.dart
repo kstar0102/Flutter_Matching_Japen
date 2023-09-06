@@ -15,24 +15,37 @@ class CommunityWidget extends StatelessWidget {
       children: [
         Stack(
           children: [
-            Image.network(image,
-                loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
+            SizedBox(
+              width: MediaQuery.of(context).size.width /1.8,
+              height: MediaQuery.of(context).size.height / 11.2,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10), // Replace 10 with your desired radius value
+                child: Image.network(
+                  image,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Text('Error loading image');
+                  },
+                  fit: BoxFit.cover, // Resize the image to fit the specified dimensions
                 ),
-              );
-            }, errorBuilder: (context, error, stackTrace) {
-              return Text('Error loading image');
-            }),
+              ),
+            ),
             isChecked == true
-                ? const Image(
-                    image: AssetImage("assets/images/community/selected.png"))
-                : Container(),
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10), // Replace 10 with your desired radius value
+                    child: Image.asset("assets/images/community/selected.png"),
+                  
+                ):Container(),
           ],
         ),
         Center(

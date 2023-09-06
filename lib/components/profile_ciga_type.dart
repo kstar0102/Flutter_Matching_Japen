@@ -7,18 +7,23 @@ import 'package:matching_app/bloc/cubit.dart';
 typedef OnPressed = void Function(bool state);
 
 
-class ProfileCigaType extends StatelessWidget {
+class ProfileCigaType extends StatefulWidget {
 	final String title, value;
 
 	final bool isShowWheel;
 	final OnPressed onPressed;
   final List<dynamic>? list;
 	const ProfileCigaType(
-			{super.key,
+			{Key? key,
 			required this.title,
 			required this.value,
-			required this.isShowWheel, required this.onPressed, this.list});
+			required this.isShowWheel, required this.onPressed, this.list}): super(key: key);
 
+  @override
+  _ProfileCigaTypeState createState() => _ProfileCigaTypeState();
+}
+
+class _ProfileCigaTypeState extends State<ProfileCigaType> {
 	@override
 	Widget build(BuildContext context) {
     String ciga = "";
@@ -43,7 +48,7 @@ class ProfileCigaType extends StatelessWidget {
 										Expanded(
 											flex: 3,
 											child: Text(
-												title,
+												widget.title,
 												style: const TextStyle(
 														fontSize: 14, color: PRIMARY_FONT_COLOR),
 											),
@@ -52,11 +57,11 @@ class ProfileCigaType extends StatelessWidget {
 											flex: 2,
 											child: GestureDetector(
 													onTap: () {
-														onPressed(!isShowWheel);
+														widget.onPressed(!widget.isShowWheel);
 													},
-													child: value != ""
+													child: widget.value != ""
 															? Text(
-																	value,
+																	widget.value,
 																	style: const TextStyle(
 																			fontSize: 14,
 																			color:
@@ -71,18 +76,18 @@ class ProfileCigaType extends StatelessWidget {
 										),
 									],
 								)),
-						isShowWheel == true
+						widget.isShowWheel == true
 								? Column(
                     children: [
                       SizedBox(
                         height: 150,
                         width: vww(context, 100),
                         child: WheelChooser.custom(
-                          onValueChanged: (id) { ciga = list![id];},
+                          onValueChanged: (id) { ciga = widget.list![id];},
                           children: List.generate(
-                            list!.length,
+                            widget.list!.length,
                             (index) {
-                              return Text(list![index]);
+                              return Text(widget.list![index]);
                             },
                           ),
                         ),
@@ -91,6 +96,13 @@ class ProfileCigaType extends StatelessWidget {
                       // Add your button here
                       ElevatedButton(
                         onPressed: () {
+                          setState(() {
+                            widget.onPressed(false);
+                          });
+                           if(ciga == "")
+                          {
+                            ciga = "選択しない";
+                          }
                           appCubit.changeCiga(ciga);
                           
                         },

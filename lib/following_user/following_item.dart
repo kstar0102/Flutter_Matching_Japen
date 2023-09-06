@@ -26,6 +26,7 @@ class FollowingItem {
     required this.private_matching,
     required this.matching_check,
     required this.pay_user,
+    required this.address,
   });
 
   final String user_id;
@@ -47,6 +48,7 @@ class FollowingItem {
   final String private_matching;
   final String matching_check;
   final String pay_user;
+  final String address;
   factory FollowingItem.fromMap(Map<String, dynamic> data) {
     FollowingItem._incrementCount();
     return FollowingItem(
@@ -68,6 +70,7 @@ class FollowingItem {
       private_matching: data['private_matching'].toString(),
       matching_check: data['matching_check'].toString(),
       pay_user: data['pay_user'].toString(),
+      address: data['address'].toString(),
     );
   }
   static int _dataCount = 0;
@@ -81,7 +84,7 @@ class FollowingItem {
   }
   @override
   String toString() => 'PeopleItem(user_id: $user_id, user_nickname: $user_nickname, '
-      'photo1: $photo1, badge_name: $badge_name, age: $age, residence: $residence, identity_state: $identity_state, badge_color: $badge_color, height: $height, body_name: $body_name, holiday: $holiday, use_purpose: $use_purpose, cigarette: $cigarette, alcohol: $alcohol, private_age: $private_age, private_matching: $private_matching, matching_check: $matching_check, pay_user: $pay_user)';
+      'photo1: $photo1, badge_name: $badge_name, age: $age, residence: $residence, identity_state: $identity_state, badge_color: $badge_color, height: $height, body_name: $body_name, holiday: $holiday, use_purpose: $use_purpose, cigarette: $cigarette, alcohol: $alcohol, private_age: $private_age, private_matching: $private_matching, matching_check: $matching_check, pay_user: $pay_user, address: $address)';
 }
 
 typedef FollowingItemList = List<FollowingItem>;

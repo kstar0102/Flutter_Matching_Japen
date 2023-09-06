@@ -161,6 +161,7 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                Platform.isIOS?
                 Padding(
                     padding:
                         const EdgeInsets.only(bottom: 15, left: 30, right: 30),
@@ -170,15 +171,7 @@ class _HomeScreenViewState extends ConsumerState<HomeScreenView> {
                         goNavigation: goNavigation,
                         id: 0,
                         isDisabled: false)
-                    // child: SignInWithAppleButton(
-                    //   style: SignInWithAppleButtonStyle.black,
-                    //   iconAlignment: IconAlignment.center,
-                    //   onPressed: () {
-                    //     context
-                    //         .read<AuthenticationProvider>()
-                    //         .signInWithApple();
-                    //   },
-                    ),
+                    ): Container(),
                 Padding(
                   padding:
                       const EdgeInsets.only(bottom: 15, left: 30, right: 30),

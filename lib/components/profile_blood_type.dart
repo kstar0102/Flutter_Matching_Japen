@@ -7,18 +7,22 @@ import 'package:matching_app/bloc/cubit.dart';
 typedef OnPressed = void Function(bool state);
 
 
-class profileBloodType extends StatelessWidget {
+class profileBloodType extends StatefulWidget {
 	final String title, value;
 
 	final bool isShowWheel;
 	final OnPressed onPressed;
   final List<dynamic>? list;
 	const profileBloodType(
-			{super.key,
+			{Key? key,
 			required this.title,
 			required this.value,
-			required this.isShowWheel, required this.onPressed, this.list});
+			required this.isShowWheel, required this.onPressed, this.list}): super(key: key);
+  @override
+  _profileBloodTypeState createState() => _profileBloodTypeState();
+}
 
+class _profileBloodTypeState extends State<profileBloodType> {
 	@override
 	Widget build(BuildContext context) {
     String blood_info = "";
@@ -43,7 +47,7 @@ class profileBloodType extends StatelessWidget {
 										Expanded(
 											flex: 3,
 											child: Text(
-												title,
+												widget.title,
 												style: const TextStyle(
 														fontSize: 14, color: PRIMARY_FONT_COLOR),
 											),
@@ -52,11 +56,11 @@ class profileBloodType extends StatelessWidget {
 											flex: 2,
 											child: GestureDetector(
 													onTap: () {
-														onPressed(!isShowWheel);
+														widget.onPressed(!widget.isShowWheel);
 													},
-													child: value != ""
+													child: widget.value != ""
 															? Text(
-																	value,
+																	widget.value,
 																	style: const TextStyle(
 																			fontSize: 14,
 																			color:
@@ -71,18 +75,18 @@ class profileBloodType extends StatelessWidget {
 										),
 									],
 								)),
-						isShowWheel == true
+						widget.isShowWheel == true
 								? Column(
                     children: [
                       SizedBox(
                         height: 150,
                         width: vww(context, 100),
                         child: WheelChooser.custom(
-                          onValueChanged: (id) { blood_info = list![id];},
+                          onValueChanged: (id) { blood_info = widget.list![id];},
                           children: List.generate(
-                            list!.length,
+                            widget.list!.length,
                             (index) {
-                              return Text(list![index]);
+                              return Text(widget.list![index]);
                             },
                           ),
                         ),
@@ -91,6 +95,12 @@ class profileBloodType extends StatelessWidget {
                       // Add your button here
                       ElevatedButton(
                         onPressed: () {
+                          setState(() {
+                            widget.onPressed(false);
+                          });
+                          if(blood_info == "") {
+                            blood_info = "A型";
+                          }
                           appCubit.changeBlood(blood_info);
                           
                         },

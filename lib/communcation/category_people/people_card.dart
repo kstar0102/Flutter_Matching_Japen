@@ -40,10 +40,10 @@ class PeopleCard extends ConsumerStatefulWidget {
 class _PeopleCardState extends ConsumerState<PeopleCard> {
   PeopleItem? boardInfo;
   String? avatar;
-   BoardDetailItem? myAncestorWidget;
+  BoardDetailItem? myAncestorWidget;
   void initState() {
-     boardInfo = widget.info;
-     avatar = boardInfo!.photo1;
+    boardInfo = widget.info;
+    avatar = boardInfo!.photo1;
   }  
 
   @override
@@ -69,7 +69,8 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
     List<String> badgeArray = boardInfo.badge_color.split(",");
     List<BadgeItemObject> badgeList = [];
     AppCubit appCubit = AppCubit.get(context);
-    print("asdasdasd"+boardInfo.matching_check);
+
+
     for (var i = 0; i < numberArray.length; i++) {
       badgeList.add(BadgeItemObject(i, numberArray[i], false, badgeArray[i]));
     }
@@ -119,6 +120,17 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
                                   "http://greeme.net/uploads/" + avatar,
                                   width: 165,
                                   height: 165,
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress.expectedTotalBytes != null
+                                            ? loadingProgress.cumulativeBytesLoaded /
+                                                loadingProgress.expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    );
+                                  }
                                 ),
                                 Container(
                                   width: 165,
@@ -131,10 +143,32 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
                             "http://greeme.net/uploads/" + avatar,
                             width: 165,
                             height: 165,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              }
                           ):Image.network(
                             "http://greeme.net/uploads/" + avatar,
                             width: 165,
                             height: 165,
+                            loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            }
                           ),
                         ),
                       ),
@@ -160,7 +194,19 @@ class _PeopleCardState extends ConsumerState<PeopleCard> {
                               ),
                             ),
                           boardInfo.identity_state == "1"?
-                          Image.network("http://greeme.net/uploads/status/on.png", width: 15, height: 15,):
+                          Image.network("http://greeme.net/uploads/status/on.png", width: 15, height: 15,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            }
+                          ):
                           Container()
                         ],)
                       ),

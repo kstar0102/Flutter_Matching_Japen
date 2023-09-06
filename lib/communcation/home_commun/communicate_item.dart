@@ -14,7 +14,8 @@ class CommunicateItem {
     required this.sub_category_id,
     required this.community_name,
     required this.community_photo,
-    required this.community_count
+    required this.community_count,
+    required this.entry_community
   });
 
   final String category_id;
@@ -24,6 +25,7 @@ class CommunicateItem {
   final String community_name;
   final String community_photo;
   final String community_count;
+  final String entry_community;
 
   factory CommunicateItem.fromMap(Map<String, dynamic> data) {
     return CommunicateItem(
@@ -33,14 +35,15 @@ class CommunicateItem {
       sub_category_id: data['sub_category_id'].toString(),
       community_name: data['community_name'].toString(),
       community_photo: data['community_photo'].toString(),
-      community_count: data['community_count'].toString()
+      community_count: data['community_count'].toString(),
+      entry_community: data['entry_community'].toString()
     );
   }
 
   @override
   String toString() => 'CommunicateItem(category_id: $category_id, category_name: $category_name, '
       'category_image: $category_image, sub_category_id: $sub_category_id, community_name: $community_name,'
-      'community_photo: $community_photo, community_count: $community_count)';
+      'community_photo: $community_photo, community_count: $community_count, entry_community: $entry_community)';
 }
 
 typedef CommunicateItemList = List<CommunicateItem>;

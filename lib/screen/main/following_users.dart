@@ -48,6 +48,7 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
 
     final state = ref.watch(followingProvider);
     final follows = state.value;
+    AppCubit appCubit = AppCubit.get(context);
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -175,7 +176,7 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
                                       padding: EdgeInsets.only(left: 8),
                                       child: Icon(
                                         Icons.remove_red_eye,
-                                        color: isViewShowFive ? Color.fromARGB(255, 193, 192, 201) : Color.fromARGB(255, 0, 202, 157),
+                                        color: isViewShowFive ?  Color.fromARGB(255, 0, 202, 157): Color.fromARGB(255, 193, 192, 201),
                                       ),
                                     ),
                                     Padding(
@@ -205,84 +206,227 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
                                     runSpacing: 10,
                                     children: <Widget>[
                                       for (var i = 0; i < follows.length; i++)
-                                        if (viewShow == '5' || i < 5)
-                                          if (i < 4) // Display data from the database up to the 4th position
-                                            FollowingCard(
-                                              info: follows[i],
-                                              onPressed: () {},
-                                            )
-                                          else if (i == 4 || viewShow != '5')
-                                            Wrap(
-                                            children: [
-                                              SizedBox(
-                                                height: 190,
-                                                child: Image.asset(
-                                                  "assets/images/users/paid_plan_users.png",
-                                                  fit: BoxFit.fitWidth,
-                                                ),
-                                              ),
-                                              SizedBox(width: 10,),
+                                        if (isViewShowFive && follows[i].address == appCubit.user.residenceId.toString()) ...[
+                                          if(appCubit.user.pay_user != "1")
+                                            if (i < 4) // Display data from the database up to the 4th position
                                               FollowingCard(
                                                 info: follows[i],
                                                 onPressed: () {},
-                                              ),
-                                            ],
-                                          )
-                                          else if (i == 14 || viewShow != '5')
-                                            Wrap(
-                                            children: [
-                                              SizedBox(
-                                                height: 190,
-                                                child: Image.asset(
-                                                  "assets/images/users/unpaid_plan_users.png",
-                                                  fit: BoxFit.fitWidth,
+                                              )
+                                            else if (i == 4 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/paid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          )
-                                          else if (i == 19 || viewShow != '5')
-                                            Wrap(
-                                            children: [
-                                              SizedBox(
-                                                height: 190,
-                                                child: Image.asset(
-                                                  "assets/images/users/paid_plan_users.png",
-                                                  fit: BoxFit.fitWidth,
+                                                SizedBox(width: 10,),
+                                                FollowingCard(
+                                                  info: follows[i],
+                                                  onPressed: () {},
                                                 ),
-                                              ),
-                                              SizedBox(width: 10,),
+                                              ],
+                                            )
+                                            else if (i == 14 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/unpaid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                            else if (i == 19 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/paid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10,),
+                                                FollowingCard(
+                                                  info: follows[i],
+                                                  onPressed: () {},
+                                                ),
+                                              ],
+                                            )
+                                            else if (i == 29 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/unpaid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                            else if (i == 36 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/paid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10,),
+                                              ],
+                                            )
+                                            else if ((i - 1) % 18 == 0 )
+                                              Wrap(
+                                                children: [
+                                                  FollowingCard(
+                                                    info: follows[i],
+                                                    onPressed: () {},
+                                                  ),
+                                                ],
+                                              )
+                                            else if ((i - 1) % 29 == 0 )
+                                              Wrap(
+                                                children: [
+                                                  FollowingCard(
+                                                    info: follows[i],
+                                                    onPressed: () {},
+                                                  ),
+                                                ],
+                                              )
+                                            else // Display data from the database after the picture position
+                                              Wrap(
+                                                children: [
+                                                  FollowingCard(
+                                                    info: follows[i],
+                                                    onPressed: () {},
+                                                  ),
+                                                ],
+                                              )
+                                          else
+                                            Wrap(
+                                              children: [
+                                                FollowingCard(
+                                                  info: follows[i],
+                                                  onPressed: () {},
+                                                ),
+                                              ],
+                                            )
+                                        ]
+                                        else if(!isViewShowFive)
+                                          if(appCubit.user.pay_user != "1")
+                                            if (i < 4) // Display data from the database up to the 4th position
                                               FollowingCard(
                                                 info: follows[i],
                                                 onPressed: () {},
-                                              ),
-                                            ],
-                                          )
-                                          else if (i == 29 || viewShow != '5')
-                                            Wrap(
-                                            children: [
-                                              SizedBox(
-                                                height: 190,
-                                                child: Image.asset(
-                                                  "assets/images/users/unpaid_plan_users.png",
-                                                  fit: BoxFit.fitWidth,
+                                              )
+                                            else if (i == 4 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/paid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          )
-                                          else if (i == 36 || viewShow != '5')
-                                            Wrap(
-                                            children: [
-                                              SizedBox(
-                                                height: 190,
-                                                child: Image.asset(
-                                                  "assets/images/users/paid_plan_users.png",
-                                                  fit: BoxFit.fitWidth,
+                                                SizedBox(width: 10,),
+                                                FollowingCard(
+                                                  info: follows[i],
+                                                  onPressed: () {},
                                                 ),
-                                              ),
-                                              SizedBox(width: 10,),
-                                            ],
-                                          )
-                                          else if ((i - 1) % 18 == 0 || viewShow != '5')
+                                              ],
+                                            )
+                                            else if (i == 14 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/unpaid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                            else if (i == 19 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/paid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10,),
+                                                FollowingCard(
+                                                  info: follows[i],
+                                                  onPressed: () {},
+                                                ),
+                                              ],
+                                            )
+                                            else if (i == 29 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/unpaid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                            else if (i == 36 )
+                                              Wrap(
+                                              children: [
+                                                SizedBox(
+                                                  height: 190,
+                                                  child: Image.asset(
+                                                    "assets/images/users/paid_plan_users.png",
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10,),
+                                              ],
+                                            )
+                                            else if ((i - 1) % 18 == 0 )
+                                              Wrap(
+                                                children: [
+                                                  FollowingCard(
+                                                    info: follows[i],
+                                                    onPressed: () {},
+                                                  ),
+                                                ],
+                                              )
+                                            else if ((i - 1) % 29 == 0 )
+                                              Wrap(
+                                                children: [
+                                                  FollowingCard(
+                                                    info: follows[i],
+                                                    onPressed: () {},
+                                                  ),
+                                                ],
+                                              )
+                                            else // Display data from the database after the picture position
+                                              Wrap(
+                                                children: [
+                                                  FollowingCard(
+                                                    info: follows[i],
+                                                    onPressed: () {},
+                                                  ),
+                                                ],
+                                              )
+                                          else
                                             Wrap(
                                               children: [
                                                 FollowingCard(
@@ -291,28 +435,11 @@ class _FollowingUserState extends ConsumerState<FollowingUser> {
                                                 ),
                                               ],
                                             )
-                                          else if ((i - 1) % 29 == 0 || viewShow != '5')
-                                            Wrap(
-                                              children: [
-                                                FollowingCard(
-                                                  info: follows[i],
-                                                  onPressed: () {},
-                                                ),
-                                              ],
-                                            )
-                                          else // Display data from the database after the picture position
-                                             Wrap(
-                                              children: [
-                                                FollowingCard(
-                                                  info: follows[i],
-                                                  onPressed: () {},
-                                                ),
-                                              ],
-                                            )
+                                    
                                     ],
                                   ),
                                 )
-                              : Text("No data"),
+                              : Center(child: Text("No data")),
                           ),
                         ),
                       const SizedBox(

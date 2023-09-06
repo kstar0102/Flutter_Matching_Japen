@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/communcation/category_people/people_item.dart';
 import 'package:matching_app/main.dart';
@@ -59,117 +60,137 @@ class _UserInfoItemsState extends State<UserInfoItems> {
     for (var i = 0; i < numberArray.length; i++) {
       badgeList.add(BadgeItemObject(i, numberArray[i], false, badgeArray[i]));
     }
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: (){
-            Navigator.push(
-              context, 
-              MaterialPageRoute(
-                builder: (context) => MatchingScreen(
-                  receiverUserPhone: boardInfo.phone_number,
-                  receiverUserToken: boardInfo.phone_token,
-                  receiverUserId: boardInfo.user_id,
-                  receiverUserAvatar: boardInfo.photo1,
-                  receiverUserName: boardInfo.user_nickname,
-                  receiverUserBadgeName: boardInfo.badge_name,
-                  receiverUserBadgeColor: boardInfo.badge_color,
-                  senderUserId: appCubit.user.phone_token,
-                  tab_val: "0",
-              ),
-            ));
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.network(
-              "http://greeme.net/uploads/" + avatar,
-              width: 165,
-              height: 165,
-            ),
-          ),
-        ),
-        boardInfo.age != ""
-        ? Padding(
-          padding: const EdgeInsets.only(
-                        left: 1, right: 1,),
-          child: Wrap(
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 7, top: 5, right: 10, bottom: 5),
-                    child: Text(
-                      "${boardInfo.age} 歳",
-                      style:
-                        TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: PRIMARY_FONT_COLOR),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 5, top: 5, right: 1, bottom: 5),
-                    child: Text(
-                      boardInfo.user_nickname,
-                      style: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.bold, color: PRIMARY_FONT_COLOR),
-                      textAlign: TextAlign.start,
-                    )),
-                boardInfo.identity_state == "1" ? 
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 5, top: 5, right: 5, bottom: 5),
-                      child: Image(
-                        image: AssetImage("assets/images/status/on.png"),
-                        width: 15) ) : Padding(padding: EdgeInsets.only(
-                        left: 1, top: 5, right: 5, bottom: 5),),
-                isNew == true
-                    ?
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 1, top: 5, right: 1, bottom: 5),
-                      child: Container(
-                        width: 30,
-                        padding: EdgeInsets.symmetric(vertical: 3),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: const Color.fromARGB(255, 255, 157, 0)),
-                        child: const Text("New", style: TextStyle(fontSize: 8, color: Colors.white), textAlign: TextAlign.center,),
-                      )
-                    )
-                    : Padding(padding: EdgeInsets.only(
-                        left: 1, top: 5, right: 10, bottom: 5),),
-              ],
-            ),
-        )
-        : Container(),
-        SizedBox(height: 1,),
-          SizedBox(
-            width: 150, // Set the width statically
-            child: IntrinsicWidth(
-              child: Wrap(
-                spacing: 2,
-                runSpacing: 2,
-                direction: Axis.horizontal, // Set the wrapDirection to horizontal
-                children: badgeList.map((BadgeItemObject e) {
-                  String textColor = e.color;
-                  String textName = e.title;
-                  return Container(
-                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(width: 1, color: Color(int.parse(textColor.replaceAll('#', '0xFF'))),),
-                      color: Color(int.parse(textColor.replaceAll('#', '0xFF'))).withOpacity(0.2)
-                    ),
-                    child: Text(
-                      "${textName}",
-                      style: TextStyle(fontSize: 12, color: Color(int.parse(textColor.replaceAll('#', '0xFF')))),
-                      textAlign: TextAlign.center,
+    String name = boardInfo.user_nickname;
+    if (name.length > 7) {
+      name = name.substring(0, 5) + "...";
+    }
+    else{
+      name = name;
+    }
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => MatchingScreen(
+                    receiverUserPhone: boardInfo.phone_number,
+                    receiverUserToken: boardInfo.phone_token,
+                    receiverUserId: boardInfo.user_id,
+                    receiverUserAvatar: boardInfo.photo1,
+                    receiverUserName: boardInfo.user_nickname,
+                    receiverUserBadgeName: boardInfo.badge_name,
+                    receiverUserBadgeColor: boardInfo.badge_color,
+                    senderUserId: appCubit.user.phone_token,
+                    tab_val: "0",
+                ),
+              ));
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                "http://greeme.net/uploads/" + avatar,
+                width: 165,
+                height: 165,
+                loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
                     ),
                   );
-                }).toList(),
+                }
               ),
             ),
+          ),
+          boardInfo.age != ""
+          ? Padding(
+            padding: const EdgeInsets.only(
+                          left: 1, right: 1,),
+            child: Wrap(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(
+                          left: 7, top: 5, right: 5, bottom: 5),
+                      child: Text(
+                        "${boardInfo.age} 歳",
+                        style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: PRIMARY_FONT_COLOR),
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          left: 2, top: 7, right: 1, bottom: 5),
+                      child: Text(
+                        name,
+                        style: const TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.bold, color: PRIMARY_FONT_COLOR),
+                        textAlign: TextAlign.start,
+                      )),
+                  boardInfo.identity_state == "1" ? 
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 5, top: 7, right: 5, bottom: 5),
+                        child: Image(
+                          image: AssetImage("assets/images/status/on.png"),
+                          width: 15) ) : Padding(padding: EdgeInsets.only(
+                          left: 1, top: 5, right: 5, bottom: 5),),
+                  isNew == true
+                      ?
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 1, top: 7, right: 1, bottom: 5),
+                        child: Container(
+                          width: 30,
+                          padding: EdgeInsets.symmetric(vertical: 3),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: const Color.fromARGB(255, 255, 157, 0)),
+                          child: const Text("New", style: TextStyle(fontSize: 8, color: Colors.white), textAlign: TextAlign.center,),
+                        )
+                      )
+                      : Padding(padding: EdgeInsets.only(
+                          left: 1, top: 5, right: 10, bottom: 5),),
+                ],
+              ),
           )
-      ],
-    );
+          : Container(),
+          SizedBox(height: 1,),
+            SizedBox(
+              width: 150, // Set the width statically
+              child: IntrinsicWidth(
+                child: Wrap(
+                  spacing: 4,
+                  runSpacing: 2,
+                  direction: Axis.horizontal, // Set the wrapDirection to horizontal
+                  children: badgeList.map((BadgeItemObject e) {
+                    String textColor = e.color;
+                    String textName = e.title;
+                    return Container(
+                      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(width: 1, color: Color(int.parse(textColor.replaceAll('#', '0xFF'))),),
+                        color: Color(int.parse(textColor.replaceAll('#', '0xFF'))).withOpacity(0.2)
+                      ),
+                      child: Text(
+                        "${textName}",
+                        style: TextStyle(fontSize: 12, color: Color(int.parse(textColor.replaceAll('#', '0xFF')))),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            )
+        ],
+      );
+    });
   }
 }

@@ -9,6 +9,7 @@ import 'package:matching_app/screen/main/layouts/bottom_nav_bar.dart';
 import 'package:matching_app/screen/main/layouts/date_select_widget.dart';
 import 'package:matching_app/screen/main/pay_screen.dart';
 import 'package:matching_app/screen/main/profile_screen.dart';
+import 'package:matching_app/screen/verify_screen/image_submit.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/controller/board_controller.dart';
 import 'package:matching_app/controller/board_repository.dart';
@@ -112,7 +113,7 @@ class _BoardFunctionState extends ConsumerState<BoardFunction> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => IdentityVerify()),
+                      MaterialPageRoute(builder: (context) => ImageSubmit()),
                     );
                   },
                   child: const Text('本人確認する'),

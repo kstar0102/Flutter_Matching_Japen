@@ -7,18 +7,22 @@ import 'package:matching_app/bloc/cubit.dart';
 typedef OnPressed = void Function(bool state);
 
 
-class ProfileInfoProposeType extends StatelessWidget {
+class ProfileInfoProposeType extends StatefulWidget {
 	final String title, value;
 
 	final bool isShowWheel;
 	final OnPressed onPressed;
   final List<dynamic>? list;
 	const ProfileInfoProposeType(
-			{super.key,
+			{Key? key,
 			required this.title,
 			required this.value,
-			required this.isShowWheel, required this.onPressed, this.list});
+			required this.isShowWheel, required this.onPressed, this.list}): super(key: key);
+  @override
+  _ProfileInfoProposeTypeState createState() => _ProfileInfoProposeTypeState();
+}
 
+class _ProfileInfoProposeTypeState extends State<ProfileInfoProposeType> {
 	@override
 	Widget build(BuildContext context) {
     String purpose_id = "";
@@ -44,7 +48,7 @@ class ProfileInfoProposeType extends StatelessWidget {
 										Expanded(
 											flex: 3,
 											child: Text(
-												title,
+												widget.title,
 												style: const TextStyle(
 														fontSize: 14, color: PRIMARY_FONT_COLOR),
 											),
@@ -53,11 +57,11 @@ class ProfileInfoProposeType extends StatelessWidget {
 											flex: 2,
 											child: GestureDetector(
 													onTap: () {
-														onPressed(!isShowWheel);
+														widget.onPressed(!widget.isShowWheel);
 													},
-													child: value != ""
+													child: widget.value != ""
 															? Text(
-																	value,
+																	widget.value,
 																	style: const TextStyle(
 																			fontSize: 14,
 																			color:
@@ -72,18 +76,18 @@ class ProfileInfoProposeType extends StatelessWidget {
 										),
 									],
 								)),
-						isShowWheel == true
+						widget.isShowWheel == true
 								? Column(
                     children: [
                       SizedBox(
                         height: 150,
                         width: vww(context, 100),
                         child: WheelChooser.custom(
-                          onValueChanged: (id) { purpose_info = list![id].title.toString(); purpose_id = (list![id].id).toString();},
+                          onValueChanged: (id) { purpose_info = widget.list![id].title.toString(); purpose_id = (widget.list![id].id).toString();},
                           children: List.generate(
-                            list!.length,
+                            widget.list!.length,
                             (index) {
-                              return Text(list![index].title);
+                              return Text(widget.list![index].title);
                             },
                           ),
                         ),
@@ -92,6 +96,16 @@ class ProfileInfoProposeType extends StatelessWidget {
                       // Add your button here
                       ElevatedButton(
                         onPressed: () {
+                           setState(() {
+                              widget.onPressed(false);
+                            });
+                            if(purpose_info == "")
+                            {
+                              purpose_info = "真剣";
+                            }
+                            if(purpose_id == ""){
+                              purpose_id = "1";
+                            }
                           appCubit.changePurposeInfo(purpose_info, purpose_id.toString());
                           
                         },

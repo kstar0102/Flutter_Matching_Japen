@@ -68,6 +68,17 @@ class _BoardMessageModalState extends ConsumerState<BoardMessageModal> {
                                     "http://greeme.net/uploads/" + avatar,
                                     width: 165,
                                     height: 165,
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded /
+                                                  loadingProgress.expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    }
                                   ),
                                   Container(
                                     width: 165,
@@ -80,10 +91,32 @@ class _BoardMessageModalState extends ConsumerState<BoardMessageModal> {
                               "http://greeme.net/uploads/" + avatar,
                               width: 165,
                               height: 165,
+                              loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              }
                             ):Image.network(
                               "http://greeme.net/uploads/" + avatar,
                               width: 165,
                               height: 165,
+                              loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              }
                             )
                           ),
                         ),

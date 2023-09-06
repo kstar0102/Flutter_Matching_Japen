@@ -7,17 +7,21 @@ import 'package:matching_app/bloc/cubit.dart';
 typedef OnPressed = void Function(bool state);
 
 
-class ProfileInfoTall extends StatelessWidget {
+class ProfileInfoTall extends StatefulWidget {
 	final String title, value;
 
 	final bool isShowWheel;
 	final OnPressed onPressed;
   final List<dynamic>? list;
 	const ProfileInfoTall(
-			{super.key,
+			{Key? key,
 			required this.title,
 			required this.value,
-			required this.isShowWheel, required this.onPressed, this.list});
+			required this.isShowWheel, required this.onPressed, this.list}): super(key: key);
+  @override
+  _ProfileInfoTallState createState() => _ProfileInfoTallState();
+}
+class _ProfileInfoTallState extends State<ProfileInfoTall> {
 
 	@override
 	Widget build(BuildContext context) {
@@ -43,7 +47,7 @@ class ProfileInfoTall extends StatelessWidget {
 										Expanded(
 											flex: 3,
 											child: Text(
-												title,
+												widget.title,
 												style: const TextStyle(
 														fontSize: 14, color: PRIMARY_FONT_COLOR),
 											),
@@ -52,11 +56,11 @@ class ProfileInfoTall extends StatelessWidget {
 											flex: 2,
 											child: GestureDetector(
 													onTap: () {
-														onPressed(!isShowWheel);
+														widget.onPressed(!widget.isShowWheel);
 													},
-													child: value != ""
+													child: widget.value != ""
 															? Text(
-																	value+" cm",
+																	widget.value+" cm",
 																	style: const TextStyle(
 																			fontSize: 14,
 																			color:
@@ -70,7 +74,7 @@ class ProfileInfoTall extends StatelessWidget {
 										),
 									],
 								)),
-						isShowWheel == true
+						widget.isShowWheel == true
 								? Column(
                     children: [
                       SizedBox(
@@ -90,7 +94,13 @@ class ProfileInfoTall extends StatelessWidget {
                       // Add your button here
                       ElevatedButton(
                         onPressed: () {
-                          print(tall_height);
+                           setState(() {
+                              widget.onPressed(false);
+                            });
+                            if(tall_height == ""){
+                              tall_height = "130";
+                            }
+                            print(tall_height);
                           appCubit.changeTallHeight(tall_height);
                         },
                         child: Text('保管'),

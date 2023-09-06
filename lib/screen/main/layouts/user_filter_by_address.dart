@@ -7,8 +7,8 @@ import 'package:matching_app/utile/index.dart';
 
 class UserFilterByAddress extends StatefulWidget {
   final String info;
-
-  const UserFilterByAddress({super.key, required this.info});
+  final String name;
+  const UserFilterByAddress({super.key, required this.info, required this.name});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -144,7 +144,8 @@ class _UserFilterByAddressState extends State<UserFilterByAddress> {
                           ),
                         ),
                         builder: (context) {
-                          return UserFilterByInfo(info_id: widget.info, live_info: selectedidx.toString());
+                          print(selectedidx.toString());
+                          return UserFilterByInfo(info_id: widget.info, live_info: selectedidx.toString(), info_name: widget.name,name:"");
                         });
                   },
                   style: ButtonStyle(

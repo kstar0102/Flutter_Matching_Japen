@@ -19,6 +19,8 @@ import 'package:matching_app/utile/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:matching_app/controller/auth_controllers.dart';
 
+import '../verify_screen/identity_failed.dart';
+
 // ignore: use_key_in_widget_constructors
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -32,6 +34,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   String? userId;
   String? get uid => userId;
   String? isShow = "true";
+  static bool dialogShown = false;
+  bool? myIdenty = false;
   set setUid(String str) {
     this.userId = str;
   }
@@ -45,9 +49,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     AppCubit appCubit = AppCubit.get(context);
     BlocProvider.of<AppCubit>(context).fetchProfileInfo();
     appCubit.intro_text != "" ?isShow = "true": isShow = "false";
+    myIdentyBool();
+
   }
   void dispose() {
     super.dispose();
+  }
+
+  void myIdentyBool() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    myIdenty = prefs.getBool('myIdentyVerify');
+  }
+
+
+  void identityVerify() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('myIdentyVerify' , true);
   }
 
   final int _currentIndex = 4;
@@ -55,8 +72,80 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   Widget build(BuildContext context) {
     AppCubit appCubit = AppCubit.get(context);
     // BlocProvider.of<AppCubit>(context).fetchProfileInfo();
-      if (isShow == "false" && appCubit.UserId=="0") {
-        final AlertDialog dialog = AlertDialog(
+    if (isShow == "false" && appCubit.UserId=="0") {
+      final AlertDialog dialog = AlertDialog(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+        titlePadding: EdgeInsets.zero,
+        insetPadding: EdgeInsets.zero,
+        actionsPadding: EdgeInsets.zero,
+        actions: [
+          Container(
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 40, left: 40, right: 40),
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    disabledForegroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    textStyle: const TextStyle(fontSize: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 0, vertical: 13),
+                    backgroundColor: BUTTON_MAIN),
+                onPressed: () {
+                  Navigator.pushNamed(context, "/self_introduction");
+                },
+                child: const Text('つぎへ'),
+              ))
+        ],
+        shape: roundedRectangleBorder,
+        content: Container(
+            height: 300,
+            padding: const EdgeInsets.only(
+                top: 30, bottom: 20, left: 20, right: 20),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "自己紹介文を記入して\n魅力的なプロフィールにしてみましょう",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: PRIMARY_FONT_COLOR,
+                      fontSize: 18,
+                      letterSpacing: -2),
+                ),
+                Image(
+                    image: AssetImage("assets/images/main/tutorial.png"),
+                    height: 160)
+              ],
+            )));
+            
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        showDialog(context: context, builder: (context) => dialog);
+      });
+    }
+
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+      if (appCubit.user.id == -1) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (appCubit.user.identityState == "block") {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => IdentityVerifyFailed()),
+          );
+        });
+      }
+      print(myIdenty.toString() + appCubit.user.identityState);
+      if (appCubit.user.identityState == "承認" && !dialogShown) {
+      {
+          dialogShown = true;
+          final AlertDialog dialog = AlertDialog(
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           titlePadding: EdgeInsets.zero,
           insetPadding: EdgeInsets.zero,
@@ -77,7 +166,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                           horizontal: 0, vertical: 13),
                       backgroundColor: BUTTON_MAIN),
                   onPressed: () {
-                    Navigator.pushNamed(context, "/self_introduction");
+                    Navigator.pop(context);
+                    identityVerify();
                   },
                   child: const Text('つぎへ'),
                 ))
@@ -85,37 +175,36 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
           shape: roundedRectangleBorder,
           content: Container(
               height: 300,
+              width: 300,
               padding: const EdgeInsets.only(
                   top: 30, bottom: 20, left: 20, right: 20),
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "自己紹介文を記入して\n魅力的なプロフィールにしてみましょう",
+                    "本人確認が\n認証されました",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: PRIMARY_FONT_COLOR,
                         fontSize: 18,
+                        fontWeight: FontWeight.w700,
                         letterSpacing: -2),
                   ),
+                  SizedBox(
+                    height: 70,
+                  ),
                   Image(
-                      image: AssetImage("assets/images/main/tutorial.png"),
-                      height: 160)
+                      image: AssetImage("assets/images/status/on.png"),
+                      height: 70)
                 ],
               )));
               
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        showDialog(context: context, builder: (context) => dialog);
-      });
-    }
-
-    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
-      if (appCubit.user.id == -1) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          showDialog(context: context, builder: (context) => dialog, barrierDismissible: false);
+        });}
       }
+      
       isShow = appCubit.user.introduce == ""?"false":"true";
       return Scaffold(
           body: RefreshIndicator(
@@ -141,7 +230,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                         Padding(
                             padding: EdgeInsets.symmetric(
                                 vertical: vhh(context, 2),
-                                horizontal: vww(context, 6)),
+                                horizontal: vww(context, 4)),
                             child: ProfileMainInfo(
                                 identityState: appCubit.user.identityState,
                                 photo: appCubit.user.photo1,
@@ -151,17 +240,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                                 name: appCubit.user.nickname)),
                         FolloingWidget(likesRate: appCubit.user.likesRate, resCount: appCubit.user.res_count),
                         appCubit.user.identityState == "承認"
-                            ? Container()
-                            : TextButton(
+                            ? TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, "/identity_verify");
-                                },
+                                  // Navigator.pushNamed(
+                                  //     context, "/identity_verify");
+                                }, 
                                 child: Padding(
                                     padding: EdgeInsets.all(vww(context, 4)),
                                     child: const Image(
                                         image: AssetImage(
-                                            "assets/images/main/set-introduction.png")))),
+                                            "assets/images/main/set-introduction.png"))))
+                            : TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, "/identity_verify");
+                                }, 
+                                child: Padding(
+                                    padding: EdgeInsets.all(vww(context, 4)),
+                                    child: const Image(
+                                        image: AssetImage(
+                                            "assets/images/main/player.png")))),
                         SettingsWidget(planType: appCubit.user.planType, todays: appCubit.user.today_recom, availDate: appCubit.user.avail_date, payUser: appCubit.user.pay_user),
                         MyCommunityWidget(
                             communityObjects: appCubit.user.community),
@@ -186,6 +284,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
             ),
           ),
           bottomNavigationBar: BottomNavBar(currentIndex: _currentIndex));
+    
   });
   }
 }

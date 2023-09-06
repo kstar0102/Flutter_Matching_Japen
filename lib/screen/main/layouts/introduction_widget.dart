@@ -42,7 +42,7 @@ class IntroductionWidget extends StatelessWidget {
                       onTap: () =>
                           {Navigator.pushNamed(context, "/self_introduction")},
                       child: Text(
-                        "もっとみる",
+                        "編集",
                         style: TextStyle(fontSize: 11, color: BUTTON_MAIN),
                       ),
                     ),

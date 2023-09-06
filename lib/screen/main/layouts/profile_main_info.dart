@@ -59,15 +59,20 @@ class ProfileMainInfo extends StatelessWidget {
                       ),
                     ),
                   ))),
-          Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Column(children: [
-                Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Text(name == "" ? "サスケ" : name, style: const TextStyle(fontSize: 17))),
-                Text("$age歳 $address", style: const TextStyle(fontSize: 12)),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-              ]))
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(name == "" ? "サスケ" : name, style: const TextStyle(fontSize: 17)),
+                    Text("$age歳 $address", style: const TextStyle(fontSize: 12)),
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                  ],
+                ),
+              ),
+            )
         ]),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -75,9 +80,8 @@ class ProfileMainInfo extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Row(children: [
-                  identityState == "ブロック"
-                  ?Container():
-                  Container(
+                  identityState == "承認"
+                  ?Container(
                     child:Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -87,7 +91,7 @@ class ProfileMainInfo extends StatelessWidget {
                       Padding(
                           padding: const EdgeInsets.only(right: 50),
                           child: Text("本人確認完了", style: const TextStyle(fontSize: 12))),
-                      ])),
+                      ])):Container()
                     ],),
                   ),
                  

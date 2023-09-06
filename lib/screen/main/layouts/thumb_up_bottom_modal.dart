@@ -6,6 +6,7 @@ import 'package:matching_app/screen/main/layouts/coin_check_modal.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/bloc/cubit.dart';
 import 'package:pay/pay.dart';
+import 'package:intl/intl.dart';
 
 import '../../../components/radius_button.dart';
 
@@ -36,7 +37,14 @@ class _ThumbUpBottomModalState extends State<ThumbUpBottomModal> {
         status: PaymentItemStatus.final_price,
       )
     ];
-    
+    String coin = appCubit.user.coin.toString();
+
+    if (coin.length >= 4) {
+        coin = NumberFormat('#,##0').format(int.parse(coin));
+    } else if (coin.length == 3) {
+      coin = coin;
+    }
+
     return Container(
         padding: EdgeInsets.only(
             left: vww(context, 6), right: vww(context, 6), top: 50),
@@ -144,7 +152,7 @@ class _ThumbUpBottomModalState extends State<ThumbUpBottomModal> {
                             ),
                           ),
                           Text(
-                            appCubit.user.coin.toString()??"0",
+                            coin.toString()??"0",
                             style: TextStyle(fontSize: 17, color: BUTTON_MAIN),
                           )
                         ],),

@@ -76,6 +76,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     final peoples = state.value;
     // print(peoples);
     AppCubit appCubit = AppCubit.get(context);
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
     return Scaffold(
         backgroundColor: Colors.white,
         body: CustomScrollView(
@@ -92,7 +93,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         horizontal: 20,
                       ),
                       child: Container(
-                        height: 590,
+                        height: MediaQuery.of(context).size.height / 1.3,
                         child: peoples != null && peoples.isNotEmpty
                           ? SingleChildScrollView(
                               scrollDirection: Axis.vertical,
@@ -105,7 +106,42 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                 )).toList(),
                               ),
                             )
-                          : Center(child: Text("No data")),
+                          : Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: MediaQuery.of(context).size.height / 7,),
+                                  Image.asset("assets/images/user.png"),
+                                  SizedBox(height: 20,),
+                                  Text("まだマッチングしたお相手がいません",
+                                    style: TextStyle(color: Colors.red,
+                                            fontWeight: FontWeight.bold),),
+                                  SizedBox(height: 20,),
+                                  Text("まずはたくさん"),
+                                  SizedBox(height: 10,),
+                                  Text("いいねをしてみましょう"),
+                                    SizedBox(height: 120,),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 5),
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: RadiusButton(
+                                          id: 0,
+                                          color: BUTTON_MAIN,
+                                          text: "探しにいく",
+                                          goNavigation: (id) {
+                                            Navigator.pushNamed(context, "/community_screen");
+                                          },
+                                          isDisabled: false,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ),
                           
                       ),
                     )
@@ -116,7 +152,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                             padding: EdgeInsets.symmetric(
                                 horizontal: vww(context, vww(context, 1))),
                             child: Container(
-                              height: 590,
+                              height: MediaQuery.of(context).size.height / 1.3,
                               child: peoples != null && peoples.isNotEmpty
                                 ? SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
@@ -132,16 +168,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                 : Center(
                                     child: Column(
                                       children: [
-                                        SizedBox(height: 80,),
+                                        SizedBox(height: MediaQuery.of(context).size.height / 7,),
                                         Image.asset("assets/images/user.png"),
                                         SizedBox(height: 20,),
-                                        Text("まだ一致する相手はいません。",
+                                        Text("まだマッチングしたお相手がいません",
                                           style: TextStyle(color: Colors.red,
                                                   fontWeight: FontWeight.bold),),
                                         SizedBox(height: 20,),
                                         Text("まずはたくさん"),
                                         SizedBox(height: 10,),
-                                        Text("好きです。"),
+                                        Text("いいねをしてみましょう"),
                                          SizedBox(height: 120,),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
@@ -153,9 +189,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                                               child: RadiusButton(
                                                 id: 0,
                                                 color: BUTTON_MAIN,
-                                                text: "探す",
+                                                text: "探しにいく",
                                                 goNavigation: (id) {
-                                                  Navigator.pushNamed(context, "/following_users");
+                                                  Navigator.pushNamed(context, "/community_screen");
                                                 },
                                                 isDisabled: false,
                                               ),
@@ -172,5 +208,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           ],
         ),
         bottomNavigationBar: BottomNavBar(currentIndex: _currentIndex));
+    });
   }
 }

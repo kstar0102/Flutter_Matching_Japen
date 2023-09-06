@@ -36,7 +36,19 @@ class ChatBubble extends StatelessWidget {
               color: Color.fromARGB(255, 0, 202, 157),
             ),
             child: message.contains('https://firebasestorage.googleapis.com/v0/b/')
-            ? Image.network(message)
+            ? Image.network(message,
+            loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            }
+            )
             : Text(
                 message,
                 style: const TextStyle(fontSize: 16, color: Colors.white),
@@ -57,7 +69,19 @@ class ChatBubble extends StatelessWidget {
                 color:  Colors.grey[300]
               ),
               child: iden == "承認" ? message.contains('https://firebasestorage.googleapis.com/v0/b/')
-              ? Image.network(message)
+              ? Image.network(message,
+              loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              }
+              )
               : Text(
                   message,
                   style: const TextStyle(fontSize: 16, color: Colors.black),
@@ -65,7 +89,19 @@ class ChatBubble extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ):
                 message.contains('https://firebasestorage.googleapis.com/v0/b/')
-                ? Image.network(message)
+                ? Image.network(message,
+                loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                }
+                )
                 : Text(
                     message,
                     style: const TextStyle(fontSize: 16, color: Colors.black),

@@ -3,6 +3,8 @@ import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:matching_app/bloc/cubit.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/components/radius_button.dart';
@@ -19,6 +21,30 @@ class ImageCheck extends StatefulWidget {
 
 class _ImageCheckState extends State<ImageCheck> {
   File? imagefile;
+  final ImagePicker imgpicker = ImagePicker();
+	openImages(source) async {
+		try {
+			var pickedFile = await imgpicker.pickImage(source: source);
+			if (pickedFile != null) {
+				final editedImage = await ImageCropper().cropImage(
+						sourcePath: pickedFile.path,
+						aspectRatio: const CropAspectRatio(
+								ratioX: 1, ratioY: 1),
+						compressQuality:
+								80,
+						maxWidth: 800,
+						maxHeight: 800);
+				if (editedImage != null) {
+					// ignore: use_build_context_synchronously
+					Navigator.pushNamed(context, "/image_check", arguments: editedImage.path);
+				}
+			} else {
+				print("No image is selected.");
+			}
+		} catch (e) {
+			print("error while picking file.");
+		}
+	}
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +92,7 @@ class _ImageCheckState extends State<ImageCheck> {
                             appCubit
                                 .uploadIdentifyImage(imagePath.toString())
                                 .then((value) => {
-                                      print(value),
+                                      print("asdasd"+value.toString()),
                                       if (value == 1)
                                         {
                                           Navigator.pushNamed(
@@ -85,7 +111,7 @@ class _ImageCheckState extends State<ImageCheck> {
                       child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: InkWell(
-                              onTap: () {},
+                              onTap: () { openImages(ImageSource.gallery);},
                               child: Padding(
                                   padding: EdgeInsets.only(
                                       top: vh(context, 2),

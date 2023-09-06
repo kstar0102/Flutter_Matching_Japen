@@ -4,6 +4,7 @@ import 'package:matching_app/communcation/category_people/people_item.dart';
 import 'package:matching_app/components/user_info_items.dart';
 import 'package:matching_app/screen/main/community_screen.dart';
 import 'package:matching_app/screen/main/layouts/user_filter_by_address.dart';
+import 'package:matching_app/screen/main/layouts/user_filter_by_info.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/communcation/category_people/people_controller.dart';
 import 'package:matching_app/communcation/category_people/people_card.dart';
@@ -13,10 +14,12 @@ import 'package:matching_app/components/dialogs.dart';
 import 'package:matching_app/utile/async_value_ui.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:matching_app/bloc/cubit.dart';
+
+import '../../../components/radius_button.dart';
 class UsersBottomModal extends ConsumerStatefulWidget {
   final String sub_id;
-
-  const UsersBottomModal({super.key, required this.sub_id});
+  final String sub_name;
+  const UsersBottomModal({super.key, required this.sub_id, required this.sub_name});
 
   @override
   ConsumerState<UsersBottomModal> createState() => _UsersBottomModalState();
@@ -25,7 +28,8 @@ class UsersBottomModal extends ConsumerStatefulWidget {
 class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
   String message = "";
   List<UsersObject> items = [];
-
+ List<dynamic> selectedidx = [];
+ bool isValue = false;
   @override
   void initState() {
     super.initState();
@@ -47,7 +51,7 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
     final state = ref.watch(peopleProvider);
     final peoples = state.value;
     AppCubit appCubit = AppCubit.get(context);
-
+    String? boardInfo = widget.sub_name.toString();
     return Scaffold(
         body: Container(
           padding: EdgeInsets.symmetric(
@@ -90,7 +94,7 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
                                   ),
                                 ),
                                 Expanded(child: Container()),
-                                const Padding(
+                                Padding(
                                     padding: EdgeInsets.symmetric(vertical: 15),
                                     child: Column(
                                       children: [
@@ -98,10 +102,10 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
                                             style: TextStyle(
                                                 color: PRIMARY_FONT_COLOR,
                                                 fontSize: 14)),
-                                        Text("ゴルフ",
+                                        Text(boardInfo.toString(),
                                             style: TextStyle(
                                                 color: PRIMARY_FONT_COLOR,
-                                                fontSize: 9))
+                                                fontSize: 11))
                                       ],
                                     )),
                                 Expanded(child: Container()),
@@ -116,74 +120,141 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
                               vertical: vhh(context, 0),
                               horizontal: vww(context, 1),
                             ),
-                            child: Container(
-                              height: MediaQuery.of(context).size.height /1.3,
-                              child: peoples != null && peoples.isNotEmpty
-                                  ? SingleChildScrollView(
-                                      scrollDirection: Axis.vertical,
-                                      child: Wrap(
-                                        spacing: 10,
-                                        runSpacing: 10,
-                                        children: peoples.where((PeopleItem person) {
-                                          int? age = int.tryParse(person.age);
-                                          String heightString = person.height;
-                                          double heightDouble = double.parse(heightString);
-                                          int height = heightDouble.toInt();
-                                          int? startAge = int.tryParse(appCubit.s_age_start);
-                                          int? endAge = int.tryParse(appCubit.s_age_end);
-                                          int? startHeight = int.tryParse(appCubit.s_height_start);
-                                          int? endHeight = int.tryParse(appCubit.s_height_end);
+                            child: Align(
+                            alignment: Alignment.topLeft,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: (peoples != null && peoples.isNotEmpty)
+                                ? Wrap(
+                                    spacing: 10,
+                                    runSpacing: 10,
+                                    alignment: WrapAlignment.start,
+                                    crossAxisAlignment: WrapCrossAlignment.start,
+                                    children:  peoples.where((PeopleItem person) {
+                                    int? age = int.tryParse(person.age);
+                                    String heightString = person.height;
+                                    double heightDouble = double.parse(heightString);
+                                    int height = heightDouble.toInt();
+                                    int? startAge = int.tryParse(appCubit.s_age_start);
+                                    int? endAge = int.tryParse(appCubit.s_age_end);
+                                    int? startHeight = int.tryParse(appCubit.s_height_start);
+                                    int? endHeight = int.tryParse(appCubit.s_height_end);
 
-                                          String? bodyType = person.body_name;
-                                          String? bodyNames = appCubit.s_body;
-                                          List<String> bodyList = bodyNames!.split(',').map((name) => name.trim()).toList();
-                                          bool bodyTypeMatches = bodyNames == "" || bodyNames.isEmpty || bodyList.any((name) => bodyType.contains(name));
+                                    String? bodyType = person.body_name;
+                                    String? bodyNames = appCubit.s_body;
+                                    List<String> bodyList = bodyNames!.split(',').map((name) => name.trim()).toList();
+                                    bool bodyTypeMatches = bodyNames == "" || bodyNames.isEmpty || bodyList.any((name) => bodyType.contains(name));
 
-                                          String? HolidayType = person.holiday;
-                                          String? HolidayName = appCubit.s_holiday;
-                                          List<String> HolidayList = HolidayName!.split(',').map((name) => name.trim()).toList();
-                                          bool HolidayTypeMatches = HolidayName == "" || HolidayName.isEmpty || HolidayList.any((name) => HolidayType.contains(name));
+                                    String? HolidayType = person.holiday;
+                                    String? HolidayName = appCubit.s_holiday;
+                                    List<String> HolidayList = HolidayName!.split(',').map((name) => name.trim()).toList();
+                                    bool HolidayTypeMatches = HolidayName == "" || HolidayName.isEmpty || HolidayList.any((name) => HolidayType.contains(name));
 
-                                          String? PurposeType = person.use_purpose;
-                                          String? PurposeName = appCubit.s_purpose;
-                                          List<String> PurposeList = PurposeName!.split(',').map((name) => name.trim()).toList();
-                                          bool PurposeTypeMatches = PurposeType == "" || PurposeName.isEmpty || PurposeList.any((name) => PurposeType.contains(name));
+                                    String? PurposeType = person.use_purpose;
+                                    String? PurposeName = appCubit.s_purpose;
+                                    List<String> PurposeList = PurposeName!.split(',').map((name) => name.trim()).toList();
+                                    bool PurposeTypeMatches = PurposeType == "" || PurposeName.isEmpty || PurposeList.any((name) => PurposeType.contains(name));
 
-                                          String? CigaType = person.cigarette;
-                                          String? CigaName = appCubit.s_ciga;
-                                          List<String> CigaList = CigaName!.split(',').map((name) => name.trim()).toList();
-                                          bool CigaTypeMatches = CigaType == "" || CigaName.isEmpty || CigaList.any((name) => CigaType.contains(name));
+                                    String? CigaType = person.cigarette;
+                                    String? CigaName = appCubit.s_ciga;
+                                    List<String> CigaList = CigaName!.split(',').map((name) => name.trim()).toList();
+                                    bool CigaTypeMatches = CigaType == "" || CigaName.isEmpty || CigaList.any((name) => CigaType.contains(name));
 
-                                          String? SakeType = person.alcohol;
-                                          String? SakeName = appCubit.s_sake;
-                                          List<String> sakeList = SakeName!.split(',').map((name) => name.trim()).toList();
-                                          bool SakeTypeMatches = SakeType == "" || SakeName.isEmpty || sakeList.any((name) => SakeType.contains(name));
+                                    String? SakeType = person.alcohol;
+                                    String? SakeName = appCubit.s_sake;
+                                    List<String> sakeList = SakeName!.split(',').map((name) => name.trim()).toList();
+                                    bool SakeTypeMatches = SakeType == "" || SakeName.isEmpty || sakeList.any((name) => SakeType.contains(name));
 
-                                          String? LiveType = person.residence;
-                                          String? LiveName = appCubit.s_live;
-                                          List<String> liveNames = LiveName!.split(',').map((name) => name.trim()).toList();
-                                          bool liveTypeMatches = LiveType == "" || liveNames.isEmpty || liveNames.any((name) => LiveType.contains(name));
+                                    String? LiveType = person.residence;
+                                    String? LiveName = appCubit.s_live;
+                                    List<String> liveNames = LiveName!.split(',').map((name) => name.trim()).toList();
+                                    bool liveTypeMatches = LiveType == "" || liveNames.isEmpty || liveNames.any((name) => LiveType.contains(name));
 
-                                          String? dbChecked = person.identity_state;
-                                          String? verifyChecked = appCubit.s_checked == ""?"":appCubit.s_checked;
-                                          bool verifyTypeMatches = dbChecked == "" || verifyChecked == "" || dbChecked.contains(verifyChecked);
-                                          return age != null &&
-                                              height != null &&
-                                              (startAge == null || endAge == null || age >= startAge && age <= endAge) &&
-                                              (startHeight == null || endHeight == null || height >= startHeight && height <= endHeight) &&
-                                              bodyTypeMatches && HolidayTypeMatches && PurposeTypeMatches && CigaTypeMatches && SakeTypeMatches && verifyTypeMatches && liveTypeMatches;
-                                        }).map<Widget>((childItem) => PeopleCard(
+                                    String? dbChecked = person.identity_state;
+                                    String? verifyChecked = appCubit.s_checked == ""?"":appCubit.s_checked;
+                                    bool verifyTypeMatches = dbChecked == "" || verifyChecked == "" || dbChecked.contains(verifyChecked);
+                                                                          isValue = true;
+
+                                  return age != null &&
+                                      height != null &&
+                                      bodyTypeMatches != null &&
+                                      HolidayTypeMatches != null &&
+                                      PurposeTypeMatches != null &&
+                                      CigaTypeMatches != null &&
+                                      SakeTypeMatches != null &&
+                                      liveTypeMatches != null &&
+                                      (startAge == null || endAge == null || age >= startAge && age <= endAge) &&
+                                      (startHeight == null || endHeight == null || height >= startHeight && height <= endHeight) &&
+                                      bodyTypeMatches &&
+                                      HolidayTypeMatches &&
+                                      PurposeTypeMatches &&
+                                      CigaTypeMatches &&
+                                      SakeTypeMatches &&
+                                      liveTypeMatches &&
+                                      (verifyChecked == "0" || verifyTypeMatches);
+                                    }).map<Widget>((childItem) {
+                                        if(childItem !=null){
+                                          isValue = false;
+                                          return PeopleCard(
                                             info: childItem,
                                             onPressed: () {},
-                                        )).toList(),
+                                          );
+                                        }
+                                      return Container();
+                                    }).toList(),
+                                  )
+                                : Center(
+                                    child: (isValue)
+                                    ? Text(
+                                        "No matching results",
+                                        textAlign: TextAlign.center,
+                                      )
+                                    : Text(
+                                        "No data",
+                                        textAlign: TextAlign.center,
                                       ),
-                                    )
-                                  : Text("No data"),
+                                  ),
+                                   
+                            ),
+                           
                             ),
                           ),
                       const SizedBox(
                         height: 40,
-                      )
+                      ),
+                      isValue == true ? Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: MediaQuery.of(context).size.height / 5,),
+                            Image.asset("assets/images/main/search_img.png"),
+                            SizedBox(height: 20,),
+                            SizedBox(height: 20,),
+                            Text("お相手がみつかりませんでした"),
+                            SizedBox(height: 10,),
+                            Text("検索条件を変更してみてください"),
+                              SizedBox(height: 200,),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 5),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: RadiusButton(
+                                    id: 0,
+                                    color: BUTTON_MAIN,
+                                    text: "探しにいく",
+                                    goNavigation: (id) {
+                                      Navigator.pushNamed(context, "/community_screen");
+                                    },
+                                    isDisabled: false,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ):Container()
                     ],
                   );
                 },
@@ -191,7 +262,7 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
             ],
           ),
         ),
-        floatingActionButton: Container(
+        floatingActionButton: isValue == false ? Container(
             padding: EdgeInsets.only(left: vww(context, 10)),
             alignment: Alignment.bottomCenter,
             width: vww(context, 100),
@@ -208,7 +279,7 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
                           ),
                         ),
                         builder: (context) {
-                          return UserFilterByAddress(info: widget.sub_id);
+                          return UserFilterByInfo(info_id: widget.sub_id, live_info:selectedidx.toString(), info_name: "", name:widget.sub_name);
                         });
                   },
                   style: ButtonStyle(
@@ -222,6 +293,6 @@ class _UsersBottomModalState extends ConsumerState<UsersBottomModal> {
                     "検索条件",
                     style: TextStyle(color: Colors.white, fontSize: 17),
                   )),
-            )));
+            )):Container());
   }
 }

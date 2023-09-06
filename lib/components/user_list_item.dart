@@ -53,6 +53,17 @@ class UserListItem extends StatelessWidget {
                         "http://greeme.net/uploads/" + info.photo1,
                         width: 165,
                         height: 165,
+                        loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            }
                       ),
                       Container(
                         width: 165,
@@ -65,10 +76,32 @@ class UserListItem extends StatelessWidget {
                   "http://greeme.net/uploads/" + info.photo1,
                   width: 165,
                   height: 165,
+                  loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  }
                 ):Image.network(
                   "http://greeme.net/uploads/" + info.photo1,
                   width: 165,
                   height: 165,
+                  loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  }
                 )
               ),
             ),

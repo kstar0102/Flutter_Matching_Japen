@@ -129,7 +129,7 @@ class MatchingApp extends StatelessWidget {
             // '/report_success': (context) => ReportSuccess(),
             '/user_profile_chat': (context) => UsersProfileChatScreen(),
             '/profile_edit_screen': (context) => ProfileEditScreen(),
-            '/profile_badge_screen': (context) => ProfileBadgeSelect(),
+            // '/profile_badge_screen': (context) => ProfileBadgeSelect(),
             '/like_user_profile': (context) => LikeUserProfile(),
             '/user_list_screen': (context) => UserListScreen(),
             '/setting_screen': (context) => SettingScreen(),

@@ -27,6 +27,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
   // ignore: unused_field
   late int _current = 0;
   bool isModalShow = false;
+  bool showAllText = false; // Add this line of code to keep track of whether to show all text or not
 
   @override
   void initState() {
@@ -59,6 +60,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
     BlocProvider.of<AppCubit>(context).fetchProfileInfo();
     AppCubit appCubit = AppCubit.get(context);
     int age = DateTime.now().year - int.parse(appCubit.user.bday.split("-")[0]);
+    List<String> lines = appCubit.user.introduce?.split('\n').take(5).toList() ?? [];
+    String shortText = lines.join('\n');
     print(appCubit.user.identityState);
     return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
       return Scaffold(
@@ -149,22 +152,22 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
                                         child: const Icon(Icons.close,
                                             color: Colors.white),
                                       )),
-                                  Container(
-                                      width: 45,
-                                      height: 45,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color: const Color.fromARGB(100, 0, 0, 0),
-                                      ),
-                                      child: TextButton(
-                                          onPressed: () {},
-                                          style: ButtonStyle(
-                                            padding: MaterialStateProperty.all(
-                                                EdgeInsets.zero),
-                                          ),
-                                          child: const Icon(Icons.more_horiz,
-                                              color: Colors.white)))
+                                  // Container(
+                                  //     width: 45,
+                                  //     height: 45,
+                                  //     alignment: Alignment.center,
+                                  //     decoration: BoxDecoration(
+                                  //       borderRadius: BorderRadius.circular(50),
+                                  //       color: const Color.fromARGB(100, 0, 0, 0),
+                                  //     ),
+                                  //     child: TextButton(
+                                  //         onPressed: () {},
+                                  //         style: ButtonStyle(
+                                  //           padding: MaterialStateProperty.all(
+                                  //               EdgeInsets.zero),
+                                  //         ),
+                                  //         child: const Icon(Icons.more_horiz,
+                                  //             color: Colors.white)))
                                 ]))
                       ],
                     ),
@@ -206,7 +209,121 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
                                         style: TextStyle(fontSize: 15)),
                                   ])),
                             ]))),
-                    IntroductionWidget(),
+                          Padding(
+  padding: EdgeInsets.only(
+    bottom: vhh(context, 3),
+    left: vww(context, 6),
+    right: vww(context, 6),
+  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.only(bottom: 10),
+        child: Text(
+          "自己紹介",
+          style: TextStyle(fontSize: 16, color: PRIMARY_FONT_COLOR),
+        ),
+      ),
+      LayoutBuilder(
+        builder: (context, constraints) {
+          final textSpan = TextSpan(
+            text: shortText ?? appCubit.user.introduce,
+            style: const TextStyle(fontSize: 13, color: PRIMARY_FONT_COLOR),
+          );
+          final textPainter = TextPainter(
+            text: textSpan,
+            maxLines: 4,
+            textAlign: TextAlign.start,
+            textDirection: TextDirection.ltr,
+          );
+          textPainter.layout(maxWidth: constraints.maxWidth);
+
+          if (textPainter.didExceedMaxLines && !showAllText) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: constraints.maxWidth,
+                  child: RichText(
+                    text: textSpan,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.bottomRight,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        showAllText = true;
+                      });
+                    },
+                    child: Text(
+                      "もっとみる",
+                      style: TextStyle(fontSize: 11, color: BUTTON_MAIN),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else if (showAllText) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: constraints.maxWidth,
+                  child: RichText(
+                    text: textSpan,
+                    overflow: TextOverflow.visible,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.bottomRight,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        showAllText = false;
+                      });
+                    },
+                    child: Text(
+                      "とじる",
+                      style: TextStyle(fontSize: 11, color: BUTTON_MAIN),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  shortText ?? appCubit.user.introduce,
+                  style: const TextStyle(fontSize: 13, color: PRIMARY_FONT_COLOR),
+                ),
+                Container(
+                  alignment: Alignment.bottomRight,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        showAllText = true;
+                      });
+                    },
+                    child: Text(
+                      "もっとみる",
+                      style: TextStyle(fontSize: 11, color: BUTTON_MAIN),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
+    ],
+  ),
+),
                     MyCommunityWidget(
                               communityObjects: appCubit.user.community),
                     Padding(padding: EdgeInsets.only(
@@ -227,68 +344,68 @@ class _UsersProfileScreenState extends State<UsersProfileScreen> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
-          width: vww(context, 60),
-          child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                    width: 60,
-                    height: 60,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.4),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.white,
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      ),
-                      child: const Icon(Icons.close,
-                          color: Color.fromARGB(255, 193, 192, 201), size: 35),
-                    )),
-                Container(
-                    width: 60,
-                    height: 60,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.4),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(50),
-                      color: Colors.white,
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => const ThumbUpModal());
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      ),
-                      child: const Icon(Icons.thumb_up,
-                          color: BUTTON_MAIN, size: 35),
-                    )),
-              ]),
-        ),
+        // floatingActionButton: Container(
+        //   width: vww(context, 60),
+        //   child: Row(
+        //       crossAxisAlignment: CrossAxisAlignment.center,
+        //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //       children: [
+        //         Container(
+        //             width: 60,
+        //             height: 60,
+        //             alignment: Alignment.center,
+        //             decoration: BoxDecoration(
+        //               boxShadow: [
+        //                 BoxShadow(
+        //                   color: Colors.grey.withOpacity(0.4),
+        //                   spreadRadius: 5,
+        //                   blurRadius: 7,
+        //                   offset: Offset(0, 3), // changes position of shadow
+        //                 ),
+        //               ],
+        //               borderRadius: BorderRadius.circular(50),
+        //               color: Colors.white,
+        //             ),
+        //             child: TextButton(
+        //               onPressed: () {
+        //                 Navigator.pop(context);
+        //               },
+        //               style: ButtonStyle(
+        //                 padding: MaterialStateProperty.all(EdgeInsets.zero),
+        //               ),
+        //               child: const Icon(Icons.close,
+        //                   color: Color.fromARGB(255, 193, 192, 201), size: 35),
+        //             )),
+        //         Container(
+        //             width: 60,
+        //             height: 60,
+        //             alignment: Alignment.center,
+        //             decoration: BoxDecoration(
+        //               boxShadow: [
+        //                 BoxShadow(
+        //                   color: Colors.grey.withOpacity(0.4),
+        //                   spreadRadius: 5,
+        //                   blurRadius: 7,
+        //                   offset: Offset(0, 3), // changes position of shadow
+        //                 ),
+        //               ],
+        //               borderRadius: BorderRadius.circular(50),
+        //               color: Colors.white,
+        //             ),
+        //             child: TextButton(
+        //               onPressed: () {
+        //                 showDialog(
+        //                     context: context,
+        //                     builder: (context) => const ThumbUpModal());
+        //               },
+        //               style: ButtonStyle(
+        //                 padding: MaterialStateProperty.all(EdgeInsets.zero),
+        //               ),
+        //               child: const Icon(Icons.thumb_up,
+        //                   color: BUTTON_MAIN, size: 35),
+        //             )),
+        //       ]),
+        // ),
       );
     });
   }

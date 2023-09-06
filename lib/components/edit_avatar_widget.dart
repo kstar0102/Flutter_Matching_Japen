@@ -21,7 +21,7 @@ class EditAvatarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppCubit appCubit = AppCubit.get(context);
-    // return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
     return FractionallySizedBox(
         widthFactor: 0.3,
         child: InkWell(
@@ -121,7 +121,7 @@ class EditAvatarWidget extends StatelessWidget {
                                           const Padding(
                                               padding:
                                                   EdgeInsets.only(left: 30),
-                                              child: Text("写真を撮る",
+                                              child: Text("ライブラリから選択",
                                                   style:
                                                       TextStyle(fontSize: 17)))
                                         ],
@@ -166,7 +166,114 @@ class EditAvatarWidget extends StatelessWidget {
                         ),
                       ]),
                     ))
-                : Container(
+                : 
+                 GestureDetector(
+                     onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return SizedBox(
+                              height: 150,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  InkWell(
+                                      onTap: () async{
+                                        try {
+                                        var pickedFile = await imgpicker.pickImage(
+                                            source: ImageSource.camera);
+                                        if (pickedFile != null) {
+                                          final editedImage = await ImageCropper()
+                                              .cropImage(
+                                                  sourcePath: pickedFile.path,
+                                                  aspectRatio: const CropAspectRatio(
+                                                      ratioX: 1,
+                                                      ratioY:
+                                                          1), // Set the desired aspect ratio
+                                                  compressQuality:
+                                                      80, // Adjust the compressed image quality as per your needs
+                                                  maxWidth:
+                                                      800, // Adjust the maximum width of the cropped image
+                                                  maxHeight: 800);
+                                          if (editedImage != null) {
+                                            appCubit.changeMultiAvatar(editedImage.path,item_id);
+                                          }
+                                        } 
+                                      } catch (e) {
+                                        print("error while picking file.");
+                                      }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                              width: vw(context, 3),
+                                              height: 10),
+                                          
+                                          const Image(
+                                            image: AssetImage(
+                                                "assets/images/identity/photo-camera-svgrepo-com.png"),
+                                            height: 30,
+                                          ),
+                                          const Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 30),
+                                              child: Text("写真を撮る",
+                                                  style:
+                                                      TextStyle(fontSize: 17)))
+                                        ],
+                                      )),
+                                  InkWell(
+                                      onTap: () async{
+                                        try {
+                                        var pickedFile = await imgpicker.pickImage(
+                                            source: ImageSource.gallery);
+                                        if (pickedFile != null) {
+                                          final editedImage = await ImageCropper()
+                                              .cropImage(
+                                                  sourcePath: pickedFile.path,
+                                                  aspectRatio: const CropAspectRatio(
+                                                      ratioX: 1,
+                                                      ratioY:
+                                                          1), // Set the desired aspect ratio
+                                                  compressQuality:
+                                                      80, // Adjust the compressed image quality as per your needs
+                                                  maxWidth:
+                                                      800, // Adjust the maximum width of the cropped image
+                                                  maxHeight: 800);
+                                          if (editedImage != null) {
+                                            appCubit.changeMultiAvatar(editedImage.path, item_id);
+                                          }
+                                        } 
+                                      } catch (e) {
+                                        print("error while picking file.");
+                                      }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                              width: vw(context, 3),
+                                              height: 10),
+                                          const Image(
+                                            image: AssetImage(
+                                                "assets/images/identity/imagesmajor-svgrepo-com.png"),
+                                            height: 30,
+                                          ),
+                                          const Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 30),
+                                              child: Text("ライブラリから選択",
+                                                  style:
+                                                      TextStyle(fontSize: 17)))
+                                        ],
+                                      )),
+                                  const SizedBox(height: 1)
+                                ],
+                              ),
+                            );
+                          });
+                    },
+                  child: Container(
                     width: 100,
                     height: 110,
                     decoration: BoxDecoration(
@@ -182,8 +289,19 @@ class EditAvatarWidget extends StatelessWidget {
                       child: Image.network(
                         "${item}",
                         fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            }
                       ),
-                    ))));
-    // });
+                    )))));
+    });
   }
 }

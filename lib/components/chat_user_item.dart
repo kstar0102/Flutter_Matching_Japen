@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_app/common.dart';
 import 'package:matching_app/utile/index.dart';
 import 'package:matching_app/communcation/category_people/people_item.dart';
@@ -44,7 +45,7 @@ class _ChatUserItemState extends State<ChatUserItem> {
               fontSize: 15,
               color: PRIMARY_FONT_COLOR,
               ));
-
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
     return InkWell(
       onTap: (){
         Navigator.push(
@@ -151,7 +152,7 @@ class _ChatUserItemState extends State<ChatUserItem> {
             ))
           ],
         ),
-    ) ;
-     
+    );
+    });
   }
 }

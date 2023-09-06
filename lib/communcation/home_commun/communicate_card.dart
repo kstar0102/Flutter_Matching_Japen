@@ -40,7 +40,7 @@ class _CommunicateCardState extends ConsumerState<CommunicateCard> {
     return Container(
       child: Column(
         children:[
-          Padding(padding: EdgeInsets.only(left: 7,),
+          Padding(padding: EdgeInsets.only(left: 3,),
             child:Column(children: [
               SizedBox(
                 child:Wrap(
@@ -64,7 +64,7 @@ class _CommunicateCardState extends ConsumerState<CommunicateCard> {
                             builder: (context) {
                               return SingleChildScrollView(
                                 padding: EdgeInsets.only(
-                                    left: vww(context, 3),
+                                    left: vww(context, 2),
                                     right: vww(context, 3),
                                     top: 20,
                                     bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -94,7 +94,32 @@ class _CommunicateCardState extends ConsumerState<CommunicateCard> {
                                         //         NetworkImage(""), )),
                                         Column(
                                           children: [
-                                            Image.network("http://greeme.net/uploads/"+boardInfo.community_photo, width: 100, height: 100,),
+                                            SizedBox(height: 10,),
+                                            SizedBox(
+                                              width: MediaQuery.of(context).size.width /4,
+                                              height: MediaQuery.of(context).size.height / 11.2,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(10), // Replace 10 with your desired radius value
+                                                child: Image.network(
+                                                  "http://greeme.net/uploads/"+boardInfo.community_photo,
+                                                  loadingBuilder: (context, child, loadingProgress) {
+                                                    if (loadingProgress == null) return child;
+                                                    return Center(
+                                                      child: CircularProgressIndicator(
+                                                        value: loadingProgress.expectedTotalBytes != null
+                                                            ? loadingProgress.cumulativeBytesLoaded /
+                                                                loadingProgress.expectedTotalBytes!
+                                                            : null,
+                                                      ),
+                                                    );
+                                                  },
+                                                  errorBuilder: (context, error, stackTrace) {
+                                                    return Text('Error loading image');
+                                                  },
+                                                  fit: BoxFit.cover, // Resize the image to fit the specified dimensions
+                                                ),
+                                              ),
+                                            ),
                                             Text(boardInfo.community_name, 
                                               style: TextStyle(
                                                 fontFamily: 'Montserrat',
@@ -129,7 +154,7 @@ class _CommunicateCardState extends ConsumerState<CommunicateCard> {
                                                       ),
                                                       builder: (context) {
                                                         appCubit.formatButton();
-                                                        return UsersBottomModal(sub_id: boardInfo.sub_category_id);
+                                                        return UsersBottomModal(sub_id: boardInfo.sub_category_id, sub_name:boardInfo.community_name);
                                                       });
                                                 },
                                                 id: 0,
@@ -141,7 +166,32 @@ class _CommunicateCardState extends ConsumerState<CommunicateCard> {
                         },
                         child: Column(
                           children: [
-                            Image.network("http://greeme.net/uploads/"+boardInfo.community_photo, width: 100, height: 100,),
+                            SizedBox(height: 10,),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width /4,
+                              height: MediaQuery.of(context).size.height / 11.2,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10), // Replace 10 with your desired radius value
+                                child: Image.network(
+                                  "http://greeme.net/uploads/"+boardInfo.community_photo,
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress.expectedTotalBytes != null
+                                            ? loadingProgress.cumulativeBytesLoaded /
+                                                loadingProgress.expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Text('Error loading image');
+                                  },
+                                  fit: BoxFit.cover, // Resize the image to fit the specified dimensions
+                                ),
+                              ),
+                            ),
                             Text(boardInfo.community_name, 
                               style: TextStyle(
                                 fontFamily: 'Montserrat',

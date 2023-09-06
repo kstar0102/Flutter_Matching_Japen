@@ -52,8 +52,9 @@ class _ChooseCommunityState extends State<ChooseCommunity> {
                         child: const Text("興味のあるコミュニティーを",
                             style: TextStyle(
                                 fontSize: 24,
+                                fontWeight: FontWeight.w700,
                                 color: PRIMARY_FONT_COLOR,
-                                letterSpacing: -2))),
+                                letterSpacing: 0))),
                     Padding(
                       padding: EdgeInsets.only(
                           top: vh(context, 4),
@@ -72,7 +73,7 @@ class _ChooseCommunityState extends State<ChooseCommunity> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: vh(context, 10)),
+              padding: EdgeInsets.only(bottom: vh(context, 10), left: 15, right: 5),
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
@@ -87,7 +88,7 @@ class _ChooseCommunityState extends State<ChooseCommunity> {
                               child: Wrap(
                                 spacing: 8,
                                 runSpacing: 8,
-                                alignment: WrapAlignment.center,
+                                alignment: WrapAlignment.start,
                                 children: List.generate(
                                   appCubit.communityList.length,
                                   (index) {
@@ -204,8 +205,10 @@ class _ChooseCommunityState extends State<ChooseCommunity> {
                           Navigator.pushNamed(context, "/height_select");
                         },
                         isDisabled: appCubit.communityList
-                            .where((element) => element.isChecked == true)
-                            .isEmpty),
+                            .where((element) =>
+                                element.isChecked)
+                            .length <
+                        3),
                   ),
                 ),
               ),

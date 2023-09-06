@@ -16,7 +16,7 @@ class User {
   int likesRate = 0;
   String phone_number = "";
   String phone_token = "";
-  double coin = 0;
+  int coin = 0;
   String phone = "";
   int res_count = 0;
   String identityState = "";

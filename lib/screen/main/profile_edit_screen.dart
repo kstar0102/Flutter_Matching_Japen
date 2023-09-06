@@ -14,6 +14,7 @@ import 'package:matching_app/components/profile_holiday_type.dart';
 import 'package:matching_app/components/profile_ciga_type.dart';
 
 import 'package:matching_app/screen/main/layouts/introduction_widget.dart';
+import 'package:matching_app/screen/main/profile_badge_select.dart';
 import 'package:matching_app/screen/register/nick_name.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_app/utile/index.dart';
@@ -353,8 +354,10 @@ class _ProfileEditScreenState extends ConsumerState<ProfileEditScreen> {
                                               alignment: Alignment.bottomRight,
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  Navigator.pushNamed(context,
-                                                      '/profile_badge_screen');
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => ProfileBadgeSelect(badges: appCubit.user.introBadge)),
+                                                  );
                                                 },
                                                 child: const Text(
                                                   "編集",
